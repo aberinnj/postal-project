@@ -1,0 +1,93 @@
+{%  extends 'home-layout.html.twig' %}
+
+{% block body %}
+    <section class="hero is-dark is-large postal-bg-image">
+        {% block header %}
+            {{ parent() }}
+        {% endblock %}
+
+        <div class="hero-body postal-bg-style">
+                <div class="container has-text-centered">
+                    <form>
+                    <div class="title">Track Your Package</div>
+                    <input class="package-track track-input" placeholder="Tracking number"/>
+                    <button class="package-track track-button">Track</button>
+                    </form>
+                </div>
+        </div>
+
+    </section>
+
+
+      </section>
+    <section class="section">
+            <div class="container">
+            <div class="tile is-ancestor">
+        <div class="tile is-7 is-vertical is-parent">
+            <div class="tile is-child box postal-idea postal-idea-message">
+                <div class="title">
+                    Ready for Mother's Day?
+                </div>
+                <div class="subtitle">
+                    Ship with CourierPO's affordable, reliable and fast shipping. <br/> Let us help you get your surprise, right on <bold>time</bold>.
+                </div>
+            </div>
+        </div>
+        <div class="tile is-parent">
+            <div class="tile is-child box postal-idea postal-idea-image">
+            </div>
+        </div>
+            </div>
+                </div>
+    </section>
+
+    <section class="section info">
+        <div class="container">
+            <div class="title">
+                Way More Than Just Shipping.
+            </div>
+            <div class="subtitle">
+            Explore ways to become more efficient, see printing offers and solutions, or<br/> get insights and inspiration for your small business.
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="section info">
+        <div class="container">
+            <div class="tile is-ancestor">
+                    <div class="tile is-parent">
+                        <article class="tile is-child box">
+                        <p class="title">One</p>
+                        <p class="subtitle">Subtitle</p>
+                        </article>
+                    </div>
+                    <div class="tile is-parent">
+                        <article class="tile is-child box">
+                        <p class="title">Two</p>
+                        <p class="subtitle">Subtitle</p>
+                        </article>
+                    </div>
+                    <div class="tile is-parent">
+                        <article class="tile is-child box">
+                        <p class="title">Three</p>
+                        <p class="subtitle">Subtitle</p>
+                        </article>
+                    </div>
+                    </div>
+        </div>
+    </section>
+
+
+    <section class="section postal-support-ribbon">
+        <div class="container support">
+            <div class="subtitle">
+                Need help with a package?
+            </div>
+            <div class="support-container">
+                <div class="postal-support-button">Go to Support</div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

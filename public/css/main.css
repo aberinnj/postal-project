@@ -1,0 +1,123 @@
+html, body {
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+    max-width: 100em;
+    margin: 0 auto;
+}
+
+.postal-brand {
+    font-size: 1.32em;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: bold;
+}
+
+.postal-bg-image {  
+    background-image: url("../images/high-bay-408222_1920.jpg");
+    background-color: #292929;
+    height: auto;
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-size: cover;
+}
+
+.postal-bg-image .hero-body.postal-bg-style{
+    background: rgba(29, 29, 29, .77);
+}
+.postal-bg-image .hero-head.postal-bg-style{
+    background: radial-gradient(circle,#c8102e, #960C22);
+}
+
+.package-track {
+    border: none;
+    padding: 7px 15px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+}
+
+.package-track.track-input{
+    width: 300px;
+}
+.package-track.track-button{
+    background-color: #00b388;
+    color: #ffffff;
+}
+
+.postal-button button, .postal-button button:active, .postal-button .button:focus:not(:active), .postal-button .button.is-focused:not(:active){
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+.postal-button:hover{
+    background: #292929;
+}
+
+.postal-button button span{
+    color: #ffffff;
+}
+
+.postal-idea.postal-idea-image {
+    background-image: url("../images/mothers-day.jpg");
+    background-color: #ffffff;
+    height: 400px;
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-size: cover;
+}
+
+.postal-idea.postal-idea-message {
+    padding-top: 100px;
+    background: transparent;
+    border: none;
+    text-align: center;
+}
+
+.postal-idea {
+    box-shadow: none;
+}
+
+.postal-idea .title{
+    font-weight: lighter;
+    padding: 15px 0;
+}
+
+.support .support-container, .support .subtitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.support .support-container .postal-support-button {
+    background-color: #00866C;
+    color: #ffffff;
+    padding: 7px 15px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+}
+
+.support .support-container .postal-support-button:hover {
+    background-color: #00b388;
+}
+
+.postal-support-ribbon {
+    background-color: #F6BE00
+}
+
+section.info {
+    background-color: #ffffff;
+}
+
+section.info div {
+    text-align: center;
+}
+.postal-copyright {
+    width: 100%;
+    font-size: .65em;
+    padding: 2px 5px;
+    background-color: #c8102e;
+}
+
+.postal-copyright *, .postal-copyright a:hover, .postal-copyright a:visited {
+    text-decoration: none;
+    color: #fff9d9;
+}
