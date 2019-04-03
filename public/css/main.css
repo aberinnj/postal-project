@@ -1,5 +1,5 @@
 html, body {
-    background-color: #f9f9f9;
+    background-color: #f0f0f0;
     box-sizing: border-box;
     max-width: 100em;
     margin: 0 auto;
@@ -7,7 +7,6 @@ html, body {
 
 .postal-brand {
     font-size: 1.32em;
-    font-family: 'Segoe UI', sans-serif;
     font-weight: bold;
 }
 
@@ -120,4 +119,10 @@ section.info div {
 .postal-copyright *, .postal-copyright a:hover, .postal-copyright a:visited {
     text-decoration: none;
     color: #fff9d9;
+}
+
+.postal-track-ribbon {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }

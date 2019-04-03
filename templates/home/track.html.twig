@@ -1,5 +1,9 @@
 {%  extends 'home-layout.html.twig' %}
 
+{% block title %}
+{{ parent() }} - Track package
+{% endblock %}
+
 
             {% block navOptions %}
                 <div class="navbar-end">
@@ -63,80 +67,31 @@
 
 
 {% block body %}
-    <section class="hero is-dark is-large postal-bg-image">
+    <section class="hero is-dark postal-bg-image">
+        {{ parent() }}
+    </section>
 
-            {{ parent() }}
+    <section class="section is-medium">
+        <div>
+            <div class="columns is-mobile">
+            <div class="column is-4 is-offset-4 postal-track-ribbon">
+            
 
-        <div class="hero-body postal-bg-style">
-                <div class="container has-text-centered">
+                <div class="field">
                     <form>
-                    <div class="title">Track Your Package</div>
+                    <div class="subtitle">Enter a CourierPO tracking number.</div>
                     <input class="package-track track-input" placeholder="Tracking number"/>
                     <button class="package-track track-button">Track</button>
                     </form>
                 </div>
-        </div>
 
-    </section>
+                            
+            </div>
+            </div>
 
-
-      </section>
-    <section class="section">
-            <div class="container">
-            <div class="tile is-ancestor">
-        <div class="tile is-7 is-vertical is-parent">
-            <div class="tile is-child box postal-idea postal-idea-message">
-                <div class="title">
-                    Ready for Mother's Day?
-                </div>
-                <div class="subtitle">
-                    Ship with CourierPO's affordable, reliable and fast shipping. <br/> Let us help you get your surprise, right on <strong>time</strong>.
-                </div>
-            </div>
-        </div>
-        <div class="tile is-parent">
-            <div class="tile is-child box postal-idea postal-idea-image">
-            </div>
-        </div>
-            </div>
-                </div>
-    </section>
-
-    <section class="section info">
-        <div class="container">
-            <div class="title">
-                Way More Than Just Shipping.
-            </div>
-            <div class="subtitle">
-            Explore ways to become more efficient, see printing offers and solutions, or<br/> get insights and inspiration for your small business.
-            </div>
         </div>
     </section>
 
-    
-    <section class="section info">
-        <div class="container">
-            <div class="tile is-ancestor">
-                    <div class="tile is-parent">
-                        <article class="tile is-child box">
-                        <p class="title">One</p>
-                        <p class="subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque risus mi, tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum felis venenatis efficitur. Aenean ac eleifend lacus, in mollis lectus. Donec sodales, arcu et sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna, vehicula et sem eget, facilisis sodales sem. </p>
-                        </article>
-                    </div>
-                    <div class="tile is-parent">
-                        <article class="tile is-child box">
-                        <p class="title">Two</p>
-                        <p class="subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque risus mi, tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum felis venenatis efficitur. Aenean ac eleifend lacus, in mollis lectus. Donec sodales, arcu et sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna, vehicula et sem eget, facilisis sodales sem. </p>
-                        </article>
-                    </div>
-                    <div class="tile is-parent">
-                        <article class="tile is-child box">
-                        <p class="title">Three</p>
-                        <p class="subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque risus mi, tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum felis venenatis efficitur. Aenean ac eleifend lacus, in mollis lectus. Donec sodales, arcu et sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna, vehicula et sem eget, facilisis sodales sem. </p>
-                        </article>
-                    </div>
-                    </div>
-        </div>
-    </section>
+    {% block trackResult %} {% endblock %}
 
 {% endblock %}
