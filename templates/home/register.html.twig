@@ -82,63 +82,7 @@
 
             <div class="column is-three-quarters">
 
-            <form>
-                First Name <input/>
-
-                <br/>
-
-                Middle Initial <input maxlength="1"/> 
-                
-                <br/>
-
-                <label>Last Name</label>  <input/>
-    
-                <br/><br/>
-
-                Street Address <input />
-
-                <br />
-
-                Apt <input/>
-
-                <br/>
-
-                City <input/>
-
-                <br/>
-
-                State <select autocomplete="on" placeholder="State">
-                    <option hidden disabled selected value></option>
-                    {% for state in states %}
-                    <option value="{{ state }}"> {{ state }} </option>
-                    {% endfor %}
-                </select>
-
-                <br/>
-
-                ZipCode <input/>
-
-                <br/><br/>
-
-                Email <input type="email"/>
-
-                <br />
-
-                Password <input type="password"/>
-
-                <br/><br/>
-                    
-                <div class="field-body">
-                    <div class="field">
-                    <div class="control">
-                        <button class="button is-primary">
-                        Submit
-                        </button>
-                    </div>
-                    </div>
-                </div>
-
-            </form>
+            {{ form(registration)}}
 
             </div>
             
