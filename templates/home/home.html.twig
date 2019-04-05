@@ -1,64 +1,7 @@
 {%  extends 'home-layout.html.twig' %}
 
-
             {% block navOptions %}
-                <div class="navbar-end">
-
-                    <div id="header-dropdown-button1" name="header-dropdown" class="dropdown navbar-item postal-button">
-                        <div class="dropdown-trigger">
-                                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" onclick="drawDropdown(1);">
-                                <span>Tracking</span>
-                                <span class="icon is-small">
-                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                </span>
-                                </button>
-                        </div>
-                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                                <div class="dropdown-content">
-                                    <a href="{{ path("app-track") }}" class="dropdown-item">
-                                        Track Your Package
-                                    </a>
-                                </div>
-                        </div>
-                    </div>
-                    <div id="header-dropdown-button2" name="header-dropdown" class="dropdown navbar-item postal-button">
-                        <div class="dropdown-trigger">
-                                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" onclick="drawDropdown(2);">
-                                <span>Shipping</span>
-                                <span class="icon is-small">
-                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                </span>
-                                </button>
-                        </div>
-                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                                <div class="dropdown-content">
-                                    <a href="{{ path('app-ship-order') }}" class="dropdown-item">
-                                        Create A Package
-                                    </a>
-                                </div>
-                        </div>
-                    </div>
-                    <div id="header-dropdown-button3" name="header-dropdown" class="dropdown navbar-item postal-button">
-                        <div class="dropdown-trigger">
-                                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" onclick="drawDropdown(3);">
-                                <span>Support &amp; Services</span>
-                                <span class="icon is-small">
-                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                </span>
-                                </button>
-                        </div>
-                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                                <div class="dropdown-content">
-                                    <a href="{{ path('app-support') }}" class="dropdown-item">
-                                        Support
-                                    </a>
-                                </div>
-                        </div>
-                    </div>
-                    <a class="navbar-item" href="{{ path('app-login') }}">
-                    MyAccount
-                    </a>
-                </div>
+            {{parent()}}
             {% endblock %}
 
 

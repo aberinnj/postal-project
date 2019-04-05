@@ -23,13 +23,13 @@ class HomeController extends AbstractController {
     {
         return $this->render('home/support.html.twig');
     }
-
+    
     /**
-     * @Route("/login", name="app-login")
+     * @Route("/register", name="app-register")
      */
-    public function sign_in()
+    public function register()
     {
-        return $this->render('home/login.html.twig');
+        return $this->render('home/register.html.twig');
     }
 
     /**
@@ -45,14 +45,6 @@ class HomeController extends AbstractController {
      */
     public function track()
     {
-        return $this->render('home/track.html.twig');
-    }
-
-    /**
-     * @Route("/track/{id}", name="app-track-id")
-     */
-    public function track_id()
-    {
-        return $this->render('home/track-result.html.twig', [ 'trackingID' => id ]);
+        return $this->render('home/track.html.twig', []);
     }
 }

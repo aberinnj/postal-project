@@ -5,17 +5,19 @@ function closeAllDropdownsExcept(id){
     {
         if (x[i].classList.contains("is-active") && id && (i != id-1)){
             x[i].classList.remove("is-active");
-        } else {
-            x[i].classList.remove("is-active");
         }
     }
 }
 
 function drawDropdown(id){
-    closeAllDropdownsExcept(id)
     const button = document.getElementById("header-dropdown-button"+id);
     button.classList.toggle("is-active");
+    closeAllDropdownsExcept(id)
+
+
 }
 
 // listener
-document.body.addEventListener('click', closeAllDropdownsExcept, true);
+document.body.addEventListener('click', function(){
+    closeAllDropdownsExcept(3);
+}, true);

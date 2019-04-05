@@ -1,5 +1,6 @@
 {%  extends 'home-layout.html.twig' %}
 
+
 {% set states = [
     "Alaska", 
     "Alabama", 
@@ -53,7 +54,7 @@
     "Wyoming"]  %}
 
 {% block title %}
-{{ parent() }} - Create Package
+{{ parent() }} - Create an Account
 {% endblock %}
 
 
@@ -65,12 +66,12 @@
 {% block body %}
     <section class="hero is-dark postal-bg-image">
         {{ parent() }}
-    </section>
+    </section>  
 
     <section class="section">
         <div class="container">
             <div class="subtitle">
-                Create and Ship A Package
+                Create Your Account
             </div>
         </div>
     </section>
@@ -82,8 +83,18 @@
             <div class="column is-three-quarters">
 
             <form>
+                First Name <input/>
 
-                <label class="label">Return Address</label>
+                <br/>
+
+                Middle Initial <input maxlength="1"/> 
+                
+                <br/>
+
+                <label>Last Name</label>  <input/>
+    
+                <br/><br/>
+
                 Street Address <input />
 
                 <br />
@@ -95,7 +106,7 @@
                 City <input/>
 
                 <br/>
-                
+
                 State <select autocomplete="on" placeholder="State">
                     <option hidden disabled selected value></option>
                     {% for state in states %}
@@ -109,50 +120,11 @@
 
                 <br/><br/>
 
-                <label class="label">Destination</label>
-                Street Address <input />
+                Email <input type="email"/>
 
                 <br />
 
-                Apt <input/>
-
-                <br/>
-
-                City <input/>
-
-                <br/>
-                
-                State <select autocomplete="on" placeholder="State">
-                    <option hidden disabled selected value></option>
-                    {% for state in states %}
-                    <option value="{{ state }}"> {{ state }} </option>
-                    {% endfor %}
-                </select>
-
-                <br/>
-
-                ZipCode <input/>
-
-                <br/><br/>
-
-                <label class="label">Specifications</label>
-                Height<input/>
-                
-                <br/>
-
-                Width  <input/>
-
-                <br/>
-
-                Length <input/> 
-
-                <br/>
-
-                Weight <input/>
-                
-                <br/><br/>
-
-                Fragile? <input type="checkbox" value="fragile"/>
+                Password <input type="password"/>
 
                 <br/><br/>
                     
@@ -169,10 +141,9 @@
             </form>
 
             </div>
-
+            
         </div>
         </div>
     </section>
-
-
+    
 {% endblock %}
