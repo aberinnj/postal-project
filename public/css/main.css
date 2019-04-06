@@ -14,6 +14,12 @@ html, body {
     font-weight: bold;
 }
 
+.tracking-history-result {
+    background-color: #ffffff;
+    border-bottom: solid 10px #F6BE00;
+    margin-bottom: 25px;
+}
+
 .postal-bg-image {  
     background-image: url("../images/high-bay-408222_1920.jpg");
     background-color: #292929;
@@ -24,7 +30,7 @@ html, body {
 }
 
 .postal-bg-image .hero-body.postal-bg-style{
-    background: rgba(29, 29, 29, .77);
+    background: rgba(29, 29, 29, .58);
 }
 .postal-bg-image .hero-head.postal-bg-style{
     background: radial-gradient(circle,#c8102e, #960C22);
@@ -37,12 +43,22 @@ html, body {
     border-radius: 5px;
 }
 
-.package-track.track-input{
+.package-track-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+}
+
+.package-track-form input{
     width: 300px;
 }
-.package-track.track-button, .field .control .postal-login-button {
+
+.package-track-form div button {
     background-color: #00b388;
     color: #ffffff;
+    border: none;
+    padding: .25em 10px;
 }
 
 .postal-button button, .postal-button button:active, .postal-button .button:focus:not(:active), .postal-button .button.is-focused:not(:active){

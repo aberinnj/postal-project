@@ -11,19 +11,20 @@
             {{ parent() }}
 
         <div class="hero-body postal-bg-style">
+            {{ form_start(tracking) }}
                 <div class="container has-text-centered">
-                    <form>
                     <div class="title">Track Your Package</div>
-                    <input class="package-track track-input" placeholder="Tracking number"/>
-                    <button class="package-track track-button">Track</button>
-                    </form>
+                        <div class="package-track-form">
+                            {{ form_row(tracking.PackageID) }}
+
+                            {{ form_row(tracking.Submit) }}
+                        </div>
                 </div>
+            {{ form_end(tracking) }}
         </div>
 
     </section>
 
-
-      </section>
     <section class="section">
             <div class="container">
             <div class="tile is-ancestor">

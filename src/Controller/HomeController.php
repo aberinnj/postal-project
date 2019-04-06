@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Entity\Registration;
+use App\Entity\Tracking;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -22,19 +23,24 @@ class HomeController extends AbstractController {
     /**
      * @Route("/", name="app-home")
      */
-    public function home_display()
+    public function home_display(Request $request)
     {
-        return $this->render('home/home.html.twig');
+        $tracking = new Tracking();
+        $trackingForm = $this->createFormBuilder($tracking)
+            ->add('PackageID', TextType::class, [ 'label' => 'Tracking ID '] )
+            ->add('Submit', SubmitType::class, [ 'label' => 'Track'] )
+            ->getForm();
+
+        $trackingForm->handleRequest($request);
+        if ($trackingForm->isSubmitted() && $trackingForm->isValid()) {
+            $tracking = $trackingForm->getData();
+            $this->get('session')->getFlashBag()->add('trackID', $tracking);
+            return $this->redirectToRoute('app-track');
+        }
+
+        return $this->render('home/home.html.twig', ['tracking' => $trackingForm->createView()]);
     }
 
-    /**
-     * @Route("/support", name="app-support")
-     */
-    public function support_help()
-    {
-        return $this->render('home/support.html.twig');
-    }
-    
     /**
      * @Route("/register", name="app-register")
      */
@@ -42,15 +48,15 @@ class HomeController extends AbstractController {
     {
         $registration = new Registration();
         $registrationForm = $this->createFormBuilder($registration)
-            ->add('Email', TextType::class, ['label' => 'Email ',  'required' => true])
-            ->add('Password', PasswordType::class, ['label' => 'Password ',  'required' => true])
-            ->add('FName', TextType::class, ['label' => 'First Name ',  'required' => true])
-            ->add('MInit', TextType::class, ['label' => 'Middle Initial ',  'required' => true])
-            ->add('LName', TextType::class, ['label' => 'Last Name ',  'required' => true])
-            ->add('Street', TextType::class, ['label' => 'Street Address ',  'required' => true])
+            ->add('Email', TextType::class, ['label' => '* Email ',  'required' => true])
+            ->add('Password', PasswordType::class, ['label' => '* Password ',  'required' => true])
+            ->add('FName', TextType::class, ['label' => '* First Name ',  'required' => true])
+            ->add('MInit', TextType::class, ['label' => '* Middle Initial ',  'required' => true])
+            ->add('LName', TextType::class, ['label' => '* Last Name ',  'required' => true])
+            ->add('Street', TextType::class, ['label' => '* Street Address ',  'required' => true])
             ->add('ApartmentNo', NumberType::class, ['label' => 'Apartment No. ', 'required' => false])
-            ->add('City', TextType::class, ['label' => 'City ',  'required' => true])
-            ->add('State', ChoiceType::class, ['choices' => [
+            ->add('City', TextType::class, ['label' => '* City ',  'required' => true])
+            ->add('State', ChoiceType::class, ['label'=> '* State ','choices' => [
                 ''=>null,
                 'Alabama'=>'AL',
                 'Alaska'=>'AK',
@@ -103,7 +109,7 @@ class HomeController extends AbstractController {
                 'Wisconsin'=>'WI',
                 'Wyoming'=>'WY'
             ],  'required' => true])
-            ->add('ZIP', NumberType::class, ['label' => 'ZIP Code ',  'required' => true])
+            ->add('ZIP', NumberType::class, ['label' => '* ZIP Code ',  'required' => true])
             ->add('Submit', SubmitType::class, ['label' => 'Submit'])
             ->getForm();
             
@@ -113,6 +119,7 @@ class HomeController extends AbstractController {
             $registration = $registrationForm->getData();
 
             $this->registerQuery($connection, $registration);
+            return $this->redirectToRoute('app-home');
         }
 
         return $this->render('home/register.html.twig', [
@@ -154,8 +161,6 @@ class HomeController extends AbstractController {
 
             echo "Error " . $e->getMessage();
         }
-
-
     }
 
     /**
@@ -169,8 +174,71 @@ class HomeController extends AbstractController {
     /**
      * @Route("/track", name="app-track")
      */
-    public function track()
+    public function track(Connection $connection, Request $request)
     {
-        return $this->render('home/track.html.twig', []);
+
+        $tracking = new Tracking();
+
+        $bag = $this->get('session')->getFlashBag();
+        $data = [];
+        $status = [];
+        if ($bag->has('trackID')) {
+
+            $req = $bag->get('trackID');
+            $tracking = $req[0];
+
+            $data = $this->trackingQuery($connection, $req[0]);
+            $status = $this->statusQuery($connection, $req[0]);
+        }
+
+        $trackingForm = $this->createFormBuilder($tracking)
+        ->add('PackageID', TextType::class, [ 'label' => 'Tracking ID '] )
+        ->add('Submit', SubmitType::class, [ 'label' => 'Track'] )
+        ->getForm();
+        $trackingForm->handleRequest($request);
+
+        if ($trackingForm->isSubmitted() && $trackingForm->isValid()) {
+            $tracking = $trackingForm->getData();
+            $this->get('session')->getFlashBag()->add('trackID', $tracking);
+            return $this->redirectToRoute('app-track');
+        }
+    
+
+        return $this->render('home/track.html.twig', [
+            'tracking' => $trackingForm->createView(), 
+            'data' => $data,
+            'id' => $tracking->getPackageID(),
+            'status' =>$status]);
+    }
+
+    private function trackingQuery(Connection $connection, Tracking $tracking): array {
+
+        try{
+            $sql = "SELECT DISTINCT t.Update_Date as Date, t.TrackingNote as Note FROM tracking as t, package as p WHERE t.Package_ID = :pID ORDER BY t.Tracking_Index ASC";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':pID', strval($tracking->getPackageID()));
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
+    private function statusQuery(Connection $connection, Tracking $tracking) {
+        try{
+            $sql = "SELECT DISTINCT s.Status as Status FROM package as p, status as s WHERE p.PackageID = :pID AND p.Status = s.Code";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':pID', strval($tracking->getPackageID()));
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
     }
 }
