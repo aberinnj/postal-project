@@ -5,8 +5,9 @@ html, body {
     margin: 0 auto;
 }
 
-.portal {
+.portal-modal {
     background-color: #ffffff;
+    border-radius: 5px;
 }
 
 .postal-brand {
@@ -145,4 +146,10 @@ section.info div {
     display: flex;
     flex-direction: row;
     justify-content: center;
+}
+
+.footer-listing ul {
+    list-style: none;
+    font-size: 1.1em;
+    margin: 0;
 }
