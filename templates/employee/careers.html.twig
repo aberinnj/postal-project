@@ -1,0 +1,66 @@
+{%  extends 'home-layout.html.twig' %}
+
+{% block title %}
+{{ parent() }} - Careers
+{% endblock %}
+
+
+            {% block navOptions %}
+            {{parent()}}
+            {% endblock %}
+
+
+{% block body %}
+    <section class="hero is-dark postal-bg-image">
+        {{ parent() }}
+    </section>  
+
+    <section class="hero postal-careers-image">
+    <div class="hero-body postal-cover">
+        <div class="container">
+        <h1 class="title postal-career-hero">
+            Careers
+        </h1>
+        </div>
+    </div>
+    </section>  
+
+    <section class="section postal-career-listings">
+        <div class="container">
+         
+        <div class="postal-career-listings">
+            {% if jobs is defined %}
+            {% else %}
+<div class="notification postal-career-default">
+  There are no current postings. 
+</div>
+            {% endif %}
+
+        </div>
+        </div>
+    </section>
+
+    <section class="section">
+    <div class="container">
+    <div class="postal-careers-general">
+
+        <div class="level">
+            <div class="level-left">
+                <p>
+                <strong>General Application</strong>
+                <br>
+                Can't find your position? Apply with a general application and we'll review which role fits your skills best!        
+                </p>
+            </div>
+            <div class="level-left">
+                <a class="level-item apply-button" aria-label="Apply" href="{{ path('app-employee-register') }}">
+                    Apply
+                </a>
+            </div>
+        </div>
+
+    </div>
+    </div>
+    </section>
+    
+{% endblock %}

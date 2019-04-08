@@ -17,7 +17,7 @@ html, body {
 
 .tracking-history-result {
     background-color: #ffffff;
-    border-bottom: solid 10px #F6BE00;
+    border-bottom: solid 20px #F6BE00;
     margin-bottom: 25px;
 }
 
@@ -30,7 +30,7 @@ html, body {
     background-size: cover;
 }
 
-.postal-bg-image .hero-body.postal-bg-style{
+.postal-bg-image .hero-body.postal-bg-style, .postal-careers-image .postal-cover{
     background: rgba(29, 29, 29, .58);
 }
 .postal-bg-image .hero-head.postal-bg-style{
@@ -152,4 +152,72 @@ section.info div {
     list-style: none;
     font-size: 1.1em;
     margin: 0;
+}
+
+.footer-listing ul li a, .footer-listing ul li a:visited, .footer-listing ul li a:active {
+    color: #00866C;
+}
+
+.footer-listing ul li a:hover {
+    color: #00b388;
+}
+
+.postal-login div {
+    display: flex;
+    flex-direction: column;
+}
+
+.postal-login div button {
+    margin: 10px 0;
+    color: #ffffff;
+    background-color: #00b388;
+    padding: .25em 10px;
+    border: none;
+}
+.postal-login div label {
+    font-weight: bold;
+}
+
+.postal-banner .postal-section{
+    text-align: left;
+    padding: 25px 0;
+    color: #f0f0f0;
+}
+
+.postal-career-listings {
+    height: 10em;
+}
+
+.postal-career-default {
+    background: #F6BE00
+}
+
+.postal-careers-general {
+    background-color: #ffffff;
+    color: #292929;
+    padding: 10px 15px;
+}
+
+.apply-button {
+    background-color: #00b388;
+    color: #ffffff;
+    padding: 5px 10px;
+}
+
+.postal-career-hero {
+    margin-top: 120px;
+    font-size: 2.7rem;
+    color: #ffffff;
+}
+
+.postal-careers-image {
+    text-align: center;
+    font-weight: lighter;
+
+    background-image: url("../images/brainstorming.jpg");
+    background-color: #ffffff;
+    height: 400px;
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-size: cover;
 }

@@ -1,7 +1,7 @@
 {%  extends 'home-layout.html.twig' %}
 
 {% block title %}
-{{ parent() }} - Create Package
+{{ parent() }} - Create an Account
 {% endblock %}
 
 
@@ -13,21 +13,28 @@
 {% block body %}
     <section class="hero is-dark postal-bg-image">
         {{ parent() }}
-    </section>
+    </section>  
 
     <section class="section">
         <div class="container">
             <div class="subtitle">
-                Create and Ship A Package
+                Create your employee profile.
             </div>
         </div>
     </section>
 
     <section class="section is-small">
         <div class="container">
-            {{ form(package) }}
+        <div class="columns">
+
+            <div class="column is-three-quarters">
+
+            {{ form(registration)}}
+
+            </div>
+            
+        </div>
         </div>
     </section>
-
-
+    
 {% endblock %}

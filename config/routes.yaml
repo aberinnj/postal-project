@@ -1,3 +1,9 @@
-# index:
-#   path: /
-#   controller: App\Controller\HomeController::display
+
+
+app-employee-home:
+  path: /employee
+  controller: App\Controller\EmployeeController::home
+
+app-customer-home:
+  path: /customer
+  controller: App\Controller\CustomerController::home

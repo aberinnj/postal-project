@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
-
 use App\Entity\Registration;
 use App\Entity\Tracking;
 use App\Entity\Package;
+use App\Form\PackageForm;
+use App\Entity\Credentials;
+use App\Form\CustomerLoginForm;
+use App\Form\CustomerRegistrationForm;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -16,17 +19,20 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 use Doctrine\DBAL\Driver\Connection;
 
-class HomeController extends AbstractController {
+class HomeController extends RootController {
+    
+
 
     /**
      * @Route("/", name="app-home")
      */
-    public function home_display(Request $request)
+    public function home_display_view(Connection $connection, Request $request)
     {
+        $loginForm = $this->customer($connection, $request);
+
         $tracking = new Tracking();
         $trackingForm = $this->createFormBuilder($tracking)
             ->add('PackageID', TextType::class, [ 'label' => 'Tracking ID '] )
@@ -40,79 +46,18 @@ class HomeController extends AbstractController {
             return $this->redirectToRoute('app-track');
         }
 
-        return $this->render('home/home.html.twig', ['tracking' => $trackingForm->createView()]);
+        return $this->render('home/home.html.twig', ['tracking' => $trackingForm->createView(), 'login' => $loginForm->createView()]);
     }
 
     /**
      * @Route("/register", name="app-register")
      */
-    public function register(Connection $connection, Request $request)
+    public function register_view(Connection $connection, Request $request)
     {
+        $loginForm = $this->customer($connection, $request);
+
         $registration = new Registration();
-        $registrationForm = $this->createFormBuilder($registration)
-            ->add('Email', TextType::class, ['label' => '* Email ',  'required' => true])
-            ->add('Password', PasswordType::class, ['label' => '* Password ',  'required' => true])
-            ->add('FName', TextType::class, ['label' => '* First Name ',  'required' => true])
-            ->add('MInit', TextType::class, ['label' => '* Middle Initial ',  'required' => true])
-            ->add('LName', TextType::class, ['label' => '* Last Name ',  'required' => true])
-            ->add('Street', TextType::class, ['label' => '* Street Address ',  'required' => true])
-            ->add('ApartmentNo', NumberType::class, ['label' => 'Apartment No. ', 'required' => false])
-            ->add('City', TextType::class, ['label' => '* City ',  'required' => true])
-            ->add('State', ChoiceType::class, ['label'=> '* State ','choices' => [
-                'Alabama'=>'AL',
-                'Alaska'=>'AK',
-                'Arizona'=>'AZ',
-                'Arkansas'=>'AR',
-                'California'=>'CA',
-                'Colorado'=>'CO',
-                'Connecticut'=>'CT',
-                'Delaware'=>'DE',
-                'Florida'=>'FL',
-                'Georgia'=>'GA',
-                'Hawaii'=>'HI',
-                'Idaho'=>'ID',
-                'Illinois'=>'IL',
-                'Indiana'=>'IN',
-                'Iowa'=>'IA',
-                'Kansas'=>'KS',
-                'Kentucky'=>'KY',
-                'Louisiana'=>'LA',
-                'Maine'=>'ME',
-                'Maryland'=>'MD',
-                'Massachusetts'=>'MA',
-                'Michigan'=>'MI',
-                'Minnesota'=>'MN',
-                'Mississippi'=>'MS',
-                'Missouri'=>'MO',
-                'Montana'=>'MT',
-                'Nebraska'=>'NE',
-                'Nevada'=>'NV',
-                'New Hampshire'=>'NH',
-                'New Jersey'=>'NJ',
-                'New Mexico'=>'NM',
-                'New York'=>'NY',
-                'North Carolina'=>'NC',
-                'North Dakota'=>'ND',
-                'Ohio'=>'OH',
-                'Oklahoma'=>'OK',
-                'Oregon'=>'OR',
-                'Pennsylvania'=>'PA',
-                'Rhode Island'=>'RI',
-                'South Carolina'=>'SC',
-                'South Dakota'=>'SD',
-                'Tennessee'=>'TN',
-                'Texas'=>'TX',
-                'Utah'=>'UT',
-                'Vermont'=>'VT',
-                'Virginia'=>'VA',
-                'Washington'=>'WA',
-                'West Virginia'=>'WV',
-                'Wisconsin'=>'WI',
-                'Wyoming'=>'WY'
-            ],  'required' => true])
-            ->add('ZIP', NumberType::class, ['label' => '* ZIP Code ',  'required' => true])
-            ->add('Submit', SubmitType::class, ['label' => 'Submit'])
-            ->getForm();
+        $registrationForm = $this->createForm(CustomerRegistrationForm::class, $registration);
             
         $registrationForm->handleRequest($request);
 
@@ -125,135 +70,35 @@ class HomeController extends AbstractController {
 
         return $this->render('home/register.html.twig', [
             "registration" => $registrationForm->createView(),
+            'login' => $loginForm->createView()
         ]);
-    }
-
-    /*******************************************************************************
-    *******************************************************************************/
-    private function registerQuery(Connection $connection, Registration $registration) {
-
-        try{
-            
-            $customer_sql = "INSERT INTO customer (FName, MInit, LName, Email, State, City, ZIP, Street, ApartmentNo)
-            VALUES (:FName, :MInit, :LName, :Email, :State, :City, :ZIP, :Street, :ApartmentNo)";
-
-            $customer_credentials_sql = "INSERT INTO customercredentials (Email, Password)
-            VALUES ((SELECT cust.Email FROM customer as cust where cust.Email=:Email), :Password)";
-
-            $stmt = $connection->prepare($customer_sql);
-            $stmt->bindValue(':FName', $registration->getFName());
-            $stmt->bindValue(':MInit', $registration->getMInit());
-            $stmt->bindValue(':LName', $registration->getLName());
-            $stmt->bindValue(':Email', $registration->getEmail());
-            $stmt->bindValue(':State', $registration->getState());
-            $stmt->bindValue(':City', $registration->getCity());
-            $stmt->bindValue(':ZIP', $registration->getZIP());
-            $stmt->bindValue(':Street', $registration->getStreet());
-            $stmt->bindValue(':ApartmentNo', $registration->getApartmentNo());
-            $stmt->execute();
-
-            $stmt = $connection->prepare($customer_credentials_sql);
-            $stmt->bindValue(':Email', $registration->getEmail());
-            $stmt->bindValue(':Password', $registration->getPassword());
-            $stmt->execute();
-
-            $stmt = null;
-        } catch (PODException $e){ 
-
-            echo "Error " . $e->getMessage();
-        }
-    }
-
-    /**
-     * @Route("/employee-portal", name="app-employee-login")
-     */
-    public function login()
-    {
-        return $this->render('home/portal.html.twig');
     }
 
     /**
      * @Route("/order", name="app-ship-order")
      */
-    public function order()
+    public function order_view(Connection $connection, Request $request)
     {
-        $package = new Package();
-        $packageForm = $this->createFormBuilder($package)
-        ->add('Email', TextType::class, ['label' => '* Email ',  'required' => true])
-        ->add('Recipient', TextType::class, ['label' => '* Recipient Name ',  'required' => true])
-        ->add('Weight', NumberType::class, ['label' => '* Weight ',  'required' => true])
-        ->add('Length', NumberType::class, ['label' => '* Length ',  'required' => true])
-        ->add('Width', NumberType::class, ['label' => '* Width ',  'required' => true])
-        ->add('Height', NumberType::class, ['label' => '* Height ',  'required' => true])
-        ->add('Street', TextType::class, ['label' => '* Street Address ', 'required' => true])
-        ->add('ApartmentNo', NumberType::class, ['label' => 'Apartment No. ', 'required' => false])
-        ->add('City', TextType::class, ['label' => '* City ',  'required' => true])
-        ->add('State', ChoiceType::class, ['label'=> '* State ','choices' => [
-            'Alabama'=>'AL',
-            'Alaska'=>'AK',
-            'Arizona'=>'AZ',
-            'Arkansas'=>'AR',
-            'California'=>'CA',
-            'Colorado'=>'CO',
-            'Connecticut'=>'CT',
-            'Delaware'=>'DE',
-            'Florida'=>'FL',
-            'Georgia'=>'GA',
-            'Hawaii'=>'HI',
-            'Idaho'=>'ID',
-            'Illinois'=>'IL',
-            'Indiana'=>'IN',
-            'Iowa'=>'IA',
-            'Kansas'=>'KS',
-            'Kentucky'=>'KY',
-            'Louisiana'=>'LA',
-            'Maine'=>'ME',
-            'Maryland'=>'MD',
-            'Massachusetts'=>'MA',
-            'Michigan'=>'MI',
-            'Minnesota'=>'MN',
-            'Mississippi'=>'MS',
-            'Missouri'=>'MO',
-            'Montana'=>'MT',
-            'Nebraska'=>'NE',
-            'Nevada'=>'NV',
-            'New Hampshire'=>'NH',
-            'New Jersey'=>'NJ',
-            'New Mexico'=>'NM',
-            'New York'=>'NY',
-            'North Carolina'=>'NC',
-            'North Dakota'=>'ND',
-            'Ohio'=>'OH',
-            'Oklahoma'=>'OK',
-            'Oregon'=>'OR',
-            'Pennsylvania'=>'PA',
-            'Rhode Island'=>'RI',
-            'South Carolina'=>'SC',
-            'South Dakota'=>'SD',
-            'Tennessee'=>'TN',
-            'Texas'=>'TX',
-            'Utah'=>'UT',
-            'Vermont'=>'VT',
-            'Virginia'=>'VA',
-            'Washington'=>'WA',
-            'West Virginia'=>'WV',
-            'Wisconsin'=>'WI',
-            'Wyoming'=>'WY'
-        ],  'required' => true])
-        ->add('ZIP', NumberType::class, ['label' => '* ZIP Code ',  'required' => true])
-        ->add('Priority', NumberType::class, ['label' => '* Priority '])
-        ->add('isFragile', CheckboxType::class, ['label' => 'isFragile? ', 'required' => false])
-        ->add('Submit', SubmitType::class, ['label' => 'Submit'])
-        ->getForm();
+        $loginForm = $this->customer($connection, $request);
 
-        return $this->render('home/order.html.twig', ['package' => $packageForm->createView()]);
+        $package = new Package();
+        $packageForm = $this->createForm(PackageForm::class, $package);
+
+        $packageForm->handleRequest($request);
+
+        return $this->render('home/order.html.twig', 
+        ['package' => $packageForm->createView(),
+        'login' => $loginForm->createView()]);
     }
 
     /**
      * @Route("/track", name="app-track")
      */
-    public function track(Connection $connection, Request $request)
+    public function track_view(Connection $connection, Request $request)
     {
+
+        $credentials = new Credentials();
+        $credentialsForm = $this->createForm(CustomerLoginForm::class, $credentials);
 
         $tracking = new Tracking();
 
@@ -283,7 +128,8 @@ class HomeController extends AbstractController {
     
 
         return $this->render('home/track.html.twig', [
-            'tracking' => $trackingForm->createView(), 
+            'tracking' => $trackingForm->createView(),
+            'login' => $credentialsForm->createView(), 
             'data' => $data,
             'id' => $tracking->getPackageID(),
             'status' =>$status]);
@@ -319,4 +165,5 @@ class HomeController extends AbstractController {
             echo "Error " . $e->getMessage();
         }
     }
+
 }

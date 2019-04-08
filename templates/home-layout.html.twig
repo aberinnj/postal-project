@@ -70,37 +70,7 @@
                                 <div class="dropdown-content">
 
                                     <div class="dropdown-item">
-                                        <p><b>Login</b></p>
-                                        <form>
-                                            
-
-<div class="field">
-  <p class="control has-icons-left has-icons-right">
-    <input class="input" type="email" placeholder="Email">
-    <span class="icon is-small is-left">
-      <i class="fas fa-envelope"></i>
-    </span>
-    <span class="icon is-small is-right">
-      <i class="fas fa-check"></i>
-    </span>
-  </p>
-</div>
-<div class="field">
-  <p class="control has-icons-left">
-    <input class="input" type="password" placeholder="Password">
-    <span class="icon is-small is-left">
-      <i class="fas fa-lock"></i>
-    </span>
-  </p>
-</div>
-<div class="field">
-  <p class="control">
-    <button class="button postal-login-button is-fullwidth">
-      Login
-    </button>
-  </p>
-</div>
-                                        </form>
+                                    {{ form(login) }}
                                     </div>
                                     <hr class="dropdown-divider">
 
@@ -144,13 +114,13 @@
     </ul>
   </div>
   <div class="column is-one-quarter footer-listing">
-      <ul  style="list-style: none; font-size: 1.1em;">
+      <ul style="list-style: none; font-size: 1.1em;">
         <li style="font-weight: bold;">Our Company</li>
         <li><a href="">About CourierPO</a></li>
         <li><a href="">Our Portfolio</a></li>
-        <li><a href="">Careers</a></li>
+        <li><a href="{{ path('app-careers')}}">Careers</a></li>
         <li><a href="">NewsRoom</a></li>
-        <li><a href="{{ path('app-employee-login') }}" style="color: #2920ee">Employee Portal</a></li>
+        <li><a href="{{ path('app-employee-home') }}">Employee Portal</a></li>
     </ul>
   </div>
   <div class="column">
@@ -181,5 +151,5 @@
 
 
 {% block javascripts %}
-    <script src="js/dropdown.js"></script>
+    <script src="{{ asset('js/dropdown.js') }}"></script>
 {% endblock %}

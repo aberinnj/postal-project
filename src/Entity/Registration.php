@@ -33,7 +33,7 @@ class Registration
     }
 
     public function setPassword($Password){
-        $this->Password = $Password;
+        $this->Password = md5($Password);
     }
 
     // FName
