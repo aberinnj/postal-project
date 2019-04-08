@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Credentials;
+use App\Entity\Registration;
 use App\Form\CustomerLoginForm;
 use App\Form\EmployeeRegistrationForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,9 +45,9 @@ protected function CustomerUserQuery(Connection $connection, Credentials $creden
     }
 }
 
-/*******************************************************************************
-*******************************************************************************/
-protected function registerQuery(Connection $connection, Registration $registration) {
+    /*******************************************************************************
+    *******************************************************************************/
+    protected function registerQuery(Connection $connection, Registration $registration) {
 
     try{
         
