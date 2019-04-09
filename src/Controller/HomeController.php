@@ -22,28 +22,26 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Doctrine\DBAL\Driver\Connection;
 
-class HomeController extends RootController {
-    
-
+class HomeController extends Root_HomeController {
 
     /**
-     * @Route("/", name="app-home")
+     * @Route("/", name="app-main-page")
      */
-    public function home_display_view(Connection $connection, Request $request)
+    public function show_mainPage(Connection $connection, Request $request)
     {
-        $loginForm = $this->customer($connection, $request);
+        $loginBundle = $this->signIn_as_customer();
+        $loginForm = $loginBundle[1];
+        $loginHandler = $this->handleSignIn_as_customer($connection, $request, $loginForm, $loginBundle[0]);
 
-        $tracking = new Tracking();
-        $trackingForm = $this->createFormBuilder($tracking)
-            ->add('PackageID', TextType::class, [ 'label' => 'Tracking ID '] )
-            ->add('Submit', SubmitType::class, [ 'label' => 'Track'] )
-            ->getForm();
+        $trackingBundle = $this->tracking();
+        $trackingForm = $trackingBundle[1];
+        $trackingHandler = $this->handleTracking($request, $trackingForm, $trackingBundle[0]);
 
-        $trackingForm->handleRequest($request);
-        if ($trackingForm->isSubmitted() && $trackingForm->isValid()) {
-            $tracking = $trackingForm->getData();
-            $this->get('session')->getFlashBag()->add('trackID', $tracking);
-            return $this->redirectToRoute('app-track');
+        if($trackingHandler) {
+            return $trackingHandler;
+        }
+        elseif($loginHandler) {
+            return $loginHandler;
         }
 
         return $this->render('home/home.html.twig', ['tracking' => $trackingForm->createView(), 'login' => $loginForm->createView()]);
@@ -52,20 +50,21 @@ class HomeController extends RootController {
     /**
      * @Route("/register", name="app-register")
      */
-    public function register_view(Connection $connection, Request $request)
+    public function show_registerPage(Connection $connection, Request $request)
     {
-        $loginForm = $this->customer($connection, $request);
+        $loginBundle = $this->signIn_as_customer();
+        $loginForm = $loginBundle[1];
+        $loginHandler = $this->handleSignIn_as_customer($connection, $request, $loginForm, $loginBundle[0]);
 
-        $registration = new Registration();
-        $registrationForm = $this->createForm(CustomerRegistrationForm::class, $registration);
-            
-        $registrationForm->handleRequest($request);
+        $registrationBundle = $this->signUp_as_customer();
+        $registrationForm = $registrationBundle[1];
+        $registrationHandler = $this->handleSignUp_as_customer($connection, $request, $registrationForm, $registrationBundle[0]);
 
-        if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
-            $registration = $registrationForm->getData();
-
-            $this->registerQuery($connection, $registration);
-            return $this->redirectToRoute('app-home');
+        if($loginHandler){
+            return $loginHandler;
+        }
+        elseif ($registrationHandler) {
+            return $registrationHandler;
         }
 
         return $this->render('home/register.html.twig', [
@@ -79,12 +78,19 @@ class HomeController extends RootController {
      */
     public function order_view(Connection $connection, Request $request)
     {
-        $loginForm = $this->customer($connection, $request);
+        $loginBundle = $this->signIn_as_customer();
+        $loginForm = $loginBundle[1];
+        $loginHandler = $this->handleSignIn_as_customer($connection, $request, $loginForm, $loginBundle[0]);
 
+        if($loginHandler) {
+            return $loginHandler;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////
         $package = new Package();
         $packageForm = $this->createForm(PackageForm::class, $package);
+        //////////////////////////////////////////////////////////////////////////////////////
 
-        $packageForm->handleRequest($request);
 
         return $this->render('home/order.html.twig', 
         ['package' => $packageForm->createView(),
@@ -97,73 +103,122 @@ class HomeController extends RootController {
     public function track_view(Connection $connection, Request $request)
     {
 
-        $credentials = new Credentials();
-        $credentialsForm = $this->createForm(CustomerLoginForm::class, $credentials);
-
-        $tracking = new Tracking();
-
-        $bag = $this->get('session')->getFlashBag();
         $data = [];
         $status = [];
+        $previous_tracking_data = null;
+        $bag = $this->get('session')->getFlashBag();
+
         if ($bag->has('trackID')) {
 
-            $req = $bag->get('trackID');
-            $tracking = $req[0];
+            $previous_tracking_data = ($bag->get('trackID'))[0];
+            
+            $data = $this->trackingQuery($connection, $previous_tracking_data);
+            $status = $this->statusQuery($connection, $previous_tracking_data);
+        } 
 
-            $data = $this->trackingQuery($connection, $req[0]);
-            $status = $this->statusQuery($connection, $req[0]);
+        $loginBundle = $this->signIn_as_customer();
+        $loginForm = $loginBundle[1];
+        $loginHandler = $this->handleSignIn_as_customer($connection, $request, $loginForm, $loginBundle[0]);
+
+        $trackingBundle = $this->tracking($previous_tracking_data);
+        $trackingForm = $trackingBundle[1];
+        $trackingHandler = $this->handleTracking($request, $trackingForm, $trackingBundle[0]);  
+
+        if($loginHandler){
+            return $loginHandler;
+        } 
+        else if($trackingHandler) {
+            return $trackingHandler;
         }
-
-        $trackingForm = $this->createFormBuilder($tracking)
-        ->add('PackageID', TextType::class, [ 'label' => 'Tracking ID '] )
-        ->add('Submit', SubmitType::class, [ 'label' => 'Track'] )
-        ->getForm();
-        $trackingForm->handleRequest($request);
-
-        if ($trackingForm->isSubmitted() && $trackingForm->isValid()) {
-            $tracking = $trackingForm->getData();
-            $this->get('session')->getFlashBag()->add('trackID', $tracking);
-            return $this->redirectToRoute('app-track');
-        }
-    
-
         return $this->render('home/track.html.twig', [
             'tracking' => $trackingForm->createView(),
-            'login' => $credentialsForm->createView(), 
+            'login' => $loginForm->createView(), 
             'data' => $data,
-            'id' => $tracking->getPackageID(),
+            'id' => $trackingBundle[0]->getPackageID(),
             'status' =>$status]);
     }
 
-    private function trackingQuery(Connection $connection, Tracking $tracking): array {
 
-        try{
-            $sql = "SELECT DISTINCT t.Update_Date as Date, t.TrackingNote as Note FROM tracking as t, package as p WHERE t.Package_ID = :pID ORDER BY t.Tracking_Index ASC";
-
-            $stmt = $connection->prepare($sql);
-            $stmt->bindValue(':pID', strval($tracking->getPackageID()));
-            $stmt->execute();
-
-            return $stmt->fetchAll();
-
-        } catch (PODException $e){ 
-            echo "Error " . $e->getMessage();
+    public function employee_home(Connection $connection, Request $request)
+    {
+        $session = $this->get('session');
+        if ($session->has('user') && $session->get('user')['type'] == 'employee')  
+        {
+            return $this->employee_dashboard($connection, $request);
+            
+        } 
+        elseif ($session->has('user') && $session->get('user')['type'] != 'employee'){
+            $session->clear();
+            return $this->login($connection, $request);
         }
+        else {
+
+            return $this->login($connection, $request);
+        }
+
     }
 
-    private function statusQuery(Connection $connection, Tracking $tracking) {
-        try{
-            $sql = "SELECT DISTINCT s.Status as Status FROM package as p, status as s WHERE p.PackageID = :pID AND p.Status = s.Code";
 
-            $stmt = $connection->prepare($sql);
-            $stmt->bindValue(':pID', strval($tracking->getPackageID()));
-            $stmt->execute();
+    public function employee_login(Connection $connection, Request $request) {
 
-            return $stmt->fetchAll();
+        $loginBundle = $this->signIn_as_customer();
+        $loginForm = $loginBundle[1];
+        $loginHandler = $this->handleSignIn_as_customer($connection, $request, $loginForm, $loginBundle[0]);
 
-        } catch (PODException $e){ 
-            echo "Error " . $e->getMessage();
+        $employeeBundle = $this->signIn_as_employee();
+        $employeeForm = $employeeBundle[1];
+        $employeeHandler = $this->handleSignIn_as_employee($connection, $request, $employeeForm, $employeeBundle[0]);
+
+        if($loginHandler){
+            return $loginHandler;
+        } 
+        elseif ($employeeHandler) {
+            return $employeeHandler;
         }
+
+        return $this->render('home/portal.html.twig', ['login' => $loginForm->createView(), 'portal'=>$employeeForm->createView()]);
+    }
+        
+    /**
+     * @Route("/careers", name="app-careers")
+     */
+    public function careers(Connection $connection, Request $request){
+
+        $loginBundle = $this->signIn_as_customer();
+        $loginForm = $loginBundle[1];
+        $loginHandler = $this->handleSignIn_as_customer($connection, $request, $loginForm, $loginBundle[0]);
+
+
+        if($loginHandler){
+            return $loginHandler;
+        } 
+
+        return $this->render('employee/careers.html.twig',
+        ['login' => $loginForm->createView()]);
+    }
+
+    /**
+     * @Route("/careers/apply", name="app-employee-register")
+    */
+    public function apply(Connection $connection, Request $request) {
+
+        $loginBundle = $this->signIn_as_customer();
+        $loginForm = $loginBundle[1];
+        $loginHandler = $this->handleSignIn_as_customer($connection, $request, $loginForm, $loginBundle[0]);
+
+
+        $registrationBundle = $this->signUp_as_employee();
+        $registrationForm = $registrationBundle[1];
+        $registrationHandler = $this->handleSignUp_as_employee($connection, $request, $registrationForm, $registrationBundle[0]);
+
+        if($loginHandler){
+            return $loginHandler;
+        }
+        elseif ($registrationHandler) {
+            return $registrationHandler;
+        }
+        
+        return $this->render('employee/apply.html.twig', ['login' => $loginForm->createView(), 'registration' => $registrationForm->createView()]);
     }
 
 }

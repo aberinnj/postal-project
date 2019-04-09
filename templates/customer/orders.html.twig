@@ -1,0 +1,94 @@
+{%  extends 'customer_layout.html.twig' %}
+
+{% block title %}
+{{ parent() }} - My Orders
+{% endblock %}
+
+
+            {% block navOptions %}
+            {{parent()}}
+            {% endblock %}
+
+
+{% block body %}
+    {{ parent() }}
+    
+    <section class="section postal-banner">
+        <div class="container">
+            <div class="title">Your Orders</div>
+            <div class="subtitle">View your orders, invoices and tracking.</div>
+        </div>
+
+    </section>
+
+<section class="section">
+<div class="container">
+
+    <div class="tile is-ancestor">
+    <div class="tile is-vertical is-8">
+
+        <div class="tile is-parent">
+        <article class="tile is-child notification">
+            <div class="content">
+
+                <div style="margin-bottom: 10px">
+                    <div class="title">
+                        Listing
+                    </div>
+                </div>
+
+            <div class="" style="overflow-x: auto">
+                <table class="table">
+                <thead>
+                    <tr>
+                    <th><attr title="Package ID"> ID</attr></th>
+                    <th>Status</th>
+                    <th>Tracking</th>
+                    <th>Invoice</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                        {% if orderList|length > 0 %}
+
+
+                        {% else %}
+
+                            <article class="message is-warning">
+                            <div class="message-header">
+                                <p>You currently have no orders.</p>
+                            </div>
+                            <div class="message-body">
+                                Ship a package now through <a href=""><strong>Packages</strong></a>.
+                            </div>
+                            </article>
+
+                        {% endif %}
+                    </tbody>
+                </table>
+
+                </div>
+            </div>
+        </article>
+        </div>
+
+    </div>
+    <div class="tile is-parent">
+            <article class="tile is-child notification">
+            <div class="content">
+                <p class="title">Tall tile</p>
+                <p class="subtitle">With even more content</p>
+                <div class="content">
+                <!-- Content -->
+                </div>
+            </div>
+            </article>
+
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+    
+{% endblock %}

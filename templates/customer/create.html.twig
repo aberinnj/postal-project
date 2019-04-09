@@ -1,7 +1,7 @@
-{%  extends 'employee_layout.html.twig' %}
+{%  extends 'customer_layout.html.twig' %}
 
 {% block title %}
-{{ parent() }} - Dashboard
+{{ parent() }} - Create Package
 {% endblock %}
 
 
@@ -12,20 +12,18 @@
 
 {% block body %}
     {{ parent() }}
-    <section class="hero is-dark">
-    </section>
-
+    
     <section class="section">
         <div class="container">
             <div class="subtitle">
-
+                Create and Ship A Package
             </div>
         </div>
     </section>
 
     <section class="section is-small">
         <div class="container">
-
+            {{ form(package) }}
         </div>
     </section>
 

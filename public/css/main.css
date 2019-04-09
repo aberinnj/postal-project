@@ -33,7 +33,7 @@ html, body {
 .postal-bg-image .hero-body.postal-bg-style, .postal-careers-image .postal-cover{
     background: rgba(29, 29, 29, .58);
 }
-.postal-bg-image .hero-head.postal-bg-style{
+.postal-bg-image .hero-head.postal-bg-style, .dashbar{
     background: radial-gradient(circle,#c8102e, #960C22);
 }
 
@@ -55,7 +55,7 @@ html, body {
     width: 300px;
 }
 
-.package-track-form div button {
+.package-track-form div button, .navbar-item .buttons .postal-button {
     background-color: #00b388;
     color: #ffffff;
     border: none;
@@ -115,7 +115,7 @@ html, body {
     font-size: 1.2rem;
 }
 
-.support .support-container .postal-support-button:hover{
+.support .support-container .postal-support-button:hover {
     background-color: #00b388;
 }
 
@@ -178,10 +178,8 @@ section.info div {
     font-weight: bold;
 }
 
-.postal-banner .postal-section{
-    text-align: left;
-    padding: 25px 0;
-    color: #f0f0f0;
+.postal-banner{
+    background-color: #F6BE00;
 }
 
 .postal-career-listings {
@@ -220,4 +218,12 @@ section.info div {
     background-position: center; 
     background-repeat: no-repeat; 
     background-size: cover;
+}
+
+section.breadcrumbs {
+    margin: 5px auto;
+}
+
+.postal-search {
+    margin: 5px 0 15px 0;
 }

@@ -1,9 +1,12 @@
 
+app-customer-home:
+  path: /dashboard
+  controller: App\Controller\CustomerController::home
 
 app-employee-home:
-  path: /employee
+  path: /employee/dashboard
   controller: App\Controller\EmployeeController::home
-
-app-customer-home:
-  path: /customer
-  controller: App\Controller\CustomerController::home
+  
+app-employee:
+  path: /employee
+  controller: App\Controller\HomeController::employee_login
