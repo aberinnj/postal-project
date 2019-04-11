@@ -1,4 +1,4 @@
-
+```
 <VirtualHost *:80>
     ServerName foobah.com
     DocumentRoot public folder here
@@ -8,3 +8,5 @@
         Require local
     </Directory>
 </VirtualHost>
+
+```
