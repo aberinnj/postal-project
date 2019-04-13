@@ -12,22 +12,111 @@
 
 {% block body %}
     {{ parent() }}
-    <section class="hero is-dark">
-    </section>
 
-    <section class="section">
+
+    <section id="postal-banner" class="section postal-banner">
         <div class="container">
-            <div class="subtitle">
-
-            </div>
+            <div><a href="/dashboard">Home</a></div>
+            <div class="title">Your Courier.PO Dashboard</div>
+            <div class="subtitle">Hi <strong>{{ firstname }}</strong>! Here you can view your most-recently updated packages.<br/><small>Or find all summaries of your account.</small></div>
         </div>
     </section>
+    
 
     <section class="section is-small">
-        <div class="container">
+    <div class="container">
 
+
+        <div class="tile is-ancestor">
+        <div class="tile is-vertical is-8">
+            <div class="tile">
+                <div class="tile is-parent is-vertical">
+
+
+                    <label class="label"> Your most-recently updated packages </label>
+
+                    {% if orders|length > 0 %}
+
+                        {% for order in orders %}
+                            <article class="tile is-child notification">
+                                <p class="title">Package# {{ order.id }}</p>
+                                <div>Last Updated: {{order.date}}</div>
+                                <div>Tracking Note: {{order.note}}</div>
+                            </article>
+                        {% endfor %}
+
+                    {% else %}
+                                <article class="message is-warning">
+                                    <div class="message-header">
+                                        <p>You currently have no orders.</p>
+                                    </div>
+                                    <div class="message-body">
+                                        Ship a package now through <a href=""><strong>Packages</strong></a>.
+                                    </div>
+                                    </article>
+                    {% endif %}
+
+                </div>
+            </div>
+            <div class="tile">
+                <div class="tile is-parent is-vertical">
+                    <label class="label"> Messages</label>
+
+                    {% if messages|length > 0 %}
+
+                        {% for message in messages %}
+                                <article class="tile is-child notification">
+                                    <p class="title">Package# {{ message.id }}</p>
+                                    <div>Last Updated: {{message.date}}</div>
+                                    <div>Tracking Note: {{message.note}}</div>
+                                </article>
+                                {% endfor %}
+
+                        {% else %}
+
+                            <article class="message is-primary">
+                                <div class="message-header">
+                                    <p>You have no messages/alerts.</p>
+                                </div>
+                                <div class="message-body">
+                                </div>
+                            </article>
+
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="tile">
+                  <div class="tile is-parent is-vertical">
+                        <label class="label"> Your Account</label>
+
+                        <article class="message is-primary">
+                            <div class="message-header">
+                                <p>Summary</p>
+                            </div>
+                            <div class="message-body">
+
+                            </div>
+                        </article>
+
+                    </div>
+            </div>
         </div>
-    </section>
+        <div class="tile is-parent">
+            <article class="tile is-child notification">
+            <div class="content">
+                <p class="title">Tall tile</p>
+                <p class="subtitle">With even more content</p>
+                <div class="content">
+                <!-- Content -->
+                </div>
+            </div>
+            </article>
+        </div>
+        </div>
 
+
+    </div>
+    </section>
 
 {% endblock %}

@@ -7,6 +7,9 @@
 -- Server version: 5.7.24
 -- PHP Version: 7.2.14
 
+CREATE DATABASE IF NOT EXISTS postaldb;
+USE postaldb;
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
@@ -28,13 +31,74 @@ SET time_zone = "+00:00";
 -- Table structure for table `customer`
 --
 
+DROP TABLE IF EXISTS `state`;
+CREATE TABLE IF NOT EXISTS `state` (
+  `StateID` tinyint NOT NULL AUTO_INCREMENT,
+  `StateAbbreviation` char(2) NOT NULL,
+  `StateName` varchar(15) NOT NULL,
+  PRIMARY KEY (`StateID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT into `state`(`StateAbbreviation`, `StateName`) values 
+('AL', 'Alabama'),
+('AK', 'Alaska'),
+('AZ', 'Arizona'),
+('AR', 'Arkansas'),
+('CA', 'California'),
+('CO', 'Colorado'),
+('CT', 'Connecticut'),
+('DE', 'Delaware'),
+('FL', 'Florida'),
+('GA', 'Georgia'),
+('HI', 'Hawaii'),
+('ID', 'Idaho'),
+('IL', 'Illinois'),
+('IN', 'Indiana'),
+('IA', 'Iowa'),
+('KS', 'Kansas'),
+('KY', 'Kentucky'),
+('LA', 'Louisiana'),
+('ME', 'Maine'),
+('MD', 'Maryland'),
+('MA', 'Massachusetts'),
+('MI', 'Michigan'),
+('MN', 'Minnesota'),
+('MS', 'Mississippi'),
+('MO', 'Missouri'),
+('MT', 'Montana'),
+('NE', 'Nebraska'),
+('NV', 'Nevada'),
+('NH', 'New Hampshire'),
+('NJ', 'New Jersey'),
+('NM', 'New Mexico'),
+('NY', 'New York'),
+('NC', 'North Carolina'),
+('ND', 'North Dakota'),
+('OH', 'Ohio'),
+('OK', 'Oklahoma'),
+('OR', 'Oregon'),
+('PA', 'Pennsylvania'),
+('RI', 'Rhode Island'),
+('SC', 'South Carolina'),
+('SD', 'South Dakota'),
+('TN', 'Tennessee'),
+('TX', 'Texas'),
+('UT', 'Utah'),
+('VT', 'Vermont'),
+('VA', 'Virginia'),
+('WA', 'Washington'),
+('WV', 'West Virginia'),
+('WI', 'Wisconsin'),
+('WY', 'Wyoming');
+
+
 DROP TABLE IF EXISTS `customer`;
 CREATE TABLE IF NOT EXISTS `customer` (
   `FName` varchar(20) NOT NULL,
   `MInit` varchar(2) NOT NULL,
   `LName` varchar(20) NOT NULL,
   `Email` varchar(55) NOT NULL,
-  `State` varchar(15) NOT NULL,
+  `State` tinyint NOT NULL,
   `City` varchar(30) NOT NULL,
   `ZIP` int(5) NOT NULL,
   `Street` varchar(35) NOT NULL,
@@ -47,9 +111,9 @@ CREATE TABLE IF NOT EXISTS `customer` (
 --
 
 INSERT INTO `customer` (`FName`, `MInit`, `LName`, `Email`, `State`, `City`, `ZIP`, `Street`, `ApartmentNo`) VALUES
-('Cooper', 'M', 'Freman', 'cooper@hotmail.com', 'FL', 'Man', 22011, 'notFree Ln', NULL),
-('Cosmo', 'M', 'Aut', 'cosmo@gmail.com', 'WA', 'Katy', 20001, '222 Space Valley', NULL),
-('John', 'O', 'Doe', 'john.doe@gmail.com', 'TX', 'Houston', 77023, '1412 Richmond Avenue', NULL);
+('Cooper', 'M', 'Freman', 'cooper@hotmail.com', 1, 'Man', 22011, 'notFree Ln', NULL),
+('Cosmo', 'M', 'Aut', 'cosmo@gmail.com', 2, 'Katy', 20001, '222 Space Valley', NULL),
+('John', 'O', 'Doe', 'john.doe@gmail.com', 43, 'Houston', 77023, '1412 Richmond Avenue', NULL);
 
 -- --------------------------------------------------------
 
@@ -90,6 +154,8 @@ CREATE TABLE IF NOT EXISTS `employee` (
   PRIMARY KEY (`EmployeeID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1000003 DEFAULT CHARSET=latin1;
 
+
+
 --
 -- Dumping data for table `employee`
 --
@@ -98,6 +164,7 @@ INSERT INTO `employee` (`EmployeeID`, `FirstName`, `MiddleName`, `LastName`, `Em
 (1000000, 'John', 'M', 'Doe', '2019-04-07 02:18:21', NULL, 'HOU002'),
 (1000001, 'Mo', 'M', 'Mo', '2019-04-07 22:57:14', NULL, 'HOU002'),
 (1000002, 'Norm', 'M', 'Norm', '2019-04-08 11:43:23', NULL, 'HOU002');
+
 
 -- --------------------------------------------------------
 
@@ -110,7 +177,7 @@ CREATE TABLE IF NOT EXISTS `employeecredentials` (
   `EmployeeID` int(7) NOT NULL,
   `Password` varchar(32) NOT NULL,
   UNIQUE KEY `EmployeeID` (`EmployeeID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET=latin1;
 
 --
 -- Dumping data for table `employeecredentials`
@@ -123,19 +190,51 @@ INSERT INTO `employeecredentials` (`EmployeeID`, `Password`) VALUES
 
 -- --------------------------------------------------------
 
---
+
+DROP TABLE IF EXISTS `service`;
+CREATE TABLE IF NOT EXISTS `service` (
+  `ServiceID` int(1) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `ServiceName` varchar(32) NOT NULL,
+  `BasePrice` decimal(5,2) NOT NULL,
+  `WeightLimit` int(3) NOT NULL DEFAULT 0,
+  `WeightPriceMultiplier` FLOAT (5, 2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+INSERT INTO `service` (`ServiceName`, `BasePrice`, `WeightLimit`, `WeightPriceMultiplier`) VALUES
+('Ground Economy', 7.5, 150, .5),
+('Priority Overnight', 11.25, 150, .75),
+('Same-Day Delivery', 13.5 , 150, .95 );
+
 -- Table structure for table `office`
 --
 
 DROP TABLE IF EXISTS `office`;
 CREATE TABLE IF NOT EXISTS `office` (
   `OfficeID` varchar(17) NOT NULL,
+  `State` tinyint NOT NULL,
   `City` varchar(30) NOT NULL,
   `ZIP` int(5) NOT NULL,
-  `Address` varchar(40) NOT NULL,
-  PRIMARY KEY (`ZIP`),
+  `Street` varchar(35) NOT NULL,
+  PRIMARY KEY (`OfficeID`),
   UNIQUE KEY `VehicleID` (`OfficeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+INSERT INTO `office` (`OfficeID`, `State`, `City`, `ZIP`, `Street`) VALUES 
+('HOU001', '44', 'Houston', '77023', '3525 Sage Road'),
+('HOU002', '44', 'Katy', '77494', '12212 Westheimer Parkway'),
+('HOU003', '44', 'Baytown', '77015', '13311 East Freeway'),
+('HOU004', '44', 'Sugar Land', '77479', '2700 Town Center Boulevard North'),
+('HOU005', '44', 'The Woodlands', '77380', '1201 Lake Woodlands Drive'),
+('DFW001', '44', 'Fort Worth', '76131', '5601 Mark IV Parkway'),
+('DFW002', '44', 'Plano', '75093', '6121 West Park Blvd'),
+('DFW003', '44', 'Irving', '75038', '5000 Hanson Drive'),
+('AUS001', '44', 'Austin', '78701', '212 East 6th St'),
+('AUS002', '44', 'Austin', '78704', '3001 South Congress Avenue'),
+('SAN001', '44', 'San Antonio', '78216', '151 Interpark Boulevard'),
+('ELP001', '44', 'El Paso', '79901', '114 W Mills Ave');
 
 -- --------------------------------------------------------
 
@@ -152,27 +251,20 @@ CREATE TABLE IF NOT EXISTS `package` (
   `Length` decimal(5,2) NOT NULL,
   `Width` decimal(5,2) DEFAULT NULL,
   `Height` decimal(5,2) NOT NULL,
-  `State` varchar(15) NOT NULL,
+  `State` tinyint NOT NULL,
   `City` varchar(30) NOT NULL,
   `ZIP` int(5) NOT NULL,
   `Street` varchar(35) NOT NULL,
   `ApartmentNo` int(5) DEFAULT NULL,
   `isFragile` tinyint(1) NOT NULL,
   `send_date` date NOT NULL,
-  `Priority` int(1) NOT NULL,
-  `Status` int(1) NOT NULL,
+  `Service` int(1) NOT NULL,
+  `Status` int(1) NOT NULL, 
   PRIMARY KEY (`PackageID`),
   KEY `Package_ibfk_1` (`Status`),
   KEY `Package_ibfk_2` (`Email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `package`
---
-
-INSERT INTO `package` (`PackageID`, `RecipientName`, `Email`, `Weight`, `Length`, `Width`, `Height`, `State`, `City`, `ZIP`, `Street`, `ApartmentNo`, `isFragile`, `send_date`, `Priority`, `Status`) VALUES
-(1, 'HANNAH MILLS', 'john.doe@gmail.com', '5.00', '5.00', '5.00', '5.00', 'TX', 'Houston', 77057, '7787 Blue St', NULL, 1, '2019-03-05', 1, 6),
-(2, 'MIKE FUR', 'john.doe@gmail.com', '5.00', '5.00', '5.00', '5.00', 'TX', 'Houston', 77057, '8882 Green St', NULL, 1, '2019-03-09', 1, 4);
 
 -- --------------------------------------------------------
 
@@ -227,24 +319,19 @@ CREATE TABLE IF NOT EXISTS `tracking` (
   `Package_ID` int(10) NOT NULL,
   `TrackingNote` varchar(40) NOT NULL,
   `Update_Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `State` tinyint NOT NULL,
+  `City` varchar(30) NOT NULL,
+  `ZIP` int(5) NOT NULL,
+  `Street` varchar(35) NOT NULL,
   PRIMARY KEY (`Tracking_Index`),
   UNIQUE KEY `Tracking_Index` (`Tracking_Index`),
   KEY `Tracking_ibfk_1` (`Package_ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
+
 --
 -- Dumping data for table `tracking`
 --
-
-INSERT INTO `tracking` (`Tracking_Index`, `Package_ID`, `TrackingNote`, `Update_Date`) VALUES
-(1, 2, 'Package accepted at HOUSTON location', '2019-03-06 07:00:00'),
-(2, 2, 'Package on the way to LOS ANGELES', '2019-03-07 07:00:00'),
-(3, 2, 'Package out for delivery', '2019-03-08 07:00:00'),
-(4, 2, 'Package DELIVERED', '2019-03-09 07:00:00'),
-(5, 1, 'Package entered into system', '2019-03-28 23:19:37'),
-(6, 1, 'On the way..', '2019-03-28 23:28:27'),
-(7, 1, 'Package has arrived to MIAMI', '2019-03-28 23:30:16'),
-(8, 1, 'Package RETURNED!', '2019-03-28 23:31:32');
 
 -- --------------------------------------------------------
 
@@ -254,6 +341,7 @@ INSERT INTO `tracking` (`Tracking_Index`, `Package_ID`, `TrackingNote`, `Update_
 
 DROP TABLE IF EXISTS `vehicle`;
 CREATE TABLE IF NOT EXISTS `vehicle` (
+  `OfficeID` varchar(17) NOT NULL,
   `VIN` varchar(17) NOT NULL,
   `DriverID` int(7) NOT NULL,
   `Vehicle_Type` varchar(10) NOT NULL,
@@ -262,13 +350,37 @@ CREATE TABLE IF NOT EXISTS `vehicle` (
   UNIQUE KEY `DriverID` (`DriverID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Constraints for dumped tables
---
+
+CREATE TABLE `transaction` (
+  `TransactionID` int(18) NOT NULL,
+  `PackageID` int(10) NOT NULL,
+  `TransactionTotal` DECIMAL (8,2) NOT NULL,
+  `TransactionDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`TransactionID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+ 
 
 --
 -- Constraints for table `customercredentials`
 --
+--
+-- Constraint for transaction table - Foreign key for Email
+--
+ALTER TABLE `transaction`
+  ADD CONSTRAINT `Transaction_ibfk_2` FOREIGN KEY (`PackageID`) REFERENCES `package` (`PackageID`);
+
+ 
+ALTER TABLE `customer`
+  ADD CONSTRAINT `Customer_ibfk_1` FOREIGN KEY (`State`) REFERENCES `state` (`StateID`);
+ 
+--
+-- Transaction - Auto-Increment
+--
+ALTER TABLE `transaction`
+  MODIFY `TransactionID` INT(18) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+
+
 ALTER TABLE `customercredentials`
   ADD CONSTRAINT `CustomerCredentials_ibfk_1` FOREIGN KEY (`Email`) REFERENCES `customer` (`Email`) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -282,14 +394,15 @@ ALTER TABLE `employeecredentials`
 -- Constraints for table `office`
 --
 ALTER TABLE `office`
-  ADD CONSTRAINT `Office_ibfk_3` FOREIGN KEY (`OfficeID`) REFERENCES `vehicle` (`VIN`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `Office_ibfk_1` FOREIGN KEY (`State`) REFERENCES `state` (`StateID`);
 
 --
 -- Constraints for table `package`
 --
 ALTER TABLE `package`
   ADD CONSTRAINT `Package_ibfk_1` FOREIGN KEY (`Status`) REFERENCES `status` (`Code`),
-  ADD CONSTRAINT `Package_ibfk_2` FOREIGN KEY (`Email`) REFERENCES `customer` (`Email`);
+  ADD CONSTRAINT `Package_ibfk_3` FOREIGN KEY (`State`) REFERENCES `state` (`StateID`),
+  ADD CONSTRAINT `Package_ibfk_4` FOREIGN KEY (`Service`) REFERENCES `service` (`ServiceID`);
 
 --
 -- Constraints for table `shift`
@@ -301,13 +414,15 @@ ALTER TABLE `shift`
 -- Constraints for table `tracking`
 --
 ALTER TABLE `tracking`
-  ADD CONSTRAINT `Tracking_ibfk_1` FOREIGN KEY (`Package_ID`) REFERENCES `package` (`PackageID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `Tracking_ibfk_1` FOREIGN KEY (`Package_ID`) REFERENCES `package` (`PackageID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Tracking_ibfk_2` FOREIGN KEY (`State`) REFERENCES `state` (`StateID`);
 
 --
 -- Constraints for table `vehicle`
 --
 ALTER TABLE `vehicle`
-  ADD CONSTRAINT `Vehicle_ibfk_1` FOREIGN KEY (`DriverID`) REFERENCES `employee` (`EmployeeID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `Vehicle_ibfk_1` FOREIGN KEY (`OfficeID`) REFERENCES `office` (`OfficeID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Vehicle_ibfk_2` FOREIGN KEY (`DriverID`) REFERENCES `employee` (`EmployeeID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

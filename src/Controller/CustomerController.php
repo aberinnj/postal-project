@@ -33,12 +33,19 @@ class CustomerController extends Root_DashboardController {
             return $logoutHandler;
         }
 
+        $bestFiveOrders = $this->CustomerDashOrdersQuery($connection, $user['id']); 
+        $message = [];
         $name = ($this->CustomerDetailsQuery($connection, $user['id']))[0];
         return $this->render('customer/dashboard.html.twig', [
             'logout'=> $logoutForm->createView(),
-            'name'=> $name["FName"]." ".$name["LName"]
+            'name'=> $name["FName"]." ".$name["LName"],
+            'firstname'=> $name["FName"],
+            'orders' => $bestFiveOrders,
+            'messages' => $message
         ]);
-    } 
+    }
+
+    
 
 
     /**
@@ -62,6 +69,7 @@ class CustomerController extends Root_DashboardController {
 
         $name = ($this->CustomerDetailsQuery($connection, $user['id']))[0];
         $orderList = ($this->CustomerOrdersQuery($connection, $user['id']));
+
         return $this->render('customer/orders.html.twig', [
             'logout'=>$logoutForm->createView(),
             'name'=> $name["FName"]." ".$name["LName"],
@@ -69,6 +77,92 @@ class CustomerController extends Root_DashboardController {
             ]);
     }
 
+    /**
+     * @Route("/dashboard/orders/track", name="app-customer-track")
+    */
+    public function customer_track(Connection $connection, Request $request) {
+        $action = $this->requestPage('customer', 'app-main-page');
+        if ($action) {
+            return $action;
+        }
+
+        $logoutForm = $this->logout();
+        $logoutHandler = $this->do_logout($request, $logoutForm);
+
+        if($logoutHandler) {
+            return $logoutHandler;
+        }
+
+        return $this->render('customer/track.html.twig', [
+            'logout' => $logoutForm->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/dashboard/orders/track/{id}", name="app-customer-track-id")
+    */
+    public function customer_track_id(Connection $connection, Request $request, $id) {
+        $action = $this->requestPage('customer', 'app-main-page');
+        if ($action) {
+            return $action;
+        }
+
+        $logoutForm = $this->logout();
+        $logoutHandler = $this->do_logout($request, $logoutForm);
+
+        if($logoutHandler) {
+            return $logoutHandler;
+        }
+
+        return $this->render('customer/track_id.html.twig', [
+            'logout' => $logoutForm->createView(),
+            'id' => $id
+        ]);
+    }
+
+    
+    /**
+     * @Route("/dashboard/orders/invoice", name="app-customer-invoice")
+    */
+    public function customer_invoice(Connection $connection, Request $request) {
+        $action = $this->requestPage('customer', 'app-main-page');
+        if ($action) {
+            return $action;
+        }
+
+        $logoutForm = $this->logout();
+        $logoutHandler = $this->do_logout($request, $logoutForm);
+
+        if($logoutHandler) {
+            return $logoutHandler;
+        }
+
+        return $this->render('customer/invoice.html.twig', [
+            'logout' => $logoutForm->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/dashboard/orders/invoice/{id}", name="app-customer-invoice-id")
+    */
+    public function customer_invoice_id(Connection $connection, Request $request, $id) {
+        $action = $this->requestPage('customer', 'app-main-page');
+        if ($action) {
+            return $action;
+        }
+
+        $logoutForm = $this->logout();
+        $logoutHandler = $this->do_logout($request, $logoutForm);
+
+        if($logoutHandler) {
+            return $logoutHandler;
+        }
+
+        return $this->render('customer/invoice_id.html.twig', [
+            'logout' => $logoutForm->createView(),
+            'id' => $id
+        ]);
+    }
 
     /**
      * @Route("/dashboard/create", name="app-create-package")

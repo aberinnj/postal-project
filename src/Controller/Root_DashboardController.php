@@ -72,7 +72,6 @@ class Root_DashboardController extends AbstractController {
             return $this->redirectToRoute('app-track');
         }
         return null;
-
     }
 
     /*******************************************************************************
@@ -92,10 +91,25 @@ class Root_DashboardController extends AbstractController {
             echo "Error " . $e->getMessage();
         }
     }
+    
+    protected function CustomerDashOrdersQuery(Connection $connection, $identity) {
+        try{
+            $sql = "SELECT p.PackageID as id, t.last_update as date, t.TrackingNote as note, p.Status as status FROM package as p, (SELECT Tracking_Index, updated_id, last_update, TrackingNote FROM tracking RIGHT JOIN (SELECT tracking.Package_ID as updated_id, max(tracking.Update_Date) as last_update FROM tracking group by tracking.Package_ID) as updated ON tracking.Package_ID = updated.updated_id AND tracking.Update_Date = updated.last_update) as t WHERE p.PackageID = t.updated_id LIMIT 5 ";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':email', $identity);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
 
     protected function CustomerOrdersQuery(Connection $connection, $identity) {
         try{
-            $sql = "SELECT p.PackageID, p.Status, p.send_date FROM  package as p WHERE p.Email = :email";
+            $sql = "SELECT p.PackageID as ID, s.Status as Status, p.send_date as Date, t.TransactionID as InvoiceID FROM  package as p, transaction as t, status as s WHERE p.Email = :email AND p.Status = s.Code AND p.PackageID = t.PackageID";
 
             $stmt = $connection->prepare($sql);
             $stmt->bindValue(':email', $identity);

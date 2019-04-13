@@ -13,7 +13,7 @@
 {% block body %}
     {{ parent() }}
     
-    <section class="section postal-banner">
+    <section id="postal-banner" class="section postal-banner">
         <div class="container">
             <div class="title">Your Orders</div>
             <div class="subtitle">View your orders, invoices and tracking.</div>
@@ -32,17 +32,20 @@
             <div class="content">
 
                 <div style="margin-bottom: 10px">
-                    <div class="title">
-                        Listing
+                    <div class="subtitle">
+                        List of All Orders Made
                     </div>
                 </div>
 
-            <div class="" style="overflow-x: auto">
+            <div class="">
                 <table class="table">
                 <thead>
                     <tr>
                     <th><attr title="Package ID"> ID</attr></th>
                     <th>Status</th>
+                    <th>Date Ordered</th>
+                    <th>Last Updated</th>
+                    <th>Selected Service</th>
                     <th>Tracking</th>
                     <th>Invoice</th>
                     </tr>
@@ -50,7 +53,17 @@
                     <tbody>
                         {% if orderList|length > 0 %}
 
-
+                            {% for order in orderList %}
+                                <tr>
+                                    <th>{{ order.ID }} </th>
+                                    <td>{{ order.Status }}</td>
+                                    <td>{{ order.Date }}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><a href="/dashboard/orders/track/{{ order.ID }}">View</a></td>
+                                    <td><a href="/dashboard/orders/invoice/{{ order.InvoiceID }}">View</a></td>
+                                </tr>
+                            {% endfor %}
                         {% else %}
 
                             <article class="message is-warning">
