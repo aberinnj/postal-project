@@ -5,27 +5,198 @@
 {% endblock %}
 
 
-            {% block navOptions %}
-            {{parent()}}
-            {% endblock %}
+{% block navOptions %}
+{{parent()}}
+{% endblock %}
 
 
 {% block body %}
     {{ parent() }}
     
-    <section class="section">
+    <section id="postal-banner" class="section postal-banner">
         <div class="container">
-            <div class="subtitle">
-                Create and Ship A Package
+            <div>
+            
+            {% for crumbsKey, crumbsValue in breadcrumbs %}
+                <a href={{ crumbsValue }}>{{ crumbsKey}}</a> <strong>/</strong>
+            {% endfor %}
+            
             </div>
+            <div class="title">Create a Courier.PO Package</div>
+            <div class="subtitle">Describe your shipping details and needs. <br/></div>
         </div>
+
     </section>
 
     <section class="section is-small">
         <div class="container">
-            {{ form(package) }}
+
+            {% if package is defined %}
+
+                <div class="form-info">
+                    <p>Order by: {{ email }}</p>
+                    <p>Your default address: </p>
+                    <p> <span id="postal-default-street">{{ default_street }}</span>
+                        <span id="postal-default-number">
+                            {% if default_number|length > 0 %}
+                                Apt/Suit No. {{default_number}}
+                            {% endif %}
+                        </span>
+                        <br>
+                        <span id="postal-default-city">{{ default_city }}</span>, 
+                        <span>{{ default_state}}</span>
+                        <span style="display: none;" id="postal-default-state">{{ default_state_id}}</span>
+                        <span id="postal-default-zip"> {{default_zip}}</span>
+                    </p>
+                </div>
+
+                {{ form_start(package) }}
+                
+                <div class="postal-form-space">
+                    <label class="label">Return Address</label>
+                    <div>
+                        {{ form_row(package.useDefaultAddress) }}
+                        {{ form_row(package.rStreet) }}
+                        {{ form_row(package.rApartmentNo) }}
+                        {{ form_row(package.rCity) }}
+                        {{ form_row(package.rState) }}
+                        {{ form_row(package.rZIP) }}
+                    </div>
+                    
+                    <label class="label">Destination Address</label>
+                    <div>
+                        {{ form_row(package.Recipient) }}
+                        {{ form_row(package.Street) }}
+                        {{ form_row(package.ApartmentNo) }}
+                        {{ form_row(package.City) }}
+                        {{ form_row(package.State) }}
+                        {{ form_row(package.ZIP) }}
+                    </div>
+
+                    <label class="label">Package Specifications</label>
+                    <div>
+                        <span style="display: flex; flex-direction: row;">{{ form_row(package.Weight) }} lbs. </span>
+                        <span style="display: flex; flex-direction: row;">{{ form_row(package.Length) }} lbs. </span>
+                        <span style="display: flex; flex-direction: row;">{{ form_row(package.Width) }} lbs. </span>
+                        <span style="display: flex; flex-direction: row;">{{ form_row(package.Height) }} lbs. </span>
+                        <span style="display: flex; flex-direction: row;">{{ form_row(package.isFragile) }} </span>
+                    </div>
+
+                    <label class="label">Service</label>
+                    <div>
+                        {{ form_row(package.Service) }}
+                        {{ form_row(package.SendDate) }}
+                    </div>
+                    <div style="display: none;">
+                        {{ form_row(package.submit)}}
+                    </div>
+
+                </div>
+                <div class="postal-form-space">
+                    {% if office is defined %}
+                        {{ form_start(office) }}
+                            {{form_row(office.Submit) }}{{form_row(office.State) }}
+                        {{ form_end(office) }}
+
+                    {% endif %}
+                </div>
+                {{ form_row(package.continue) }}
+                
+                {{ form_end(package) }}
+
+            {% elseif payment is defined %}
+
+                {{ form_start(payment) }}
+                    <div>
+                        {% if total|length > 0 %}
+
+
+<article class="message is-warning">
+  <div class="message-header">
+    <p>Payment</p>
+  </div>
+  <div class="message-body">
+      <div class="postal-payment-list">
+        <label class="label">Selected Shipping Service</label>
+        {{ total['service'] }}
+    </div>
+    <div class="postal-payment-list">
+        <label class="label">Package Weight</label>
+        {{ total['weight'] }} lbs.
+    </div>
+    <div class="postal-payment-list">
+        <label class="label">Base Price</label>
+        ${{ total['BasePrice'] }}
+    </div>
+    <div class="postal-payment-list">
+        <label class="label">Weight Limit Charge</label>
+        <div>${{ total['WeightLimitCost'] }}</div>
+    </div>
+    <hr>
+    <div class="postal-payment-list">
+        <label class="label">Total</label>
+        ${{ total['total'] }}
+    </div>
+  </div>
+</article>
+
+
+                        {% endif %}
+                        {{ form_row(payment.submit) }}
+                    </div>
+
+                    <div style="display: none;">
+                        <label class="label">Return Address</label>
+                        <div>
+                            {{ form_row(payment.useDefaultAddress) }}
+                            {{ form_row(payment.rStreet) }}
+                            {{ form_row(payment.rApartmentNo) }}
+                            {{ form_row(payment.rCity) }}
+                            {{ form_row(payment.rState) }}
+                            {{ form_row(payment.rZIP) }}
+                        </div>
+                        
+                        <label class="label">Destination Address</label>
+                        <div>
+                            {{ form_row(payment.Recipient) }}
+                            {{ form_row(payment.Street) }}
+                            {{ form_row(payment.ApartmentNo) }}
+                            {{ form_row(payment.City) }}
+                            {{ form_row(payment.State) }}
+                            {{ form_row(payment.ZIP) }}
+                        </div>
+
+                        <label class="label">payment Specifications</label>
+                        <div>
+                            <span style="display: flex; flex-direction: row;">{{ form_row(payment.Weight) }} lbs. </span>
+                            <span style="display: flex; flex-direction: row;">{{ form_row(payment.Length) }} lbs. </span>
+                            <span style="display: flex; flex-direction: row;">{{ form_row(payment.Width) }} lbs. </span>
+                            <span style="display: flex; flex-direction: row;">{{ form_row(payment.Height) }} lbs. </span>
+                            <span style="display: flex; flex-direction: row;">{{ form_row(payment.isFragile) }} </span>
+                        </div>
+
+                        <label class="label">Service</label>
+                        <div>
+                            {{ form_row(payment.Service) }}
+                            {{ form_row(payment.SendDate) }}
+                        </div>
+                        {{ form_row(payment.continue) }}
+                    </div>
+                {{ form_end(payment) }}
+
+
+            {% elseif invoice is defined %}
+
+
+            {% endif %}
+
         </div>
     </section>
 
 
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="{{ asset('js/DefaultAddressCheckbox.js') }}"></script>
 {% endblock %}

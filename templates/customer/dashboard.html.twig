@@ -16,9 +16,15 @@
 
     <section id="postal-banner" class="section postal-banner">
         <div class="container">
-            <div><a href="/dashboard">Home</a></div>
+            <div>
+            
+            {% for crumbsKey, crumbsValue in breadcrumbs %}
+                <a href={{ crumbsValue }}>{{ crumbsKey}}</a> <strong>/</strong>
+            {% endfor %}
+            
+            </div>
             <div class="title">Your Courier.PO Dashboard</div>
-            <div class="subtitle">Hi <strong>{{ firstname }}</strong>! Here you can view your most-recently updated packages.<br/><small>Or find all summaries of your account.</small></div>
+            <div class="subtitle">Hi <strong>{{ firstname }}</strong>! View your most-recently updated packages below.<br/><small>Or find all summaries of your account.</small></div>
         </div>
     </section>
     
@@ -33,25 +39,47 @@
                 <div class="tile is-parent is-vertical">
 
 
-                    <label class="label"> Your most-recently updated packages </label>
+                    <label class="label"> Your Packages </label>
 
                     {% if orders|length > 0 %}
 
-                        {% for order in orders %}
-                            <article class="tile is-child notification">
-                                <p class="title">Package# {{ order.id }}</p>
-                                <div>Last Updated: {{order.date}}</div>
-                                <div>Tracking Note: {{order.note}}</div>
-                            </article>
-                        {% endfor %}
+                        <article class="message is-primary">
+                            <div class="message-header">
+                                <p>Most-recently updated packages</p>
+                            </div>
+                            <div class="message-body">
+
+                                {% for order in orders %}
+
+                                        <div class="postal-item-pill media is-mobile">
+                                            <div class="media-content">
+                                                <p><span class="subtitle">Package #{{ order.id }}</span></p>
+                                                <div class="status">
+                                                    <p>Last Updated: {{ order.date }}</p>
+                                                    <p>Note: {{ order.note }}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="media-right">{{ order.status }}</div>
+                                        </div>
+                                        <hr>
+
+                                {% endfor %}
+
+
+                            </div>
+                        </article>
+
 
                     {% else %}
                                 <article class="message is-warning">
                                     <div class="message-header">
-                                        <p>You currently have no orders.</p>
+                                        <p>Most-recently updated packages</p>
                                     </div>
                                     <div class="message-body">
+                                        <p>You currently have no orders. <br/>
                                         Ship a package now through <a href=""><strong>Packages</strong></a>.
+                                        </p>
                                     </div>
                                     </article>
                     {% endif %}
@@ -76,9 +104,10 @@
 
                             <article class="message is-primary">
                                 <div class="message-header">
-                                    <p>You have no messages/alerts.</p>
+                                    <p>Recent messages</p>
                                 </div>
                                 <div class="message-body">
+                                <p>You currently have no recent messges/alerts.</p>
                                 </div>
                             </article>
 

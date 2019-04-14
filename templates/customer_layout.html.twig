@@ -27,10 +27,10 @@
         </a>
 
         <div class="navbar-dropdown">
-          <a class="navbar-item" href="{{ path('app-create-package') }}">
+          <a class="navbar-item" href="{{ path('app-customer-create-package') }}">
             Create A Package
           </a>
-          <a class="navbar-item">
+          <a class="navbar-item" href="{{ path('app-customer-track') }}">
             Track A Package
           </a>
           <hr class="navbar-divider">
@@ -87,9 +87,5 @@
       </div>
     </div>
 </nav>
-
-{% endblock %}
-
-{% block javascripts %}
 
 {% endblock %}

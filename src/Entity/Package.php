@@ -11,6 +11,11 @@ class Package
     protected $Width;
     protected $Height;
 
+    protected $rStreet;
+    protected $rApartmentNo;
+    protected $rCity;
+    protected $rState;
+    protected $rZIP;
 
     protected $Street;
     protected $ApartmentNo;
@@ -19,7 +24,16 @@ class Package
     protected $ZIP;
 
     protected $isFragile;
-    protected $Priority;
+    protected $Service;
+    protected $SendDate;
+    protected $Status;
+    protected $useDefaultAddress;
+    protected $Total;
+
+    function __construct() {
+        $this->SendDate = new \DateTime();   
+        $this->Status = 1;
+    }
 
     // Email
     public function getEmail()
@@ -31,6 +45,16 @@ class Package
         $this->Email = $Email;
     }
 
+    // Total
+    public function getTotal()
+    {
+        return $this->Total;
+    }
+
+    public function setTotal($Total){
+        $this->Total = $Total;
+    }
+    
     // Recipient
     public function getRecipient()
     {
@@ -129,6 +153,58 @@ class Package
         $this->ApartmentNo = $ApartmentNo;
     }
 
+
+    // rState
+    public function getrState()
+    {
+        return $this->rState;
+    }
+
+    public function setrState($rState){
+        $this->rState = $rState;
+    }
+
+    // rCity
+    public function getrCity()
+    {
+        return $this->rCity;
+    }
+
+    public function setrCity($rCity){
+        $this->rCity = $rCity;
+    }
+
+    // rZIP
+    public function getrZIP()
+    {
+        return $this->rZIP;
+    }
+
+    public function setrZIP($rZIP){
+        $this->rZIP = $rZIP;
+    }
+
+    // rStreet
+    public function getrStreet()
+    {
+        return $this->rStreet;
+    }
+
+    public function setrStreet($rStreet){
+        $this->rStreet = $rStreet;
+    }
+
+    // rApartmentNo
+    public function getrApartmentNo()
+    {
+        return $this->rApartmentNo;
+    }
+
+    public function setrApartmentNo($rApartmentNo = null){
+        $this->rApartmentNo = $rApartmentNo;
+    }
+
+
     // isFragile
     public function getIsFragile()
     {
@@ -139,13 +215,44 @@ class Package
         $this->isFragile = $isFragile;
     }
 
-    // Priority
-    public function getPriority()
+    // Service
+    public function getService()
     {
-        return $this->Priority;
+        return $this->Service;
     }
     
-    public function setPriority($Priority){
-        $this->Priority = $Priority;
+    public function setService($Service){
+        $this->Service = $Service;
+    }
+
+    // Status
+    public function getStatus()
+    {
+        return $this->Status;
+    }
+    
+    public function setStatus($Status){
+        $this->Status = 1;
+    }
+
+
+    // SendDate
+    public function getSendDate()
+    {
+        return $this->SendDate;
+    }
+    
+    public function setSendDate($SendDate){
+        $this->SendDate = $SendDate;
+    }
+
+    // default Address
+    public function getuseDefaultAddress()
+    {
+        return $this->useDefaultAddress;
+    }
+    
+    public function setuseDefaultAddress($useDefaultAddress){
+        $this->useDefaultAddress = $useDefaultAddress;
     }
 }

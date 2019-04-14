@@ -1,12 +1,35 @@
+app-employee:
+  path: /employee
+  controller: App\Controller\HomeController::employee_login
+
+app-employee-home:
+  path: /employee/dashboard
+  controller: App\Controller\EmployeeController::home
 
 app-customer-home:
   path: /dashboard
   controller: App\Controller\CustomerController::home
 
-app-employee-home:
-  path: /employee/dashboard
-  controller: App\Controller\EmployeeController::home
-  
-app-employee:
-  path: /employee
-  controller: App\Controller\HomeController::employee_login
+app-customer-create-package:
+  path: /dashboard/create
+  controller: App\Controller\CustomerCreatePackageController::create
+
+app-customer-orders:
+  path: /dashboard/orders
+  controller: App\Controller\CustomerOrdersController::list
+
+app-customer-invoice:
+  path: /dashboard/orders/invoice
+  controller: App\Controller\CustomerInvoiceController::list
+
+app-customer-invoice-id:
+  path: /dashboard/orders/invoice/{id}
+  controller: App\Controller\CustomerInvoiceController:viewWithID
+
+app-customer-track:
+  path: /dashboard/orders/track
+  controller: App\Controller\CustomerTrackingController::list
+
+app-customer-tracking-id:
+  path: /dashboard/orders/track/{id}
+  controller: App\Controller\CustomerTrackingController:viewWithID

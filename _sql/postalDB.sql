@@ -223,18 +223,18 @@ CREATE TABLE IF NOT EXISTS `office` (
 
 
 INSERT INTO `office` (`OfficeID`, `State`, `City`, `ZIP`, `Street`) VALUES 
-('HOU001', '44', 'Houston', '77023', '3525 Sage Road'),
-('HOU002', '44', 'Katy', '77494', '12212 Westheimer Parkway'),
-('HOU003', '44', 'Baytown', '77015', '13311 East Freeway'),
-('HOU004', '44', 'Sugar Land', '77479', '2700 Town Center Boulevard North'),
-('HOU005', '44', 'The Woodlands', '77380', '1201 Lake Woodlands Drive'),
-('DFW001', '44', 'Fort Worth', '76131', '5601 Mark IV Parkway'),
-('DFW002', '44', 'Plano', '75093', '6121 West Park Blvd'),
-('DFW003', '44', 'Irving', '75038', '5000 Hanson Drive'),
-('AUS001', '44', 'Austin', '78701', '212 East 6th St'),
-('AUS002', '44', 'Austin', '78704', '3001 South Congress Avenue'),
-('SAN001', '44', 'San Antonio', '78216', '151 Interpark Boulevard'),
-('ELP001', '44', 'El Paso', '79901', '114 W Mills Ave');
+('HOU001', '43', 'Houston', '77023', '3525 Sage Road'),
+('HOU002', '43', 'Katy', '77494', '12212 Westheimer Parkway'),
+('HOU003', '43', 'Baytown', '77015', '13311 East Freeway'),
+('HOU004', '43', 'Sugar Land', '77479', '2700 Town Center Boulevard North'),
+('HOU005', '43', 'The Woodlands', '77380', '1201 Lake Woodlands Drive'),
+('DFW001', '43', 'Fort Worth', '76131', '5601 Mark IV Parkway'),
+('DFW002', '43', 'Plano', '75093', '6121 West Park Blvd'),
+('DFW003', '43', 'Irving', '75038', '5000 Hanson Drive'),
+('AUS001', '43', 'Austin', '78701', '212 East 6th St'),
+('AUS002', '43', 'Austin', '78704', '3001 South Congress Avenue'),
+('SAN001', '43', 'San Antonio', '78216', '151 Interpark Boulevard'),
+('ELP001', '43', 'El Paso', '79901', '114 W Mills Ave');
 
 -- --------------------------------------------------------
 
@@ -251,18 +251,21 @@ CREATE TABLE IF NOT EXISTS `package` (
   `Length` decimal(5,2) NOT NULL,
   `Width` decimal(5,2) DEFAULT NULL,
   `Height` decimal(5,2) NOT NULL,
-  `State` tinyint NOT NULL,
-  `City` varchar(30) NOT NULL,
-  `ZIP` int(5) NOT NULL,
-  `Street` varchar(35) NOT NULL,
-  `ApartmentNo` int(5) DEFAULT NULL,
+  `dest_State` tinyint NOT NULL,
+  `dest_City` varchar(30) NOT NULL,
+  `dest_ZIP` int(5) NOT NULL,
+  `dest_Street` varchar(35) NOT NULL,
+  `dest_ApartmentNo` int(5) DEFAULT NULL,
+  `return_State` tinyint NOT NULL,
+  `return_City` varchar(30) NOT NULL,
+  `return_ZIP` int(5) NOT NULL,
+  `return_Street` varchar(35) NOT NULL,
+  `return_ApartmentNo` int(5) DEFAULT NULL,
   `isFragile` tinyint(1) NOT NULL,
   `send_date` date NOT NULL,
   `Service` int(1) NOT NULL,
   `Status` int(1) NOT NULL, 
-  PRIMARY KEY (`PackageID`),
-  KEY `Package_ibfk_1` (`Status`),
-  KEY `Package_ibfk_2` (`Email`)
+  PRIMARY KEY (`PackageID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 
@@ -300,12 +303,13 @@ CREATE TABLE IF NOT EXISTS `status` (
 --
 
 INSERT INTO `status` (`Code`, `Status`) VALUES
-(1, 'Processed'),
-(2, 'In Transit'),
-(3, 'Pick Up'),
-(4, 'Delivered'),
-(5, 'Expired'),
-(6, 'Alert');
+(1, 'Drop Off'),
+(2, 'Processed'),
+(3, 'In Transit'),
+(4, 'Pick Up'),
+(5, 'Delivered'),
+(6, 'Expired'),
+(7, 'Alert');
 
 -- --------------------------------------------------------
 
@@ -317,7 +321,7 @@ DROP TABLE IF EXISTS `tracking`;
 CREATE TABLE IF NOT EXISTS `tracking` (
   `Tracking_Index` int(18) NOT NULL AUTO_INCREMENT,
   `Package_ID` int(10) NOT NULL,
-  `TrackingNote` varchar(40) NOT NULL,
+  `TrackingNote` varchar(40),
   `Update_Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `State` tinyint NOT NULL,
   `City` varchar(30) NOT NULL,
@@ -401,7 +405,8 @@ ALTER TABLE `office`
 --
 ALTER TABLE `package`
   ADD CONSTRAINT `Package_ibfk_1` FOREIGN KEY (`Status`) REFERENCES `status` (`Code`),
-  ADD CONSTRAINT `Package_ibfk_3` FOREIGN KEY (`State`) REFERENCES `state` (`StateID`),
+  ADD CONSTRAINT `Package_ibfk_2` FOREIGN KEY (`dest_State`) REFERENCES `state` (`StateID`),
+  ADD CONSTRAINT `Package_ibfk_3` FOREIGN KEY (`return_State`) REFERENCES `state` (`StateID`),
   ADD CONSTRAINT `Package_ibfk_4` FOREIGN KEY (`Service`) REFERENCES `service` (`ServiceID`);
 
 --

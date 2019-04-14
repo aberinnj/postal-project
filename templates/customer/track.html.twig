@@ -5,9 +5,39 @@
 
     <section id="postal-banner" class="section postal-banner">
         <div class="container">
-            <div class="title">Viewing Package Tracking</div>
-            <div class="subtitle"></div>
+
+            {% for crumbsKey, crumbsValue in breadcrumbs %}
+                <a href={{ crumbsValue }}>{{ crumbsKey}}</a> <strong>/</strong>
+            {% endfor %}
+
+            <div class="title">Find Your Courier.PO Tracking</div>
+            <div class="subtitle">Looking for your package's tracking? Enter a Package ID <br>
+                <small>You can only view your packages' tracking. If you have packages unassociated with this account, try our tracking on our homepage. </small>
+            </div>
         </div>
 
+    </section>
+
+    <section class="section is-medium">
+        <div>
+
+            <div class="columns is-mobile">
+            <div class="column is-4 is-offset-4 postal-track-ribbon">
+            
+                {{ form_start(tracking) }}
+                    <div class="container has-text-centered">
+                        <label class="Label">Enter Your CourierPO Package ID</label>
+                            <div class="package-track-form">
+                                {{ form_row(tracking.PackageID) }}
+
+                                {{ form_row(tracking.Submit) }}
+                            </div>
+                    </div>
+                {{ form_end(tracking) }}
+                            
+            </div>
+            </div>
+
+        </div>
     </section>
 {% endblock %}

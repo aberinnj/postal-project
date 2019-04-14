@@ -15,8 +15,15 @@
     
     <section id="postal-banner" class="section postal-banner">
         <div class="container">
-            <div class="title">Your Orders</div>
-            <div class="subtitle">View your orders, invoices and tracking.</div>
+            <div>
+            
+            {% for crumbsKey, crumbsValue in breadcrumbs %}
+                <a href={{ crumbsValue }}>{{ crumbsKey}}</a> <strong>/</strong>
+            {% endfor %}
+            
+            </div>
+            <div class="title">Your Courier.PO Orders</div>
+            <div class="subtitle">View <em>all</em> your orders, invoices and tracking.</div>
         </div>
 
     </section>
@@ -27,68 +34,56 @@
     <div class="tile is-ancestor">
     <div class="tile is-vertical is-8">
 
-        <div class="tile is-parent">
-        <article class="tile is-child notification">
-            <div class="content">
+            <div class="tile">
+                <div class="tile is-parent is-vertical">
 
-                <div style="margin-bottom: 10px">
-                    <div class="subtitle">
-                        List of All Orders Made
-                    </div>
-                </div>
 
-            <div class="">
-                <table class="table">
-                <thead>
-                    <tr>
-                    <th><attr title="Package ID"> ID</attr></th>
-                    <th>Status</th>
-                    <th>Date Ordered</th>
-                    <th>Last Updated</th>
-                    <th>Selected Service</th>
-                    <th>Tracking</th>
-                    <th>Invoice</th>
-                    </tr>
-                </thead>
-                    <tbody>
-                        {% if orderList|length > 0 %}
+                    <label class="label"> Your Packages </label>
 
-                            {% for order in orderList %}
-                                <tr>
-                                    <th>{{ order.ID }} </th>
-                                    <td>{{ order.Status }}</td>
-                                    <td>{{ order.Date }}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td><a href="/dashboard/orders/track/{{ order.ID }}">View</a></td>
-                                    <td><a href="/dashboard/orders/invoice/{{ order.InvoiceID }}">View</a></td>
-                                </tr>
-                            {% endfor %}
-                        {% else %}
+                    <table class="table is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th><attr title="Package ID"> ID</attr></th>
+                                <th>Status</th>
+                                <th>Date Ordered</th>
+                                <th>Tracking</th>
+                                <th>Invoice</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if orderList|length > 0 %}
 
-                            <article class="message is-warning">
-                            <div class="message-header">
-                                <p>You currently have no orders.</p>
-                            </div>
-                            <div class="message-body">
-                                Ship a package now through <a href=""><strong>Packages</strong></a>.
-                            </div>
-                            </article>
+                                {% for order in orderList %}
+                                    <tr>
+                                        <th>{{ order.ID }} </th>
+                                        <td>{{ order.Status }}</td>
+                                        <td>{{ order.Date }}</td>
+                                        <td><a href="/dashboard/orders/track/{{ order.ID }}">View</a></td>
+                                        <td><a href="/dashboard/orders/invoice/{{ order.InvoiceID }}">View</a></td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
 
-                        {% endif %}
-                    </tbody>
-                </table>
+                                <article class="message is-warning">
+                                <div class="message-header">
+                                    <p>You currently have no orders.</p>
+                                </div>
+                                <div class="message-body">
+                                    Ship a package now through <a href=""><strong>Packages</strong></a>.
+                                </div>
+                                </article>
 
+                            {% endif %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </article>
-        </div>
 
     </div>
     <div class="tile is-parent">
             <article class="tile is-child notification">
             <div class="content">
-                <p class="title">Tall tile</p>
+                <p class="title">Filter</p>
                 <p class="subtitle">With even more content</p>
                 <div class="content">
                 <!-- Content -->

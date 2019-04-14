@@ -227,3 +227,21 @@ section.breadcrumbs {
 .postal-search {
     margin: 5px 0 15px 0;
 }
+
+.postal-item-pill .media-content p span {
+    font-weight: bolder;
+}
+
+.form-info p, .form-info span {
+    color: #7e7e7e;
+}
+
+.postal-payment-list{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.postal-form-space {
+    margin-bottom: 30px;
+}
