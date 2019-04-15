@@ -3,15 +3,15 @@ namespace App\Entity;
 
 class Offices
 {
-    protected $state;
+    protected $OfficeID;
 
-    public function getState()
+    public function getOfficeID()
     {
-        return $this->state;
+        return $this->OfficeID;
     }
 
-    public function setState($state)
+    public function setOfficeID($OfficeID)
     {
-        $this->state = $state;
+        $this->OfficeID = $OfficeID;
     }
 }

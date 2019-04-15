@@ -1,0 +1,40 @@
+{%  extends 'customer_layout.html.twig' %}
+
+{% block title %}
+{{ parent() }} - Account
+{% endblock %}
+
+
+            {% block navOptions %}
+            {{parent()}}
+            {% endblock %}
+
+
+{% block body %}
+    {{ parent() }}
+    
+    <section class="hero">
+    </section>  
+
+    <section class="section">
+        <div class="container">
+            <div class="subtitle">
+                
+            </div>
+        </div>
+    </section>
+
+    <section class="section is-small">
+        <div class="container">
+        <div class="columns">
+
+            <div class="column is-three-quarters">
+
+
+            </div>
+            
+        </div>
+        </div>
+    </section>
+    
+{% endblock %}

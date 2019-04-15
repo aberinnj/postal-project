@@ -29,10 +29,11 @@ class Package
     protected $Status;
     protected $useDefaultAddress;
     protected $Total;
+    protected $Location;
 
     function __construct() {
         $this->SendDate = new \DateTime();   
-        $this->Status = 1;
+        $this->Status = 2;
     }
 
     // Email
@@ -43,6 +44,17 @@ class Package
 
     public function setEmail($Email){
         $this->Email = $Email;
+    }
+
+
+    // Location
+    public function getLocation()
+    {
+        return $this->Location;
+    }
+
+    public function setLocation($Location){
+        $this->Location = $Location;
     }
 
     // Total
@@ -232,7 +244,7 @@ class Package
     }
     
     public function setStatus($Status){
-        $this->Status = 1;
+        $this->Status = 2;
     }
 
 

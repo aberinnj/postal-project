@@ -6,6 +6,14 @@ app-employee-home:
   path: /employee/dashboard
   controller: App\Controller\EmployeeController::home
 
+app-employee-profile:
+  path: /employee/dashboard/profile
+  controller: App\Controller\EmployeeProfileController::home
+
+app-employee-deliver:
+  path: /employee/dashboard/delivery
+  controller: App\Controller\EmployeeDeliveryController::start
+
 app-customer-home:
   path: /dashboard
   controller: App\Controller\CustomerController::home
@@ -33,3 +41,5 @@ app-customer-track:
 app-customer-tracking-id:
   path: /dashboard/orders/track/{id}
   controller: App\Controller\CustomerTrackingController:viewWithID
+
+  

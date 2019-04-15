@@ -1,7 +1,7 @@
 {%  extends 'employee_layout.html.twig' %}
 
 {% block title %}
-{{ parent() }} - Dashboard
+{{ parent() }} - Delivery
 {% endblock %}
 
 
@@ -12,7 +12,7 @@
 
 {% block body %}
     {{ parent() }}
-
+    
     <section id="postal-banner" class="section postal-employee-banner">
         <div class="container">
             <div>
@@ -22,10 +22,10 @@
             {% endfor %}
             
             </div>
-            <div class="title">Your Courier.PO Dashboard</div>
-            <div class="subtitle">Hi Courier <strong>{{firstname}}</strong>! Courier ready?<br/></div>
+            <div class="title">Your Courier.PO Delivery Manager</div>
+            <div class="subtitle">Select your packages and deliver away!</div>
         </div>
 
     </section>
-
+    
 {% endblock %}

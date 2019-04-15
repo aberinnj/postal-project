@@ -12,8 +12,8 @@ use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
 use Doctrine\DBAL\Driver\Connection;
 
-class EmployeeController extends Root_DashboardController {
-    
+class EmployeeProfileController extends Root_DashboardController {
+   
     public function home(Connection $connection, Request $request) {
         $session = $this->get('session');
         $user = $session->get('user');

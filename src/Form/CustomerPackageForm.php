@@ -76,7 +76,7 @@ class CustomerPackageForm extends AbstractType {
 
         $builder
         ->add('Recipient', TextType::class, ['label' => '* Recipient Name ',  'required' => true])
-        ->add('Weight', NumberType::class, ['label' => '* Weight ',  'required' => true])
+        ->add('Weight', NumberType::class, ['label' => '* Weight ', 'required' => true])
         ->add('Length', NumberType::class, ['label' => '* Length ',  'required' => true])
         ->add('Width', NumberType::class, ['label' => '* Width ',  'required' => true])
         ->add('Height', NumberType::class, ['label' => '* Height ',  'required' => true])
@@ -95,10 +95,12 @@ class CustomerPackageForm extends AbstractType {
         ->add('ZIP', NumberType::class, ['label' => '* ZIP Code ',  'required' => true])
         ->add('Service', ChoiceType::class, ['label' => '* Select Shipping Type ', 'choices' => $services,  'required' => true])
         ->add('SendDate', DateType::class, ['label' => '* Set Pickup/Drop-off date ', 'required' => true])
-        ->add('isFragile', CheckboxType::class, ['label' => 'isFragile? ', 'required' => false])
-
-        ->add('continue', SubmitType::class, ['label' => 'Continue To Payment'])
+        ->add('isFragile', CheckboxType::class, ['label' => 'isFragile? ', 'required' => false])   
+        ->add('Location', TextType::class, ['label' => '* Selected Office Location : ', 'required'=> true, 'attr'=>['readonly'=>true]]) 
+        ->add('next', SubmitType::class, ['label' => 'Next'])
+        ->add('continue', SubmitType::class, ['label' => 'Next'])
         ->add('submit', SubmitType::class, ['label' => 'Submit Payment and Order']);
-    }
 
+
+    }
 }

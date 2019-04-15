@@ -37,10 +37,10 @@
                     <p>Order by: {{ email }}</p>
                     <p>Your default address: </p>
                     <p> <span id="postal-default-street">{{ default_street }}</span>
+                    {% if default_number|length > 0 %}Apt/Suite No.{% endif %}
+
                         <span id="postal-default-number">
-                            {% if default_number|length > 0 %}
-                                Apt/Suit No. {{default_number}}
-                            {% endif %}
+                        {% if default_number|length > 0 %}{{default_number}}{% else %}{% endif %}
                         </span>
                         <br>
                         <span id="postal-default-city">{{ default_city }}</span>, 
@@ -76,9 +76,9 @@
                     <label class="label">Package Specifications</label>
                     <div>
                         <span style="display: flex; flex-direction: row;">{{ form_row(package.Weight) }} lbs. </span>
-                        <span style="display: flex; flex-direction: row;">{{ form_row(package.Length) }} lbs. </span>
-                        <span style="display: flex; flex-direction: row;">{{ form_row(package.Width) }} lbs. </span>
-                        <span style="display: flex; flex-direction: row;">{{ form_row(package.Height) }} lbs. </span>
+                        <span style="display: flex; flex-direction: row;">{{ form_row(package.Length) }} cm. </span>
+                        <span style="display: flex; flex-direction: row;">{{ form_row(package.Width) }} cm. </span>
+                        <span style="display: flex; flex-direction: row;">{{ form_row(package.Height) }} cm. </span>
                         <span style="display: flex; flex-direction: row;">{{ form_row(package.isFragile) }} </span>
                     </div>
 
@@ -89,18 +89,23 @@
                     </div>
                     <div style="display: none;">
                         {{ form_row(package.submit)}}
+                        {{ form_row(package.Location)}}
                     </div>
 
                 </div>
                 <div class="postal-form-space">
+
                     {% if office is defined %}
                         {{ form_start(office) }}
                             {{form_row(office.Submit) }}{{form_row(office.State) }}
                         {{ form_end(office) }}
 
                     {% endif %}
+
                 </div>
-                {{ form_row(package.continue) }}
+                <div style="display: none;">
+                    {{ form_row(package.continue) }}
+                </div>
                 
                 {{ form_end(package) }}
 
@@ -111,37 +116,42 @@
                         {% if total|length > 0 %}
 
 
-<article class="message is-warning">
-  <div class="message-header">
-    <p>Payment</p>
-  </div>
-  <div class="message-body">
-      <div class="postal-payment-list">
-        <label class="label">Selected Shipping Service</label>
-        {{ total['service'] }}
-    </div>
-    <div class="postal-payment-list">
-        <label class="label">Package Weight</label>
-        {{ total['weight'] }} lbs.
-    </div>
-    <div class="postal-payment-list">
-        <label class="label">Base Price</label>
-        ${{ total['BasePrice'] }}
-    </div>
-    <div class="postal-payment-list">
-        <label class="label">Weight Limit Charge</label>
-        <div>${{ total['WeightLimitCost'] }}</div>
-    </div>
-    <hr>
-    <div class="postal-payment-list">
-        <label class="label">Total</label>
-        ${{ total['total'] }}
-    </div>
-  </div>
-</article>
+                        <article class="message is-warning">
+                        <div class="message-header">
+                            <p>Payment</p>
+                        </div>
+                        <div class="message-body">
+                            <div class="postal-payment-list">
+                                <label class="label">Selected Shipping Service</label>
+                                {{ total['service'] }}
+                            </div>
+                            <div class="postal-payment-list">
+                                <label class="label">Selected Pickup/Dropoff Location</label>
+                                {{ officeLocation }}
+                            </div>
+                            <div class="postal-payment-list">
+                                <label class="label">Package Weight</label>
+                                {{ total['weight'] }} lbs.
+                            </div>
+                            <div class="postal-payment-list">
+                                <label class="label">Base Price</label>
+                                ${{ total['BasePrice'] }}
+                            </div>
+                            <div class="postal-payment-list">
+                                <label class="label">Weight Limit Charge</label>
+                                <div>${{ total['WeightLimitCost'] }}</div>
+                            </div>
+                            <hr>
+                            <div class="postal-payment-list">
+                                <label class="label">Total</label>
+                                ${{ total['total'] }}
+                            </div>
+                        </div>
+                        </article>
 
 
                         {% endif %}
+
                         {{ form_row(payment.submit) }}
                     </div>
 
@@ -180,13 +190,64 @@
                             {{ form_row(payment.Service) }}
                             {{ form_row(payment.SendDate) }}
                         </div>
+                        {{ form_row(payment.next) }}
                         {{ form_row(payment.continue) }}
+                        {{ form_row(payment.Location)}}
                     </div>
                 {{ form_end(payment) }}
 
 
-            {% elseif invoice is defined %}
+            {% elseif officeList is defined %}
 
+                <label class="label">Available Courier.PO Offices near you</label>
+                <div class="" style="display: flex; flex-direction: row">
+                {{ form(officeList) }}
+                <button class="" onclick="SelectOffice();">Set as Pickup/Drop-off Location</button>
+                </div>
+
+                {{ form_start(pickupForm) }}
+
+                    {{ form_row(pickupForm.Location)}}
+                    {{ form_row(pickupForm.continue) }}  
+                    <div style="display: none;">
+                        <label class="label">Return Address</label>
+                        <div>
+                            {{ form_row(pickupForm.useDefaultAddress) }}
+                            {{ form_row(pickupForm.rStreet) }}
+                            {{ form_row(pickupForm.rApartmentNo) }}
+                            {{ form_row(pickupForm.rCity) }}
+                            {{ form_row(pickupForm.rState) }}
+                            {{ form_row(pickupForm.rZIP) }}
+                        </div>
+                        
+                        <label class="label">Destination Address</label>
+                        <div>
+                            {{ form_row(pickupForm.Recipient) }}
+                            {{ form_row(pickupForm.Street) }}
+                            {{ form_row(pickupForm.ApartmentNo) }}
+                            {{ form_row(pickupForm.City) }}
+                            {{ form_row(pickupForm.State) }}
+                            {{ form_row(pickupForm.ZIP) }}
+                        </div>
+
+                        <label class="label">pickupForm Specifications</label>
+                        <div>
+                            <span style="display: flex; flex-direction: row;">{{ form_row(pickupForm.Weight) }} lbs. </span>
+                            <span style="display: flex; flex-direction: row;">{{ form_row(pickupForm.Length) }} lbs. </span>
+                            <span style="display: flex; flex-direction: row;">{{ form_row(pickupForm.Width) }} lbs. </span>
+                            <span style="display: flex; flex-direction: row;">{{ form_row(pickupForm.Height) }} lbs. </span>
+                            <span style="display: flex; flex-direction: row;">{{ form_row(pickupForm.isFragile) }} </span>
+                        </div>
+
+                        <label class="label">Service</label>
+                        <div>
+                            {{ form_row(pickupForm.Service) }}
+                            {{ form_row(pickupForm.SendDate) }}
+                            {{ form_row(pickupForm.submit) }}
+                            {{ form_row(pickupForm.next) }}                          
+                        </div>
+                    </div>
+                {{ form_end(pickupForm) }}
 
             {% endif %}
 
@@ -199,4 +260,5 @@
 
 {% block javascripts %}
     <script src="{{ asset('js/DefaultAddressCheckbox.js') }}"></script>
+    <script src="{{ asset('js/SelectOffice.js') }}"></script>
 {% endblock %}

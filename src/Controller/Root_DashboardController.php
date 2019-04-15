@@ -129,6 +129,21 @@ class Root_DashboardController extends AbstractController {
             echo "Error " . $e->getMessage();
         }
     }
+
+    protected function EmployeesDetailsQuery(Connection $connection, $identity) {
+        try{
+            $sql = "SELECT FirstName, LastName, OfficeID FROM  employee WHERE employee.EmployeeID = :id;";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':id', $identity);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
     
     protected function CustomerDashOrdersQuery(Connection $connection, $identity) {
         try{
@@ -151,6 +166,21 @@ class Root_DashboardController extends AbstractController {
 
             $stmt = $connection->prepare($sql);
             $stmt->bindValue(':email', $identity);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
+    protected function getOfficeQuery(Connection $connection, $state) {
+        try{
+            $sql = "SELECT o.OfficeID, o.Street, o.City, s.StateAbbreviation, o.ZIP FROM office as o, state as s WHERE o.State = :state AND o.State = s.StateID";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':state', $state);
             $stmt->execute();
 
             return $stmt->fetchAll();
@@ -206,12 +236,11 @@ class Root_DashboardController extends AbstractController {
     }
 
     protected function CustomerPackageSubmitQuery(Connection $connection, $package) {
-     
         try{
             $sql = "INSERT INTO package (RecipientName, Email, Weight, Length, Width, Height, 
             dest_State, dest_City, dest_ZIP, dest_Street, dest_ApartmentNo,
             return_State, return_City, return_ZIP, return_Street, return_ApartmentNo,
-            isFragile, send_date, Service, Status) VALUES (
+            isFragile, send_date, Service, Status, OfficeID) VALUES (
                 :Recipient,
                 :Email,
                 :Weight,
@@ -231,7 +260,8 @@ class Root_DashboardController extends AbstractController {
                 :isFragile,
                 :sendDate,
                 :service,
-                :status
+                :status,
+                :OfficeID
             )";
 
             $transaction = "INSERT INTO transaction (PackageID, TransactionTotal) VALUES ((SELECT LAST_INSERT_ID()), :total)";
@@ -261,6 +291,7 @@ class Root_DashboardController extends AbstractController {
             $stmt->bindValue(':sendDate', date_format($package->getSendDate(), 'Y-m-d'));
             $stmt->bindValue(':service', $package->getService());
             $stmt->bindValue(':status', $package->getStatus());
+            $stmt->bindValue(':OfficeID', $package->getLocation());
             $stmt->execute();
 
             $stmt = $connection->prepare($transaction);
