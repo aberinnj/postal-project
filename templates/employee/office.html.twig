@@ -1,7 +1,7 @@
 {%  extends 'employee_layout.html.twig' %}
 
 {% block title %}
-{{ parent() }} - Dashboard
+{{ parent() }} - {{ branch }} Office
 {% endblock %}
 
 
@@ -22,8 +22,8 @@
             {% endfor %}
             
             </div>
-            <div class="title">Your Courier.PO Dashboard</div>
-            <div class="subtitle">Welcome Courier <strong>{{firstname}}</strong>!</div>
+            <div class="title">Your Office</div>
+            <div class="subtitle"> {{ branch }} Office</div>
         </div>
 
     </section>
@@ -31,11 +31,6 @@
 
     <section class="section is-small dashboard">
     <div class="container">
-
-        <div class="postal-quick-buttons">
-            <a class="button is-active" href="{{ path('app-employee-profile') }}">Employee ID#{{id}}</a>
-            <a class="button is-active" href="{{ path('app-employee-office') }}">{{branch}} Office</a>
-        </div>
 
         <div class="tile is-ancestor">
         <div class="tile is-vertical is-8">

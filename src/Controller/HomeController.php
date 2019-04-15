@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -73,10 +74,7 @@ class HomeController extends Root_HomeController {
         ]);
     }
 
-    /**
-     * @Route("/order", name="app-ship-order")
-     */
-    public function order_view(Connection $connection, Request $request)
+    public function order(Connection $connection, Request $request)
     {
         $loginBundle = $this->signIn_as_customer();
         $loginForm = $loginBundle[1];
@@ -206,18 +204,32 @@ class HomeController extends Root_HomeController {
         $loginForm = $loginBundle[1];
         $loginHandler = $this->handleSignIn_as_customer($connection, $request, $loginForm, $loginBundle[0]);
 
-
-        $registrationBundle = $this->signUp_as_employee();
-        $registrationForm = $registrationBundle[1];
-        $registrationHandler = $this->handleSignUp_as_employee($connection, $request, $registrationForm, $registrationBundle[0]);
-
         if($loginHandler){
             return $loginHandler;
         }
-        elseif ($registrationHandler) {
-            return $registrationHandler;
+
+        $registration = new Registration();
+        $all_offices = $this->getAllOfficeQuery($connection);
+        $listing = [];
+
+        foreach ($all_offices as $office) {
+            array_push($listing, [$office['office'] => $office['office']]);
         }
-        
+        $registrationForm = $this->createFormBuilder($registration)
+            ->add('FName', TextType::class, ['label' => '* First Name ',  'required' => true])
+            ->add('MInit', TextType::class, ['label' => '* Middle Initial ',  'required' => true])
+            ->add('LName', TextType::class, ['label' => '* Last Name ',  'required' => true])
+            ->add('Password', PasswordType::class, ['label' => '* Password ',  'required' => true])
+            ->add('Office', ChoiceType::class, ['label' => '* Office ', 'choices'=>$listing, 'required' => true])
+            ->add('Submit', SubmitType::class, ['label' => 'Submit'])
+            ->getForm();
+
+        $registrationForm->handleRequest($request);
+        if($registrationForm->isSubmitted() && $registrationForm->isValid()) {
+            $registration = $registrationForm->getData();
+            $hp = $this->registerEmployeeQuery($connection, $registration);
+            return $this->redirectToRoute('app-employee');
+        }  
         return $this->render('employee/apply.html.twig', ['login' => $loginForm->createView(), 'registration' => $registrationForm->createView()]);
     }
 

@@ -31,6 +31,7 @@ class Package
     protected $Total;
     protected $Location;
 
+
     function __construct() {
         $this->SendDate = new \DateTime();   
         $this->Status = 2;

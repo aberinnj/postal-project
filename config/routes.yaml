@@ -1,3 +1,7 @@
+app-home-create-package:
+  path: /order
+  controller: App\Controller\HomeController::order
+
 app-employee:
   path: /employee
   controller: App\Controller\HomeController::employee_login
@@ -13,6 +17,18 @@ app-employee-profile:
 app-employee-deliver:
   path: /employee/dashboard/delivery
   controller: App\Controller\EmployeeDeliveryController::start
+
+app-employee-office:
+  path: /employee/dashboard/office
+  controller: App\Controller\EmployeeOfficeController::show
+
+app-employee-manage-office:
+  path: /employee/dashboard/office/manage
+  controller: App\Controller\EmployeeManageOffice::home
+
+app-employee-office-vehicles:
+  path: /employee/dashboard/office/vehicles
+  controller: App\Controller\EmployeeVehiclesController::home
 
 app-customer-home:
   path: /dashboard

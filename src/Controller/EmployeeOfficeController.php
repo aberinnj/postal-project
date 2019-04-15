@@ -12,17 +12,17 @@ use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
 use Doctrine\DBAL\Driver\Connection;
 
-class EmployeeProfileController extends Root_DashboardController {
+class EmployeeOfficeController extends Root_DashboardController {
    
-    public function home(Connection $connection, Request $request) {
+    public function show(Connection $connection, Request $request) {
         $session = $this->get('session');
         $user = $session->get('user');
-        $breadcrumbs = ['Home'=>'/employee/dashboard', 'Profile'=>'/employee/dashboard/profile'];
+        $breadcrumbs = ['Home'=>'/employee/dashboard', 'Office'=>'/employee/dashboard/office'];
 
         $action = $this->requestPage('employee', 'app-employee');
         if ($action) {
             return $action;
-        }
+        }   
 
         $logoutForm = $this->logout();
         $logoutHandler = $this->do_logout($request, $logoutForm);
@@ -33,11 +33,13 @@ class EmployeeProfileController extends Root_DashboardController {
 
         $name = ($this->EmployeesDetailsQuery($connection, $user['id']))[0];
         return $this->render(
-            'employee/profile.html.twig', [
+            'employee/office.html.twig', [
             'firstname'=>$name['FirstName'],
-            'id' => $user['id'],
+
             'name'=>$name['FirstName'].' '.$name['LastName'],
             'breadcrumbs' => $breadcrumbs,
+            'branch'=>$name['OfficeID'],
+            'id'=>$user['id'],
             'logout'=>$logoutForm->createView()]
         );
     }

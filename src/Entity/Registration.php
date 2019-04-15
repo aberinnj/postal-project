@@ -15,6 +15,29 @@ class Registration
     protected $ZIP;
     protected $Street;
     protected $ApartmentNo;
+    protected $Office;
+    protected $Vehicle;
+
+
+    // Vehicle
+    public function getVehicle()
+    {
+        return $this->Vehicle;
+    }
+
+    public function setVehicle($Vehicle){
+        $this->Vehicle = $Vehicle;
+    }
+    
+    // Office
+    public function getOffice()
+    {
+        return $this->Office;
+    }
+
+    public function setOffice($Office){
+        $this->Office = $Office;
+    }
 
     // Email
     public function getEmail()

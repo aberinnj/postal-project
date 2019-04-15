@@ -1,0 +1,111 @@
+{%  extends 'employee_layout.html.twig' %}
+
+{% block title %}
+{{ parent() }} - {{branch}} Office
+{% endblock %}
+
+
+            {% block navOptions %}
+            {{parent()}}
+            {% endblock %}
+
+
+{% block body %}
+    {{ parent() }}
+    
+    <section id="postal-banner" class="section postal-employee-banner">
+        <div class="container">
+            <div>
+            
+            {% for crumbsKey, crumbsValue in breadcrumbs %}
+                <a href={{ crumbsValue }}>{{ crumbsKey}}</a> <strong>/</strong>
+            {% endfor %}
+            
+            </div>
+            <div class="title">Manage Your Office</div>
+            <div class="subtitle">{{ branch }} Office <br/></div>
+        </div>
+
+    </section>
+
+    <section class="section">
+        <div class="container">
+        <div style="overflow-x: auto">
+            <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th><abbr title="PackageID">ID</abbr></th>
+                    <th><abbr title="Service">Service/Priority</abbr></th>
+                    <th><abbr title="Destination Street Address">Destination Street</abbr></th>
+                    <th><abbr title="Destination Apt/Suite">Apt/Suite No.</abbr></th>
+                    <th><abbr title="Destination City">Destination City</abbr></th>
+                    <th><abbr title="Destination State">Destination State</abbr></th>
+                    <th><abbr title="Destination ZIP">Destination ZIP</abbr></th>
+                    <th><abbr title="Available Delivery Vehicles">Office Vehicles</abbr></th>
+                    <th>Actions</th>
+                    <th>Loaded</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% if packages|length > 0 %}
+                {% for package in packages %}
+
+                <tr>
+                    <th>{{package.ID}}</th>
+                    <th>{{package.ServiceName}}</th>
+                    <th>{{package.Street}}</th>
+                    <th>{{package.ApartmentNo}}</th>
+                    <th>{{package.City}}</th>
+                    <th>{{package.State}}</th>
+                    <th>{{package.ZIP}}</th>
+                    <th>
+                        <select placeholder="Vehicle" id="vehicle_form{{ package.ID }}">
+
+
+                            {% for vehicle in vehicles %}
+                                {% for key,value in vehicle %}
+
+                                    <option value={{value}} 
+                                    {% if package.VID == value %} selected {% endif %}
+                                    >  
+                                        {{key}}
+                                    </option>
+
+                                {% endfor %}
+                            {% endfor %}
+                        </select>
+                    </th>
+                    <th>
+                        <button onclick="loadVehicle({{package.ID}});">Load</button>
+                    </th>
+                    <th id="loaded_table_{{package.ID}}">{% if package.VID is null %} No {% else %} Yes{% endif %}</th>
+                </tr>
+
+                {% endfor %}
+            {% else %}
+
+                                <article class="message is-warning">
+                                    <div class="message-header">
+                                        <p>You currently have no packages to deliver.</p>
+                                    </div>
+                                </article>
+
+            {% endif %}
+
+            </tbody>
+            </table>
+
+        </div>
+        </div>
+    </section>
+
+    <div style="display: none;">
+        {{ form(loadingForm) }}
+    </div>
+    
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/loadVehicle.js') }}"></script>
+{% endblock %}

@@ -22,8 +22,8 @@
             {% endfor %}
             
             </div>
-            <div class="title">Your Courier.PO Dashboard</div>
-            <div class="subtitle">Welcome Courier <strong>{{firstname}}</strong>!</div>
+            <div class="title">{{ branch }} Vehicles</div>
+            <div class="subtitle"></div>
         </div>
 
     </section>
@@ -34,7 +34,7 @@
 
         <div class="postal-quick-buttons">
             <a class="button is-active" href="{{ path('app-employee-profile') }}">Employee ID#{{id}}</a>
-            <a class="button is-active" href="{{ path('app-employee-office') }}">{{branch}} Office</a>
+            <a class="button is-active" href="{{ path('app-employee-manage-office') }}">{{branch}} Office</a>
         </div>
 
         <div class="tile is-ancestor">

@@ -36,7 +36,9 @@ class EmployeeController extends Root_DashboardController {
             'employee/dashboard.html.twig', [
             'firstname'=>$name['FirstName'],
             'name'=>$name['FirstName'].' '.$name['LastName'],
+            'id'=>$user['id'],
             'breadcrumbs' => $breadcrumbs,
+            'branch' => $name['OfficeID'],
             'logout'=>$logoutForm->createView()]
         );
     }

@@ -121,25 +121,6 @@ class Root_HomeController extends AbstractController {
 
     }
 
-    public function signUp_as_employee(){
-        $registration = new Registration();
-        $registrationForm = $this->createForm(EmployeeRegistrationForm::class, $registration);
-        return Array($registration, $registrationForm);
-    }
-
-    public function handleSignUp_as_employee(Connection $connection, Request $request, $registrationForm, $registration){
-
-        $registrationForm->handleRequest($request);
-
-        if($registrationForm->isSubmitted() && $registrationForm->isValid()) {
-            $registration = $registrationForm->getData();
-
-            $hp = $this->registerEmployeeQuery($connection, $registration);
-            return $this->redirectToRoute('app-employee');
-        }
-        return null;
-    }
-
 
     //
     protected function passmatch(Credentials $credentials, String $password) {
@@ -204,6 +185,7 @@ class Root_HomeController extends AbstractController {
 
     //
     protected function registerEmployeeQuery(Connection $connection, Registration $registration) {
+        print_r($registration);
         try{
 
             $sql = "INSERT INTO employee (FirstName, MiddleName, LastName, OfficeID) VALUES (:firstname, :middlename, :lastname, :office)";
@@ -211,7 +193,7 @@ class Root_HomeController extends AbstractController {
             $stmt->bindValue(':firstname', $registration->getFName());
             $stmt->bindValue(':middlename', $registration->getMInit());
             $stmt->bindValue(':lastname', $registration->getLName());
-            $stmt->bindValue(':office', 'HOU002');
+            $stmt->bindValue(':office', $registration->getOffice());
             $stmt->execute();
 
             $sql = "SELECT LAST_INSERT_ID() as id;";
@@ -280,5 +262,19 @@ class Root_HomeController extends AbstractController {
         }
     }
 
+    // 
+    protected function getAllOfficeQuery(Connection $connection) {
+        try{
+            $sql = "SELECT o.OfficeID as office FROM office as o";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
 
 }

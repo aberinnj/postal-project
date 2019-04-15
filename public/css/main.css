@@ -236,12 +236,18 @@ section.breadcrumbs {
     color: #7e7e7e;
 }
 
-.postal-payment-list{
+.postal-payment-list {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.postal-form-space {
+.postal-vehicle-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+}
+
+.postal-form-space, .dashboard .container .postal-quick-buttons, .VIN  {
     margin-bottom: 30px;
 }

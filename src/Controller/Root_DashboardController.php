@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Tracking;
 use App\Entity\Package;
+use App\Entity\Delivery;
 use App\Form\CustomerPackageForm;
 use App\Form\TrackingForm;
 use Symfony\Component\HttpFoundation\Response;
@@ -184,6 +185,66 @@ class Root_DashboardController extends AbstractController {
             $stmt->execute();
 
             return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
+    protected function GetOfficePackages(Connection $connection, $office) {
+        try{
+            $sql = "SELECT p.VehicleID as VID, p.PackageID as ID, p.Service, s.ServiceName, t.StateAbbreviation as State, p.dest_City as City, p.dest_ZIP as ZIP, p.dest_ApartmentNo as ApartmentNo, p.dest_street as Street FROM package as p, service as s, state as t WHERE p.OfficeID = :office AND p.Service = s.ServiceID AND p.dest_State = t.StateID ORDER BY p.Service DESC";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':office', $office);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
+    protected function getPackagesForVehicle(Connection $connection, $vehicle) {
+        try{
+            $sql = "SELECT p.PackageID as ID, Weight, Length, Width, Height, isFragile, p.Service, s.ServiceName, t.StateAbbreviation as State, p.dest_City as City, p.dest_ZIP as ZIP, p.dest_ApartmentNo as ApartmentNo, p.dest_street as Street FROM package as p, service as s, state as t WHERE p.VehicleID = :vehicle AND p.Service = s.ServiceID AND p.dest_State = t.StateID ORDER BY p.Service DESC";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':vehicle', $vehicle);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
+    protected function GetVehiclesQuery(Connection $connection, $office) {
+        try{
+            $sql = "SELECT * FROM vehicle WHERE vehicle.officeID = :office";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':office', $office);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
+
+    protected function LoadPackageToVehicleQuery(Connection $connection, Delivery $delivery) {
+        try{
+            $sql = "UPDATE package SET package.VehicleID = :vehicle WHERE package.packageID = :pid";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':vehicle', $delivery->getVehicle());
+            $stmt->bindValue(':pid', $delivery->getPackageID());
+            $stmt->execute();
 
         } catch (PODException $e){ 
             echo "Error " . $e->getMessage();
