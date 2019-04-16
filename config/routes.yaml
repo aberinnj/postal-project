@@ -27,6 +27,10 @@ app-employee-office:
   path: /employee/dashboard/office
   controller: App\Controller\EmployeeOfficeController::show
 
+app-employee-reports:
+  path: /employee/dashboard/reports
+  controller: App\Controller\EmployeeReportsController::show
+
 app-employee-manage-office:
   path: /employee/dashboard/office/manage
   controller: App\Controller\EmployeeManageOffice::home
@@ -38,6 +42,10 @@ app-employee-office-vehicles:
 app-customer-home:
   path: /dashboard
   controller: App\Controller\CustomerController::home
+
+app-customer-profile:
+  path: /dashboard/profile
+  controller: App\Controller\CustomerProfileController::home
 
 app-customer-create-package:
   path: /dashboard/create

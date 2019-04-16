@@ -145,6 +145,35 @@ class Root_DashboardController extends AbstractController {
             echo "Error " . $e->getMessage();
         }
     }
+
+    protected function ReportEmployeeDeliveryQuery(Connection $connection) {
+        try{
+            $sql = "SELECT * FROM employee_delivery_report;";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
+    protected function ReportRegionalOfficeStatistics(Connection $connection) {
+        try{
+            $sql = "SELECT * FROM get_office_location_statistics";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
     
     protected function CustomerDashOrdersQuery(Connection $connection, $identity) {
         try{

@@ -1,0 +1,137 @@
+{%  extends 'employee_layout.html.twig' %}
+
+{% block title %}
+{{ parent() }} - Reports
+{% endblock %}
+
+
+            {% block navOptions %}
+            {{parent()}}
+            {% endblock %}
+
+
+{% block body %}
+    {{ parent() }}
+    
+    <section id="postal-banner" class="section postal-employee-banner">
+        <div class="container">
+            <div>
+            
+            {% for crumbsKey, crumbsValue in breadcrumbs %}
+                <a href={{ crumbsValue }}>{{ crumbsKey}}</a> <strong>/</strong>
+            {% endfor %}
+            
+            </div>
+            <div class="title">Our Courier.PO Reports</div>
+            <div class="subtitle">View how Courier.PO is doing</div>
+        </div>
+
+    </section>
+
+
+    <section class="section">
+        <div class="container">
+        <div style="overflow-x: auto;">
+        <table class="table is-fullwidth">
+            <thead>
+            <tr>
+                    <th>Employee ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>VIN</th>                   
+                    <th>Office ID</th>
+
+                    <th>Package ID</th>
+                    <th>Destination ZIP</th>
+                    <th>Package Weight</th>
+                    <th>Status Name</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            
+                {% for each in reportEmployeeDelivery %}
+                    <tr>
+                    <th>{{ each.EmployeeID }}</th>
+                    <th> {{ each.FirstName }}</th>
+                    <th> {{ each.LastName }}</th>
+                    <th>{{ each.VIN }}</th>                   
+                    <th>{{ each.OfficeID }}</th>
+
+                    <th>{{each.PackageID}}</th>
+                    <th>{{each.dest_ZIP}}</th>
+                    <th>{{each.Weight}}</th>
+                    <th>{{each.Status}}</th>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+        </div>
+        </div>
+
+
+    </section>
+
+
+    <section class="section">
+        <div class="container">
+        <div style="overflow-x: auto;">
+        <table class="table is-fullwidth">
+            <thead>
+            <tr>
+                    <th>State</th>
+                    <th>No. Of Offices</th>
+                    <th>Total No. Of Shipping Orders</th>
+
+            </tr>
+            </thead>
+
+            <tbody>
+            
+                {% for each in reportRegionalStats %}
+                    <tr>
+                    <th>{{ each.StateName }}</th>
+                    <th> {% if each.OfficesCount is null %}0{% else %}{{ each.OfficesCount }}{% endif %}</th>
+                    <th> {% if each.OrdersCount is null %}0{% else %}{{ each.OrdersCount }}{% endif %}</th>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+        </div>
+        </div>
+
+
+    </section>
+
+        <section class="section">
+        <div class="container">
+        <div style="overflow-x: auto;">
+        <table class="table is-fullwidth">
+            <thead>
+            <tr>
+                <th>PackageID</th>
+                <th>Email</th>
+                <th>Weight</th>
+                <th>Length</th>
+                <th>Width</th>
+                <th>Height</th>
+                <th>Price</th>
+                <th>State</th>
+                <th>City</th>
+                <th>ZIP</th>
+                <th>Street</th>
+                <th>Apt/Suite. No</th>
+                <th>isFragile</th>
+                <th>Send date</th>
+                <th>Priority</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+        </table>
+        </div>
+        </div>
+    </section>
+    
+{% endblock %}

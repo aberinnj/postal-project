@@ -76,30 +76,5 @@ class CustomerController extends Root_DashboardController {
             'orderList' => $orderList
             ]);
     }
-    
-    /**
-     * @Route("/dashboard/profile", name="app-customer-profile")
-    */
-    public function customer_profile(Connection $connection, Request $request) {
-        $session = $this->get('session');
-        $user = $session->get('user');
-
-        $action = $this->requestPage('customer', 'app-main-page');
-        if ($action) {
-            return $action;
-        }
-        
-        $logoutForm = $this->logout();
-        $logoutHandler = $this->do_logout($request, $logoutForm);
-
-        if($logoutHandler) {
-            return $logoutHandler;
-        }
-
-        $name = ($this->CustomerDetailsQuery($connection, $user['id']))[0];
-        return $this->render('customer/profile.html.twig', [
-            'logout'=>$logoutForm->createView(),
-            'name'=> $name["FName"]." ".$name["LName"]
-        ]);
-    }
+ 
 }

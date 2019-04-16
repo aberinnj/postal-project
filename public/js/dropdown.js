@@ -19,5 +19,5 @@ function drawDropdown(id){
 
 // listener
 document.body.addEventListener('click', function(){
-    closeAllDropdownsExcept(3);
+    closeAllDropdownsExcept(2);
 }, true);

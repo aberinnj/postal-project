@@ -13,15 +13,18 @@
 {% block body %}
     {{ parent() }}
     
-    <section class="hero">
-    </section>  
-
-    <section class="section">
+    <section id="postal-banner" class="section postal-banner">
         <div class="container">
-            <div class="subtitle">
-                
+
+            {% for crumbsKey, crumbsValue in breadcrumbs %}
+                <a href={{ crumbsValue }}>{{ crumbsKey}}</a> <strong>/</strong>
+            {% endfor %}
+
+            <div class="title">Your Courier.PO Profile</div>
+            <div class="subtitle">Set your account details or change your address. </small>
             </div>
         </div>
+
     </section>
 
     <section class="section is-small">
@@ -30,6 +33,7 @@
 
             <div class="column is-three-quarters">
 
+                {{ form(profile )}}
 
             </div>
             

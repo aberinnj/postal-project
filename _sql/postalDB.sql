@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 15, 2019 at 09:42 PM
+-- Generation Time: Apr 16, 2019 at 04:54 PM
 -- Server version: 5.7.24
 -- PHP Version: 7.2.14
 
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `UserRole` int(3) DEFAULT NULL,
   `OfficeID` varchar(7) NOT NULL,
   PRIMARY KEY (`EmployeeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1000003 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1000004 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `employee`
@@ -100,7 +100,8 @@ CREATE TABLE IF NOT EXISTS `employee` (
 INSERT INTO `employee` (`EmployeeID`, `FirstName`, `MiddleName`, `LastName`, `EmploymentDate`, `UserRole`, `OfficeID`) VALUES
 (1000000, 'John', 'M', 'Doe', '2019-04-07 02:18:21', NULL, 'HOU002'),
 (1000001, 'Mo', 'M', 'Mo', '2019-04-07 22:57:14', NULL, 'HOU002'),
-(1000002, 'Norm', 'M', 'Norm', '2019-04-08 11:43:23', NULL, 'HOU002');
+(1000002, 'Norm', 'M', 'Norm', '2019-04-08 11:43:23', NULL, 'HOU002'),
+(1000003, 'Shuber', 'M', 'Costa', '2019-04-16 03:56:07', NULL, 'HOU004');
 
 -- --------------------------------------------------------
 
@@ -122,7 +123,44 @@ CREATE TABLE IF NOT EXISTS `employeecredentials` (
 INSERT INTO `employeecredentials` (`EmployeeID`, `Password`) VALUES
 (1000000, '8d307b07b9b59d479d0db9be3fa1a2b0'),
 (1000001, '81dc9bdb52d04dc20036dbd8313ed055'),
-(1000002, '81dc9bdb52d04dc20036dbd8313ed055');
+(1000002, '81dc9bdb52d04dc20036dbd8313ed055'),
+(1000003, 'f56c047327d98c9d787b9325926d9860');
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `employee_delivery_report`
+-- (See below for the actual view)
+--
+DROP VIEW IF EXISTS `employee_delivery_report`;
+CREATE TABLE IF NOT EXISTS `employee_delivery_report` (
+`EmployeeID` int(7)
+,`FirstName` varchar(20)
+,`MiddleName` varchar(2)
+,`LastName` varchar(20)
+,`VIN` varchar(17)
+,`OfficeID` varchar(7)
+,`PackageID` int(10)
+,`dest_ZIP` int(5)
+,`Weight` decimal(5,2)
+,`Status` varchar(12)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `get_office_location_statistics`
+-- (See below for the actual view)
+--
+DROP VIEW IF EXISTS `get_office_location_statistics`;
+CREATE TABLE IF NOT EXISTS `get_office_location_statistics` (
+`StateID` tinyint(4)
+,`StateAbbreviation` char(2)
+,`StateName` varchar(15)
+,`OfficesCount` bigint(21)
+,`State` tinyint(4)
+,`OrdersCount` decimal(42,0)
+);
 
 -- --------------------------------------------------------
 
@@ -159,7 +197,12 @@ INSERT INTO `office` (`OfficeID`, `State`, `City`, `ZIP`, `Street`, `isRegional`
 ('HOU003', 43, 'Baytown', 77015, '13311 East Freeway', 0),
 ('HOU004', 43, 'Sugar Land', 77479, '2700 Town Center Boulevard North', 0),
 ('HOU005', 43, 'The Woodlands', 77380, '1201 Lake Woodlands Drive', 0),
-('SAN001', 43, 'San Antonio', 78216, '151 Interpark Boulevard', 0);
+('OLY001', 47, 'Olympia', 98501, '414 Jefferson St NE', 1),
+('OLY002', 47, 'Olympia', 98599, '2201 Homer St', 0),
+('SAN001', 43, 'San Antonio', 78216, '151 Interpark Boulevard', 0),
+('SEA001', 47, 'Seattle', 98401, '420 Valid St', 0),
+('SEA002', 47, 'Seattle', 98101, '911 Pine St', 0),
+('VAN001', 47, 'Vancouver', 98662, '8700 NE Vancouver Mall Dr', 0);
 
 -- --------------------------------------------------------
 
@@ -192,24 +235,28 @@ CREATE TABLE IF NOT EXISTS `package` (
   `Status` int(1) NOT NULL,
   `OfficeID` varchar(7) DEFAULT NULL,
   `VehicleID` varchar(17) DEFAULT NULL,
+  `return_office` varchar(7) DEFAULT NULL,
   PRIMARY KEY (`PackageID`),
   KEY `Package_ibfk_1` (`Status`),
   KEY `Package_ibfk_2` (`dest_State`),
   KEY `Package_ibfk_5` (`OfficeID`),
   KEY `Package_ibfk_3` (`return_State`),
   KEY `Package_ibfk_4` (`Service`),
-  KEY `Package_ibfk_6` (`VehicleID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+  KEY `Package_ibfk_6` (`VehicleID`),
+  KEY `Package_ibfk_7` (`return_office`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `package`
 --
 
-INSERT INTO `package` (`PackageID`, `RecipientName`, `Email`, `Weight`, `Length`, `Width`, `Height`, `dest_State`, `dest_City`, `dest_ZIP`, `dest_Street`, `dest_ApartmentNo`, `return_State`, `return_City`, `return_ZIP`, `return_Street`, `return_ApartmentNo`, `isFragile`, `send_date`, `Service`, `Status`, `OfficeID`, `VehicleID`) VALUES
-(3, 'Homer Man', 'cooper@hotmail.com', '10.00', '5.00', '5.00', '5.00', 43, 'Corpus', 73001, '4490 Home Road', 10, 43, 'Katy', 73001, '888 Heller Road', 202, 1, '2019-04-15', 3, 2, 'HOU001', NULL),
-(4, 'House Morgan', 'cooper@hotmail.com', '10.00', '10.00', '5.00', '5.00', 43, 'Katy', 77494, '888 Heller Road', 201, 43, 'Man', 77494, '1012 Homefree Lane', 11, 0, '2019-04-15', 2, 2, 'HOU002', 'AAAAAAA0000000004'),
-(5, 'Cosa Mosa', 'cooper@hotmail.com', '40.00', '5.00', '5.00', '5.00', 47, 'District of Columbia', 20001, '720 Hope Lane', NULL, 43, 'Corpus', 20001, '4490 Home Road', NULL, 0, '2019-04-15', 2, 2, 'HOU002', 'AAAAAAA0000000004'),
-(6, 'StressFree Inc.', 'cooper@hotmail.com', '8.00', '8.00', '8.00', '8.00', 43, 'Tomball', 77202, '530 Torp Street', NULL, 43, 'Plano', 77202, '555 Magis Corpus Avenue', 520, 0, '2019-04-15', 1, 2, 'HOU002', 'AAAAAAA0000000004');
+INSERT INTO `package` (`PackageID`, `RecipientName`, `Email`, `Weight`, `Length`, `Width`, `Height`, `dest_State`, `dest_City`, `dest_ZIP`, `dest_Street`, `dest_ApartmentNo`, `return_State`, `return_City`, `return_ZIP`, `return_Street`, `return_ApartmentNo`, `isFragile`, `send_date`, `Service`, `Status`, `OfficeID`, `VehicleID`, `return_office`) VALUES
+(3, 'Homer Man', 'cooper@hotmail.com', '10.00', '5.00', '5.00', '5.00', 43, 'Corpus', 73001, '4490 Home Road', 10, 43, 'Katy', 73001, '888 Heller Road', 202, 1, '2019-04-15', 3, 2, 'HOU001', NULL, 'HOU001'),
+(4, 'House Morgan', 'cooper@hotmail.com', '10.00', '10.00', '5.00', '5.00', 43, 'Katy', 77494, '888 Heller Road', 201, 43, 'Man', 77494, '1012 Homefree Lane', 11, 0, '2019-04-15', 2, 3, 'HOU002', NULL, 'HOU002'),
+(5, 'Cosa Mosa', 'cooper@hotmail.com', '40.00', '5.00', '5.00', '5.00', 47, 'District of Columbia', 20001, '720 Hope Lane', NULL, 43, 'Corpus', 20001, '4490 Home Road', NULL, 0, '2019-04-15', 2, 3, 'AUS001', NULL, 'AUS001'),
+(6, 'StressFree Inc.', 'cooper@hotmail.com', '8.00', '8.00', '8.00', '8.00', 43, 'Tomball', 77202, '530 Torp Street', NULL, 43, 'Plano', 77202, '555 Magis Corpus Avenue', 520, 0, '2019-04-15', 1, 5, NULL, NULL, 'HOU003'),
+(7, 'Massay Trish', 'cooper@hotmail.com', '162.00', '5.00', '20.00', '5.00', 43, 'El Paso', 77992, '1 Lespaq Avenue', NULL, 43, 'Austin', 77992, '401 Heavenhearth Dr', NULL, 0, '2019-04-16', 2, 2, 'AUS002', NULL, 'HOU004'),
+(8, 'May Dureen', 'cooper@hotmail.com', '18.00', '5.00', '5.00', '5.00', 47, 'Seattle', 88192, '772 Emerhurst Center NE', NULL, 43, 'Houston', 88192, '123 Home Address', NULL, 0, '2019-04-16', 1, 2, 'HOU001', NULL, 'HOU002');
 
 --
 -- Triggers `package`
@@ -218,6 +265,33 @@ DROP TRIGGER IF EXISTS `create_package_tracking`;
 DELIMITER $$
 CREATE TRIGGER `create_package_tracking` AFTER INSERT ON `package` FOR EACH ROW BEGIN
 INSERT INTO tracking (package_ID, TrackingNote, Update_Date, OfficeID) VALUES(NEW.packageID, 'Package Picked Up.', NOW(), NEW.OfficeID);
+END
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `package_transferred`;
+DELIMITER $$
+CREATE TRIGGER `package_transferred` AFTER UPDATE ON `package` FOR EACH ROW BEGIN
+INSERT into tracking (Package_ID, TrackingNote, OfficeID)
+
+SELECT NEW.packageID, d.message, NEW.OfficeID FROM 
+
+(
+  (SELECT m.message FROM 
+  (SELECT 'Package delivered' as message from package where package.Status = 5 AND package.PackageID = NEW.packageID) as m
+    
+  UNION 
+  
+  (SELECT m.message FROM 
+  (SELECT CONCAT('Package arrived at regional office', NEW.OfficeID) as message from package, office where package.OfficeID = NEW.OfficeID AND office.isRegional = 1 and office.OfficeID = package.OfficeID) as m)
+  
+  UNION
+   
+   (  (SELECT m.message FROM 
+  (SELECT CONCAT('Package transferred to ', NEW.OfficeID) as message from package, office where package.OfficeID = NEW.OfficeID AND office.isRegional != 1 and office.OfficeID = package.OfficeID) as m))
+  
+) as d
+ 
+);
 END
 $$
 DELIMITER ;
@@ -255,14 +329,46 @@ INSERT INTO `service` (`ServiceID`, `ServiceName`, `BasePrice`, `WeightLimit`, `
 
 DROP TABLE IF EXISTS `shift`;
 CREATE TABLE IF NOT EXISTS `shift` (
-  `ShiftSession` int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `ShiftSession` int(10) NOT NULL AUTO_INCREMENT,
   `EmployeeID` int(7) NOT NULL,
   `Clock_in_dateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `Clock_out_dateTime` datetime,
-  `Hours_Worked` decimal(4,2) DEFAULT 0,
+  `Clock_out_dateTime` datetime DEFAULT NULL,
+  `Hours_Worked` decimal(4,2) DEFAULT '0.00',
   `VehicleID` varchar(17) NOT NULL,
-  UNIQUE KEY `EmployeeID` (`EmployeeID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`ShiftSession`),
+  UNIQUE KEY `EmployeeID` (`EmployeeID`),
+  KEY `Shift_ibfk_2` (`VehicleID`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `shift`
+--
+
+INSERT INTO `shift` (`ShiftSession`, `EmployeeID`, `Clock_in_dateTime`, `Clock_out_dateTime`, `Hours_Worked`, `VehicleID`) VALUES
+(9, 1000000, '2019-04-15 19:18:17', '2019-04-16 04:21:38', '0.00', 'AAAAAAA0000000004'),
+(10, 1000003, '2019-04-16 03:59:00', '2019-04-16 04:23:27', '0.00', 'AAAAAAA0000000012');
+
+--
+-- Triggers `shift`
+--
+DROP TRIGGER IF EXISTS `begin_shipping_package`;
+DELIMITER $$
+CREATE TRIGGER `begin_shipping_package` AFTER INSERT ON `shift` FOR EACH ROW BEGIN
+UPDATE vehicle SET vehicle.Status = 1 WHERE NEW.VehicleID = vehicle.VIN;
+
+UPDATE package SET package.OfficeID = NULL, package.Status = 3 WHERE package.VehicleID = NEW.VehicleID;
+
+INSERT INTO tracking (Package_ID, TrackingNote, OfficeID) 
+SELECT package.PackageID,'Left Courier.PO facility', NULL FROM package WHERE package.VehicleID = NEW.VehicleID;
+
+END
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `end_shift`;
+DELIMITER $$
+CREATE TRIGGER `end_shift` BEFORE UPDATE ON `shift` FOR EACH ROW UPDATE vehicle SET vehicle.Status = 0 WHERE NEW.VehicleID = vehicle.VIN
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -377,7 +483,7 @@ CREATE TABLE IF NOT EXISTS `tracking` (
   UNIQUE KEY `Tracking_Index` (`Tracking_Index`),
   KEY `Tracking_ibfk_1` (`Package_ID`),
   KEY `Tracking_ibfk_2` (`OfficeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tracking`
@@ -387,7 +493,23 @@ INSERT INTO `tracking` (`Tracking_Index`, `Package_ID`, `TrackingNote`, `Update_
 (9, 3, 'Package Picked Up.', '2019-04-15 17:47:27', 'HOU001'),
 (10, 4, 'Package Picked Up.', '2019-04-15 17:48:40', 'HOU002'),
 (11, 5, 'Package Picked Up.', '2019-04-15 17:49:53', 'HOU002'),
-(12, 6, 'Package Picked Up.', '2019-04-15 17:51:54', 'HOU002');
+(12, 6, 'Package Picked Up.', '2019-04-15 17:51:54', 'HOU002'),
+(13, 4, 'Left Courier.PO facility', '2019-04-16 00:18:17', NULL),
+(14, 5, 'Left Courier.PO facility', '2019-04-16 00:18:17', NULL),
+(15, 6, 'Left Courier.PO facility', '2019-04-16 00:18:17', NULL),
+(16, 6, 'Package delivered', '2019-04-16 08:44:25', NULL),
+(17, 4, 'Package arrived at HOU004 Office', '2019-04-16 08:44:59', 'HOU004'),
+(18, 4, 'Left Courier.PO facility', '2019-04-16 08:59:00', NULL),
+(19, 5, 'Package arrived at regional officeAUS001', '2019-04-16 09:20:28', 'AUS001'),
+(20, 7, 'Package Picked Up.', '2019-04-16 14:17:34', 'AUS002'),
+(21, 8, 'Package Picked Up.', '2019-04-16 14:19:03', 'HOU001'),
+(22, 3, 'Package transferred to HOU001', '2019-04-16 16:09:50', 'HOU001'),
+(23, 3, 'Package transferred to HOU001', '2019-04-16 16:10:14', 'HOU001'),
+(24, 4, 'Package transferred to HOU002', '2019-04-16 16:10:14', 'HOU002'),
+(25, 5, 'Package arrived at regional officeAUS001', '2019-04-16 16:10:14', 'AUS001'),
+(26, 6, 'Package delivered', '2019-04-16 16:10:14', NULL),
+(27, 7, 'Package transferred to AUS002', '2019-04-16 16:10:14', 'AUS002'),
+(28, 8, 'Package transferred to HOU001', '2019-04-16 16:11:40', 'HOU001');
 
 -- --------------------------------------------------------
 
@@ -403,7 +525,7 @@ CREATE TABLE IF NOT EXISTS `transaction` (
   `TransactionDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`TransactionID`),
   KEY `Transaction_ibfk_2` (`PackageID`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `transaction`
@@ -413,7 +535,20 @@ INSERT INTO `transaction` (`TransactionID`, `PackageID`, `TransactionTotal`, `Tr
 (9, 3, '13.50', '2019-04-15 12:47:27'),
 (10, 4, '11.25', '2019-04-15 12:48:40'),
 (11, 5, '11.25', '2019-04-15 12:49:53'),
-(12, 6, '7.50', '2019-04-15 12:51:54');
+(12, 6, '7.50', '2019-04-15 12:51:54'),
+(13, 7, '20.25', '2019-04-16 09:17:34'),
+(14, 8, '7.50', '2019-04-16 09:19:03');
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `unique_customers`
+-- (See below for the actual view)
+--
+DROP VIEW IF EXISTS `unique_customers`;
+CREATE TABLE IF NOT EXISTS `unique_customers` (
+`COUNT(DISTINCT Email)` bigint(21)
+);
 
 -- --------------------------------------------------------
 
@@ -440,13 +575,40 @@ INSERT INTO `vehicle` (`OfficeID`, `VIN`, `Vehicle_Type`, `Status`) VALUES
 ('HOU002', 'AAAAAAA0000000001', 'Van', NULL),
 ('HOU002', 'AAAAAAA0000000002', 'Van', NULL),
 ('HOU002', 'AAAAAAA0000000003', 'Van', NULL),
-('HOU002', 'AAAAAAA0000000004', 'Truck', NULL),
+('HOU002', 'AAAAAAA0000000004', 'Truck', 0),
 ('HOU002', 'AAAAAAA0000000005', 'Truck', NULL),
 ('HOU001', 'AAAAAAA0000000006', 'Van', NULL),
 ('HOU001', 'AAAAAAA0000000007', 'Van', NULL),
 ('HOU001', 'AAAAAAA0000000008', 'Van', NULL),
 ('HOU001', 'AAAAAAA0000000009', 'Truck', NULL),
-('HOU001', 'AAAAAAA0000000010', 'Truck', NULL);
+('HOU001', 'AAAAAAA0000000010', 'Truck', NULL),
+('HOU004', 'AAAAAAA0000000012', 'Van', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `employee_delivery_report`
+--
+DROP TABLE IF EXISTS `employee_delivery_report`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`aberinnj`@`%` SQL SECURITY DEFINER VIEW `employee_delivery_report`  AS  select `E`.`EmployeeID` AS `EmployeeID`,`E`.`FirstName` AS `FirstName`,`E`.`MiddleName` AS `MiddleName`,`E`.`LastName` AS `LastName`,`V`.`VIN` AS `VIN`,`O`.`OfficeID` AS `OfficeID`,`P`.`PackageID` AS `PackageID`,`P`.`dest_ZIP` AS `dest_ZIP`,`P`.`Weight` AS `Weight`,`T`.`Status` AS `Status` from (((((`employee` `E` join `package` `P`) join `vehicle` `V`) join `office` `O`) join `shift` `S`) join `status` `T`) where ((`E`.`OfficeID` = `O`.`OfficeID`) and (`E`.`EmployeeID` = `S`.`EmployeeID`) and (`S`.`VehicleID` = `V`.`VIN`) and (`P`.`Status` = `T`.`Code`)) order by `E`.`EmployeeID` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `get_office_location_statistics`
+--
+DROP TABLE IF EXISTS `get_office_location_statistics`;
+-- Error reading structure for table postaldb.get_office_location_statistics: #1046 - No database selected
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `unique_customers`
+--
+DROP TABLE IF EXISTS `unique_customers`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`aberinnj`@`%` SQL SECURITY DEFINER VIEW `unique_customers`  AS  select count(distinct `package`.`Email`) AS `COUNT(DISTINCT Email)` from `package` ;
 
 --
 -- Constraints for dumped tables
@@ -485,7 +647,8 @@ ALTER TABLE `package`
   ADD CONSTRAINT `Package_ibfk_3` FOREIGN KEY (`return_State`) REFERENCES `state` (`StateID`),
   ADD CONSTRAINT `Package_ibfk_4` FOREIGN KEY (`Service`) REFERENCES `service` (`ServiceID`),
   ADD CONSTRAINT `Package_ibfk_5` FOREIGN KEY (`OfficeID`) REFERENCES `office` (`OfficeID`),
-  ADD CONSTRAINT `Package_ibfk_6` FOREIGN KEY (`VehicleID`) REFERENCES `vehicle` (`VIN`);
+  ADD CONSTRAINT `Package_ibfk_6` FOREIGN KEY (`VehicleID`) REFERENCES `vehicle` (`VIN`),
+  ADD CONSTRAINT `Package_ibfk_7` FOREIGN KEY (`return_office`) REFERENCES `office` (`OfficeID`);
 
 --
 -- Constraints for table `shift`
@@ -493,6 +656,7 @@ ALTER TABLE `package`
 ALTER TABLE `shift`
   ADD CONSTRAINT `Shift_ibfk_1` FOREIGN KEY (`EmployeeID`) REFERENCES `employee` (`EmployeeID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `Shift_ibfk_2` FOREIGN KEY (`VehicleID`) REFERENCES `vehicle` (`VIN`);
+
 --
 -- Constraints for table `tracking`
 --
