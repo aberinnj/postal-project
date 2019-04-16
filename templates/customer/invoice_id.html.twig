@@ -16,9 +16,106 @@
 
     </section>
 
+
+    {% if transaction is defined %}
+
     <section class="section">
         <div class="container">
+
+        <div class="media">
+        
+            <div class="media-left">
+                <div class="title">INVOICE</div>
+                <div><small>Date: {{transaction.TransactionDate}}</small></div>
+                <div><small>Invoice #{{transaction.TransactionID}}</small></div>
+            </div>
+        </div>
+        <hr>
             
+<nav class="level is-mobile">
+  <div class="level-item has-text-centered">
+    <div>
+      <p class="heading">Return</p>
+      <p class="title">
+        {{fullret_street}}<br/>
+        {{fullret_region}}
+      </p>
+    </div>
+  </div>
+  <div class="level-item has-text-centered">
+    <div>
+      <p class="heading">Destination</p>
+      <p class="title">
+        {{transaction.dest_Street}} {% if transaction is defined %}Apt/Suite #{{ transaction.dest_ApartmentNo}}{% endif %}<br/>
+        {{transaction.dest_City}}, {{ transaction.StateName}} {{ transaction.dest_ZIP}}
+      </p>
+    </div>
+    <div>
+
+    </div>
+  </div>
+</nav>
+
+
+
+
+
+
+
+
+                    <table class="table is-fullwidth is-hoverable is-bordered">
+                        <thead>
+                            <tr>
+                                <th><attr title="Package ID"> Package ID</attr></th>
+                                <th>Service</th>
+                                <th>Customer Email</th>
+                                <th>Weight</th>
+                                <th>Width</th>                                
+                                <th>Height</th>
+                                <th>Length</th>
+                                <th>Payment</th>
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+                            <tr>
+                                <th>{{id}}</th>
+                                <th>{{transaction.ServiceName}}</th>
+                                <th>{{transaction.Email}}</th>
+                                <th>{{transaction.Weight}} lbs</th>
+                                <th>{{transaction.Width}} cm</th>               
+                                <th>{{transaction.Height}} cm</th>
+                                <th>{{transaction.Length}} cm</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>Total</th>
+                                <th>$ {{transaction.TransactionTotal}}</th>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+
+
+        <div style="display: flex; flex-direction: row; justify-content: center; margin-top: 50px;">
+        THANK YOU FOR SHIPPING WITH COURIER.PO
+        </div>
+
+
+
+
+
+
         </div>
     </section>
+
+    {% endif %}
 {% endblock %}

@@ -177,7 +177,7 @@ class Root_DashboardController extends AbstractController {
     
     protected function CustomerDashOrdersQuery(Connection $connection, $identity) {
         try{
-            $sql = "SELECT p.PackageID as id, t.last_update as date, t.TrackingNote as note, s.Status as status FROM package as p, status as s, (SELECT Tracking_Index, Update_Date, updated_id, last_update, TrackingNote FROM tracking RIGHT JOIN (SELECT tracking.Package_ID as updated_id, max(tracking.Update_Date) as last_update FROM tracking group by tracking.Package_ID) as updated ON tracking.Package_ID = updated.updated_id AND tracking.Update_Date = updated.last_update) as t WHERE p.PackageID = t.updated_id AND p.Status = s.Code ORDER BY t.Update_Date DESC LIMIT 5 ";
+            $sql = "SELECT p.PackageID as id, t.last_update as date, t.TrackingNote as note, s.Status as status FROM package as p, status as s, (SELECT Tracking_Index, Update_Date, updated_id, last_update, TrackingNote FROM tracking RIGHT JOIN (SELECT tracking.Package_ID as updated_id, max(tracking.Update_Date) as last_update FROM tracking group by tracking.Package_ID) as updated ON tracking.Package_ID = updated.updated_id AND tracking.Update_Date = updated.last_update) as t WHERE p.PackageID = t.updated_id AND p.Email = :email AND p.Status = s.Code ORDER BY t.Update_Date DESC LIMIT 5 ";
 
             $stmt = $connection->prepare($sql);
             $stmt->bindValue(':email', $identity);
@@ -196,6 +196,38 @@ class Root_DashboardController extends AbstractController {
 
             $stmt = $connection->prepare($sql);
             $stmt->bindValue(':email', $identity);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
+    protected function getInvoiceQuery(Connection $connection, $identity, $package) {
+        try{
+            $sql = "SELECT t.TransactionID, t.TransactionTotal, t.TransactionDate, RecipientName, Email, Weight, Width, Length, Height, v.ServiceName, s.StateName, dest_ApartmentNo, dest_Street, dest_ZIP, dest_City FROM transaction as t, package as p, state as s, service as v where t.PackageID = p.PackageID and p.PackageID = :pid and p.Email = :email and p.dest_State = s.StateID and v.ServiceID = p.Service";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':email', $identity);
+            $stmt->bindValue(':pid', $package);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
+
+    protected function getReturnAddressQuery(Connection $connection, $package) {
+        try{
+            $sql = "SELECT s.StateName, return_ZIP, return_City, return_Street, return_ApartmentNo FROM package as p, state as s where p.PackageID = :pid and p.return_State = s.StateID";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':pid', $package);
             $stmt->execute();
 
             return $stmt->fetchAll();

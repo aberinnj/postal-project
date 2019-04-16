@@ -62,10 +62,17 @@ class CustomerInvoiceController extends Root_DashboardController {
         }
 
         $name = ($this->CustomerDetailsQuery($connection, $user['id']))[0];
+        $transaction = ($this->getInvoiceQuery($connection, $user['id'], $id))[0];
+        $returnTransaction = ($this->getReturnAddressQuery($connection, $id))[0];
+        
         return $this->render('customer/invoice_id.html.twig', [
             'logout' => $logoutForm->createView(),
             'id' => $id,
+            'email' => $user['id'],
             'breadcrumbs'=> $breadcrumbs,
+            'fullret_street' => $returnTransaction['return_Street'].' '.$returnTransaction['return_ApartmentNo'],
+            'transaction' => $transaction,
+            'fullret_region' => $returnTransaction['return_City'].', '.$returnTransaction['StateName'].' '.$returnTransaction['return_ZIP'],
             'name'=> $name["FName"]." ".$name["LName"],
         ]);
     }
