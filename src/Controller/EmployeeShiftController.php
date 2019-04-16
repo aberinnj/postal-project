@@ -88,7 +88,6 @@ class EmployeeShiftController extends Root_DashboardController {
             
             if ($Deliver->getLocation() === "HOME01")
             {
-                print_r($Deliver);
                 $destination = ($this->isHomeDeliveryPossibleQuery($connection, $name['OfficeID'], $Deliver->getState()));
                 if(count($destination) === 0) {
                     // destination is in another state

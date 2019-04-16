@@ -88,7 +88,6 @@
             </div>
             <div class="tile">
                 <div class="tile is-parent is-vertical">
-                    <label class="label"> Messages</label>
 
                     {% if messages|length > 0 %}
 
@@ -102,34 +101,9 @@
 
                         {% else %}
 
-                            <article class="message is-primary">
-                                <div class="message-header">
-                                    <p>Recent messages</p>
-                                </div>
-                                <div class="message-body">
-                                <p>You currently have no recent messges/alerts.</p>
-                                </div>
-                            </article>
-
                     {% endif %}
                 </div>
-            </div>
-
-            <div class="tile">
-                  <div class="tile is-parent is-vertical">
-                        <label class="label"> Your Account</label>
-
-                        <article class="message is-primary">
-                            <div class="message-header">
-                                <p>Summary</p>
-                            </div>
-                            <div class="message-body">
-
-                            </div>
-                        </article>
-
-                    </div>
-            </div>
+            </div>  
         </div>
         <div class="tile is-parent">
             <article class="tile is-child notification">

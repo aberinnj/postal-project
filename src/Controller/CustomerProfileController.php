@@ -39,7 +39,7 @@ class CustomerProfileController extends Root_DashboardController {
             'breadcrumbs'=> $breadcrumbs,
             'name'=> $name["FName"]." ".$name["LName"],
             'profile' => $profileForm->createView()
-            ]);
+        ]);
 
         
     }

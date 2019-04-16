@@ -38,5 +38,27 @@
         </div>
         </div>
     </section>
+
+
+    {% if employee_id|length > 0 %}
+        <div id="shift-modal" class="modal is-active">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+            <p class="modal-card-title">Welcome to Courier.PO</p>
+            </header>
+            <section class="modal-card-body">
+                Your Employee ID is: {{employee_id}}
+            </section>
+            <footer class="modal-card-foot">
+            <button class="button is-dark" onclick="modal2();">Login</button>
+            </footer>
+        </div>
+        </div>
+    {% endif %}
     
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/deliver.js') }}"></script>
 {% endblock %}

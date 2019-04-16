@@ -225,12 +225,17 @@ class HomeController extends Root_HomeController {
             ->getForm();
 
         $registrationForm->handleRequest($request);
+        
+        $hp ="";
         if($registrationForm->isSubmitted() && $registrationForm->isValid()) {
             $registration = $registrationForm->getData();
             $hp = $this->registerEmployeeQuery($connection, $registration);
-            return $this->redirectToRoute('app-employee');
+            return $this->render('employee/apply.html.twig', [
+            'employee_id'=> $hp,
+            'login' => $loginForm->createView(), 
+            'registration' => $registrationForm->createView()]);
         }  
-        return $this->render('employee/apply.html.twig', ['login' => $loginForm->createView(), 'registration' => $registrationForm->createView()]);
+        return $this->render('employee/apply.html.twig', ['employee_id'=>$hp, 'login' => $loginForm->createView(), 'registration' => $registrationForm->createView()]);
     }
 
 }

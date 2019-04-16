@@ -185,7 +185,6 @@ class Root_HomeController extends AbstractController {
 
     //
     protected function registerEmployeeQuery(Connection $connection, Registration $registration) {
-        print_r($registration);
         try{
 
             $sql = "INSERT INTO employee (FirstName, MiddleName, LastName, OfficeID) VALUES (:firstname, :middlename, :lastname, :office)";

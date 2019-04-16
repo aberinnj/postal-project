@@ -59,7 +59,6 @@ class Root_DashboardController extends AbstractController {
 
     //
     public function tracking($new_tracking_found=null) {
-
         if ($new_tracking_found) {
             $tracking = $new_tracking_found;
         } else {
