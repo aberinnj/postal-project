@@ -89,6 +89,7 @@
 
             <tbody>
             
+            {% if reportRegionalStats is defined %}
                 {% for each in reportRegionalStats %}
                     <tr>
                     <th>{{ each.StateName }}</th>
@@ -96,7 +97,7 @@
                     <th> {% if each.OrdersCount is null %}0{% else %}{{ each.OrdersCount }}{% endif %}</th>
                     </tr>
                 {% endfor %}
-
+            {% endif %}
             </tbody>
         </table>
         </div>

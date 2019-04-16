@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 16, 2019 at 04:54 PM
+-- Generation Time: Apr 15, 2019 at 09:42 PM
 -- Server version: 5.7.24
 -- PHP Version: 7.2.14
 
@@ -18,8 +18,8 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
-CREATE DATABASE IF NOT EXISTS db_postal;
-use db_postal;
+CREATE DATABASE IF NOT EXISTS courierDB_1;
+use courierDB_1;
 --
 -- Database: `postaldb`
 --
@@ -128,41 +128,6 @@ INSERT INTO `employeecredentials` (`EmployeeID`, `Password`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Stand-in structure for view `employee_delivery_report`
--- (See below for the actual view)
---
-DROP VIEW IF EXISTS `employee_delivery_report`;
-CREATE TABLE IF NOT EXISTS `employee_delivery_report` (
-`EmployeeID` int(7)
-,`FirstName` varchar(20)
-,`MiddleName` varchar(2)
-,`LastName` varchar(20)
-,`VIN` varchar(17)
-,`OfficeID` varchar(7)
-,`PackageID` int(10)
-,`dest_ZIP` int(5)
-,`Weight` decimal(5,2)
-,`Status` varchar(12)
-);
-
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `get_office_location_statistics`
--- (See below for the actual view)
---
-DROP VIEW IF EXISTS `get_office_location_statistics`;
-CREATE TABLE IF NOT EXISTS `get_office_location_statistics` (
-`StateID` tinyint(4)
-,`StateAbbreviation` char(2)
-,`StateName` varchar(15)
-,`OfficesCount` bigint(21)
-,`State` tinyint(4)
-,`OrdersCount` decimal(42,0)
-);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `office`
@@ -268,33 +233,6 @@ INSERT INTO tracking (package_ID, TrackingNote, Update_Date, OfficeID) VALUES(NE
 END
 $$
 DELIMITER ;
-DROP TRIGGER IF EXISTS `package_transferred`;
-DELIMITER $$
-CREATE TRIGGER `package_transferred` AFTER UPDATE ON `package` FOR EACH ROW BEGIN
-INSERT into tracking (Package_ID, TrackingNote, OfficeID)
-
-SELECT NEW.packageID, d.message, NEW.OfficeID FROM 
-
-(
-  (SELECT m.message FROM 
-  (SELECT 'Package delivered' as message from package where package.Status = 5 AND package.PackageID = NEW.packageID) as m
-    
-  UNION 
-  
-  (SELECT m.message FROM 
-  (SELECT CONCAT('Package arrived at regional office', NEW.OfficeID) as message from package, office where package.OfficeID = NEW.OfficeID AND office.isRegional = 1 and office.OfficeID = package.OfficeID) as m)
-  
-  UNION
-   
-   (  (SELECT m.message FROM 
-  (SELECT CONCAT('Package transferred to ', NEW.OfficeID) as message from package, office where package.OfficeID = NEW.OfficeID AND office.isRegional != 1 and office.OfficeID = package.OfficeID) as m))
-  
-) as d
- 
-);
-END
-$$
-DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -329,15 +267,15 @@ INSERT INTO `service` (`ServiceID`, `ServiceName`, `BasePrice`, `WeightLimit`, `
 
 DROP TABLE IF EXISTS `shift`;
 CREATE TABLE IF NOT EXISTS `shift` (
-  `ShiftSession` int(10) NOT NULL AUTO_INCREMENT,
+    `ShiftSession` int(10) NOT NULL AUTO_INCREMENT,
   `EmployeeID` int(7) NOT NULL,
   `Clock_in_dateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `Clock_out_dateTime` datetime DEFAULT NULL,
+ `Clock_out_dateTime` datetime DEFAULT NULL,
   `Hours_Worked` decimal(4,2) DEFAULT '0.00',
   `VehicleID` varchar(17) NOT NULL,
-  PRIMARY KEY (`ShiftSession`),
-  UNIQUE KEY `EmployeeID` (`EmployeeID`),
-  KEY `Shift_ibfk_2` (`VehicleID`)
+    PRIMARY KEY (`ShiftSession`),
+    UNIQUE KEY `EmployeeID` (`EmployeeID`),
+    KEY `Shift_ibfk_2` (`VehicleID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
@@ -511,6 +449,37 @@ INSERT INTO `tracking` (`Tracking_Index`, `Package_ID`, `TrackingNote`, `Update_
 (27, 7, 'Package transferred to AUS002', '2019-04-16 16:10:14', 'AUS002'),
 (28, 8, 'Package transferred to HOU001', '2019-04-16 16:11:40', 'HOU001');
 
+DROP TRIGGER IF EXISTS `package_transferred`;
+DELIMITER $$
+CREATE TRIGGER `package_transferred` AFTER UPDATE ON `package` FOR EACH ROW BEGIN
+INSERT into tracking (Package_ID, TrackingNote, OfficeID)
+
+SELECT NEW.packageID, d.message, NEW.OfficeID FROM 
+
+(
+  (SELECT m.message FROM 
+  (SELECT 'Package delivered' as message from package where package.Status = 5 AND package.PackageID = NEW.packageID) as m
+
+  UNION 
+
+  (SELECT m.message FROM 
+  (SELECT CONCAT('Package arrived at regional office', NEW.OfficeID) as message from package, office where package.OfficeID = NEW.OfficeID AND office.isRegional = 1 and office.OfficeID = package.OfficeID) as m)
+
+  UNION
+
+   (  (SELECT m.message FROM 
+  (SELECT CONCAT('Package transferred to ', NEW.OfficeID) as message from package, office where package.OfficeID = NEW.OfficeID AND office.isRegional != 1 and office.OfficeID = package.OfficeID) as m))
+
+) as d
+
+);
+END
+$$
+DELIMITER ;
+
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -593,17 +562,6 @@ DROP TABLE IF EXISTS `employee_delivery_report`;
 
 CREATE VIEW `employee_delivery_report`  AS  select `E`.`EmployeeID` AS `EmployeeID`,`E`.`FirstName` AS `FirstName`,`E`.`MiddleName` AS `MiddleName`,`E`.`LastName` AS `LastName`,`V`.`VIN` AS `VIN`,`O`.`OfficeID` AS `OfficeID`,`P`.`PackageID` AS `PackageID`,`P`.`dest_ZIP` AS `dest_ZIP`,`P`.`Weight` AS `Weight`,`T`.`Status` AS `Status` from (((((`employee` `E` join `package` `P`) join `vehicle` `V`) join `office` `O`) join `shift` `S`) join `status` `T`) where ((`E`.`OfficeID` = `O`.`OfficeID`) and (`E`.`EmployeeID` = `S`.`EmployeeID`) and (`S`.`VehicleID` = `V`.`VIN`) and (`P`.`Status` = `T`.`Code`)) order by `E`.`EmployeeID` ;
 
--- --------------------------------------------------------
-
---
--- Structure for view `get_office_location_statistics`
---
-CREATE VIEW `get_office_location_statistics` AS
-SELECT `state`.`StateID` AS `StateID`, `state`.`StateAbbreviation` AS `StateAbbreviation`, `state`.`StateName` AS `StateName`,`regional`.`count(office.OfficeID)` AS `OfficesCount`,`regional`.`State` AS `State`,`regional`.`sum(local.P)` AS `OrdersCount` from ( `state` left join (select count( `office`.`OfficeID`) AS `count(office.OfficeID)`, `office`.`State` AS `State`,sum(`local`.`P`) AS `sum(local.P)` from ( `office` left join (select  `office`.`OfficeID` AS `id`,count( `package`.`PackageID`) AS `P`, `office`.`State` AS `S` from ( `office` join  `package`) where ( `office`.`OfficeID` =  `package`.`return_office`) group by  `office`.`OfficeID`) `local` on(( `office`.`OfficeID` = `local`.`id`))) group by  `office`.`State`) `regional` on((`regional`.`State` =  `state`.`StateID`)));
--- Error reading structure for table postaldb.get_office_location_statistics: #1046 - No database selected
-
--- --------------------------------------------------------
-
 --
 -- Structure for view `unique_customers`
 --
@@ -648,7 +606,7 @@ ALTER TABLE `package`
   ADD CONSTRAINT `Package_ibfk_3` FOREIGN KEY (`return_State`) REFERENCES `state` (`StateID`),
   ADD CONSTRAINT `Package_ibfk_4` FOREIGN KEY (`Service`) REFERENCES `service` (`ServiceID`),
   ADD CONSTRAINT `Package_ibfk_5` FOREIGN KEY (`OfficeID`) REFERENCES `office` (`OfficeID`),
-  ADD CONSTRAINT `Package_ibfk_6` FOREIGN KEY (`VehicleID`) REFERENCES `vehicle` (`VIN`),
+   ADD CONSTRAINT `Package_ibfk_6` FOREIGN KEY (`VehicleID`) REFERENCES `vehicle` (`VIN`),
   ADD CONSTRAINT `Package_ibfk_7` FOREIGN KEY (`return_office`) REFERENCES `office` (`OfficeID`);
 
 --
@@ -657,7 +615,6 @@ ALTER TABLE `package`
 ALTER TABLE `shift`
   ADD CONSTRAINT `Shift_ibfk_1` FOREIGN KEY (`EmployeeID`) REFERENCES `employee` (`EmployeeID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `Shift_ibfk_2` FOREIGN KEY (`VehicleID`) REFERENCES `vehicle` (`VIN`);
-
 --
 -- Constraints for table `tracking`
 --
