@@ -18,6 +18,8 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+CREATE DATABASE IF NOT EXISTS postaldb;
+use postaldb;
 --
 -- Database: `postaldb`
 --
@@ -253,11 +255,12 @@ INSERT INTO `service` (`ServiceID`, `ServiceName`, `BasePrice`, `WeightLimit`, `
 
 DROP TABLE IF EXISTS `shift`;
 CREATE TABLE IF NOT EXISTS `shift` (
+  `ShiftSession` int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `EmployeeID` int(7) NOT NULL,
-  `Clock_in_Date` date NOT NULL,
-  `Clock_in_Time` time(6) NOT NULL,
-  `Clock_out_Time` time(6) NOT NULL,
-  `Hours_Worked` decimal(4,2) NOT NULL,
+  `Clock_in_dateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Clock_out_dateTime` datetime,
+  `Hours_Worked` decimal(4,2) DEFAULT 0,
+  `VehicleID` varchar(17) NOT NULL,
   UNIQUE KEY `EmployeeID` (`EmployeeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -422,11 +425,9 @@ DROP TABLE IF EXISTS `vehicle`;
 CREATE TABLE IF NOT EXISTS `vehicle` (
   `OfficeID` varchar(7) NOT NULL,
   `VIN` varchar(17) NOT NULL,
-  `DriverID` int(7) DEFAULT NULL,
   `Vehicle_Type` varchar(10) NOT NULL,
   `Status` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`VIN`),
-  UNIQUE KEY `DriverID` (`DriverID`),
   KEY `Vehicle_ibfk_1` (`OfficeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -434,18 +435,18 @@ CREATE TABLE IF NOT EXISTS `vehicle` (
 -- Dumping data for table `vehicle`
 --
 
-INSERT INTO `vehicle` (`OfficeID`, `VIN`, `DriverID`, `Vehicle_Type`, `Status`) VALUES
-('HOU002', 'AAAAAAA0000000000', NULL, 'Truck', NULL),
-('HOU002', 'AAAAAAA0000000001', NULL, 'Van', NULL),
-('HOU002', 'AAAAAAA0000000002', NULL, 'Van', NULL),
-('HOU002', 'AAAAAAA0000000003', NULL, 'Van', NULL),
-('HOU002', 'AAAAAAA0000000004', NULL, 'Truck', NULL),
-('HOU002', 'AAAAAAA0000000005', NULL, 'Truck', NULL),
-('HOU001', 'AAAAAAA0000000006', NULL, 'Van', NULL),
-('HOU001', 'AAAAAAA0000000007', NULL, 'Van', NULL),
-('HOU001', 'AAAAAAA0000000008', NULL, 'Van', NULL),
-('HOU001', 'AAAAAAA0000000009', NULL, 'Truck', NULL),
-('HOU001', 'AAAAAAA0000000010', NULL, 'Truck', NULL);
+INSERT INTO `vehicle` (`OfficeID`, `VIN`, `Vehicle_Type`, `Status`) VALUES
+('HOU002', 'AAAAAAA0000000000', 'Truck', NULL),
+('HOU002', 'AAAAAAA0000000001', 'Van', NULL),
+('HOU002', 'AAAAAAA0000000002', 'Van', NULL),
+('HOU002', 'AAAAAAA0000000003', 'Van', NULL),
+('HOU002', 'AAAAAAA0000000004', 'Truck', NULL),
+('HOU002', 'AAAAAAA0000000005', 'Truck', NULL),
+('HOU001', 'AAAAAAA0000000006', 'Van', NULL),
+('HOU001', 'AAAAAAA0000000007', 'Van', NULL),
+('HOU001', 'AAAAAAA0000000008', 'Van', NULL),
+('HOU001', 'AAAAAAA0000000009', 'Truck', NULL),
+('HOU001', 'AAAAAAA0000000010', 'Truck', NULL);
 
 --
 -- Constraints for dumped tables
@@ -490,8 +491,8 @@ ALTER TABLE `package`
 -- Constraints for table `shift`
 --
 ALTER TABLE `shift`
-  ADD CONSTRAINT `Shift_ibfk_1` FOREIGN KEY (`EmployeeID`) REFERENCES `employee` (`EmployeeID`) ON DELETE CASCADE ON UPDATE CASCADE;
-
+  ADD CONSTRAINT `Shift_ibfk_1` FOREIGN KEY (`EmployeeID`) REFERENCES `employee` (`EmployeeID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Shift_ibfk_2` FOREIGN KEY (`VehicleID`) REFERENCES `vehicle` (`VIN`);
 --
 -- Constraints for table `tracking`
 --
@@ -509,8 +510,7 @@ ALTER TABLE `transaction`
 -- Constraints for table `vehicle`
 --
 ALTER TABLE `vehicle`
-  ADD CONSTRAINT `Vehicle_ibfk_1` FOREIGN KEY (`OfficeID`) REFERENCES `office` (`OfficeID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `Vehicle_ibfk_2` FOREIGN KEY (`DriverID`) REFERENCES `employee` (`EmployeeID`);
+  ADD CONSTRAINT `Vehicle_ibfk_1` FOREIGN KEY (`OfficeID`) REFERENCES `office` (`OfficeID`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
