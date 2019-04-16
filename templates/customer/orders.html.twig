@@ -59,7 +59,7 @@
                                         <td>{{ order.Status }}</td>
                                         <td>{{ order.Date }}</td>
                                         <td><a href="/dashboard/orders/track/{{ order.ID }}">View</a></td>
-                                        <td><a href="/dashboard/orders/invoice/{{ order.ID }}">View</a></td>
+                                        <td><a href="/dashboard/orders/invoice/{{ order.InvoiceID }}">View</a></td>
                                     </tr>
                                 {% endfor %}
                             {% else %}

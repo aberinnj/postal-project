@@ -11,7 +11,7 @@
             {% endfor %}
 
             <div class="title">Viewing Invoice</div>
-            <div class="subtitle">For Package {{ id }}</div>
+            <div class="subtitle">For Package {{ pid }}</div>
         </div>
 
     </section>
@@ -80,7 +80,7 @@
 
                         <tbody>
                             <tr>
-                                <th>{{id}}</th>
+                                <th>{{pid}}</th>
                                 <th>{{transaction.ServiceName}}</th>
                                 <th>{{transaction.Email}}</th>
                                 <th>{{transaction.Weight}} lbs</th>

@@ -205,13 +205,13 @@ class Root_DashboardController extends AbstractController {
         }
     }
 
-    protected function getInvoiceQuery(Connection $connection, $identity, $package) {
+    protected function getInvoiceQuery(Connection $connection, $identity, $invoice) {
         try{
-            $sql = "SELECT t.TransactionID, t.TransactionTotal, t.TransactionDate, RecipientName, Email, Weight, Width, Length, Height, v.ServiceName, s.StateName, dest_ApartmentNo, dest_Street, dest_ZIP, dest_City FROM transaction as t, package as p, state as s, service as v where t.PackageID = p.PackageID and p.PackageID = :pid and p.Email = :email and p.dest_State = s.StateID and v.ServiceID = p.Service";
+            $sql = "SELECT t.TransactionID, p.PackageID as pid, t.TransactionTotal, t.TransactionDate, RecipientName, Email, Weight, Width, Length, Height, v.ServiceName, s.StateName, dest_ApartmentNo, dest_Street, dest_ZIP, dest_City FROM transaction as t, package as p, state as s, service as v where t.PackageID = p.PackageID and t.TransactionID = :iid and p.Email = :email and p.dest_State = s.StateID and v.ServiceID = p.Service";
 
             $stmt = $connection->prepare($sql);
             $stmt->bindValue(':email', $identity);
-            $stmt->bindValue(':pid', $package);
+            $stmt->bindValue(':iid', $invoice);
             $stmt->execute();
 
             return $stmt->fetchAll();
@@ -222,12 +222,12 @@ class Root_DashboardController extends AbstractController {
     }
 
 
-    protected function getReturnAddressQuery(Connection $connection, $package) {
+    protected function getReturnAddressQuery(Connection $connection, $invoice) {
         try{
-            $sql = "SELECT s.StateName, return_ZIP, return_City, return_Street, return_ApartmentNo FROM package as p, state as s where p.PackageID = :pid and p.return_State = s.StateID";
+            $sql = "SELECT s.StateName, return_ZIP, return_City, return_Street, return_ApartmentNo FROM transaction as t, package as p, state as s where t.TransactionID = :iid and t.PackageID = p.PackageID and p.return_State = s.StateID";
 
             $stmt = $connection->prepare($sql);
-            $stmt->bindValue(':pid', $package);
+            $stmt->bindValue(':iid', $invoice);
             $stmt->execute();
 
             return $stmt->fetchAll();
