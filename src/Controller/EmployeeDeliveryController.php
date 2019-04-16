@@ -21,8 +21,7 @@ class EmployeeDeliveryController extends Root_DashboardController {
         $session = $this->get('session');
         $user = $session->get('user');
         $breadcrumbs = ['Home'=>'/employee/dashboard', 'Make-Delivery'=>'/employee/dashboard/delivery'];
-        
-        $name = ($this->EmployeesDetailsQuery($connection, $user['id']))[0];
+        $name = ($this->EmployeesDetailsQuery($connection, $user['id']))[0];       
 
         $action = $this->requestPage('employee', 'app-employee');
         if ($action) {
@@ -66,17 +65,30 @@ class EmployeeDeliveryController extends Root_DashboardController {
         }
 
         $startShift = new Tracking();
-        $startShiftForm = $this->createFormBuilder($logout)
+        $startShiftForm = $this->createFormBuilder($startShift)
             ->add('startShift', SubmitType::class, [ 'label' => 'Start Shift', 'attr'=>['class'=>'button is-primary is-fullWidth']] )
             ->getForm();
         $startShiftForm->handleRequest($request);
         if ($startShiftForm->isSubmitted() && $startShiftForm->getClickedButton() && $startShiftForm->getClickedButton()->getName() === 'startShift' ) {
-                return $this->redirectToRoute('app-main-page');
+
+            $this->startShift($connection, $user['id'], $selected);
+                    
+            $shiftdata = $this->getShiftQuery($connection, $user['id']);
+            if (count($shiftdata) > 0) {
+                return $this->redirectToRoute('app-employee-shift', ['shift'=>$shiftdata[0]['session']]);
+            }
         }
+
         
+        $shiftdata = $this->getShiftQuery($connection, $user['id']);
+        if (count($shiftdata) > 0) {
+            return $this->redirectToRoute('app-employee-shift', ['shift'=>$shiftdata[0]['session']]);
+        }
+
         return $this->render(
             'employee/delivery.html.twig', [
             'firstname'=>$name['FirstName'],
+            'id'=>$user['id'],
             'name'=>$name['FirstName'].' '.$name['LastName'],
             'breadcrumbs' => $breadcrumbs,
             'vehicles' => $packageVehicleForm->createView(),

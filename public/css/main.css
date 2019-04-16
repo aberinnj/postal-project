@@ -242,7 +242,7 @@ section.breadcrumbs {
     justify-content: space-between;
 }
 
-.postal-vehicle-list {
+.postal-vehicle-list, .postal-badges-list {
     display: flex;
     flex-direction: row;
     justify-content: left;
@@ -250,4 +250,42 @@ section.breadcrumbs {
 
 .postal-form-space, .dashboard .container .postal-quick-buttons, .VIN  {
     margin-bottom: 30px;
+}
+
+#postal-shift {
+    background: radial-gradient(circle, #ffffff, #f0f0f0);
+}
+
+.shiftdash {
+    background-color: #F6BE00;
+    color: #292929;
+}
+#form_endShift {
+    background-color: #f0f0f0;
+    color: #292929;
+    font-weight: bolder;
+}
+
+#form_endShift:hover {
+    background-color: #292929;
+    color: #f0f0f0;
+}
+
+#postal-shift .container .subtitle {
+    color: #7e7e7e;
+}
+#postal-shift .container .title {
+    color: #292929;
+}
+
+#postal-shift .container .subtitle span {
+    color: #F6BE00;
+}
+
+.postal-package-table {
+    background-color: #c8102e !important;
+}
+
+.postal-package-table tr th {
+    color: #fff9d9;
 }

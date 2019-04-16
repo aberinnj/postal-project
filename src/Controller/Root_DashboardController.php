@@ -148,7 +148,7 @@ class Root_DashboardController extends AbstractController {
     
     protected function CustomerDashOrdersQuery(Connection $connection, $identity) {
         try{
-            $sql = "SELECT p.PackageID as id, t.last_update as date, t.TrackingNote as note, s.Status as status FROM package as p, status as s, (SELECT Tracking_Index, updated_id, last_update, TrackingNote FROM tracking RIGHT JOIN (SELECT tracking.Package_ID as updated_id, max(tracking.Update_Date) as last_update FROM tracking group by tracking.Package_ID) as updated ON tracking.Package_ID = updated.updated_id AND tracking.Update_Date = updated.last_update) as t WHERE p.PackageID = t.updated_id AND p.Status = s.Code LIMIT 5 ";
+            $sql = "SELECT p.PackageID as id, t.last_update as date, t.TrackingNote as note, s.Status as status FROM package as p, status as s, (SELECT Tracking_Index, Update_Date, updated_id, last_update, TrackingNote FROM tracking RIGHT JOIN (SELECT tracking.Package_ID as updated_id, max(tracking.Update_Date) as last_update FROM tracking group by tracking.Package_ID) as updated ON tracking.Package_ID = updated.updated_id AND tracking.Update_Date = updated.last_update) as t WHERE p.PackageID = t.updated_id AND p.Status = s.Code ORDER BY t.Update_Date DESC LIMIT 5 ";
 
             $stmt = $connection->prepare($sql);
             $stmt->bindValue(':email', $identity);
@@ -206,9 +206,25 @@ class Root_DashboardController extends AbstractController {
         }
     }
 
+    protected function isHomeDeliveryPossibleQuery(Connection $connection, $location, $state) {
+        try{
+            $sql = "SELECT office.OfficeID FROM office WHERE office.officeID = :office AND office.State = :state";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':office', $location);
+            $stmt->bindValue(':state', $state);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
     protected function getPackagesForVehicle(Connection $connection, $vehicle) {
         try{
-            $sql = "SELECT p.PackageID as ID, Weight, Length, Width, Height, isFragile, p.Service, s.ServiceName, t.StateAbbreviation as State, p.dest_City as City, p.dest_ZIP as ZIP, p.dest_ApartmentNo as ApartmentNo, p.dest_street as Street FROM package as p, service as s, state as t WHERE p.VehicleID = :vehicle AND p.Service = s.ServiceID AND p.dest_State = t.StateID ORDER BY p.Service DESC";
+            $sql = "SELECT p.PackageID as ID, Weight, Length, Width, Height, isFragile, p.Service, s.ServiceName, t.StateID, t.StateAbbreviation as State, p.dest_City as City, p.dest_ZIP as ZIP, p.dest_ApartmentNo as ApartmentNo, p.dest_street as Street FROM package as p, service as s, state as t WHERE p.VehicleID = :vehicle AND p.Service = s.ServiceID AND p.dest_State = t.StateID ORDER BY p.Service DESC";
 
             $stmt = $connection->prepare($sql);
             $stmt->bindValue(':vehicle', $vehicle);
@@ -251,12 +267,99 @@ class Root_DashboardController extends AbstractController {
         }
     }
 
+    protected function deliverQuery(Connection $connection, Package $delivery) {
+        try{
+            $sql = "UPDATE package SET package.OfficeID = :office, package.VehicleID = null WHERE package.packageID = :pid";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':office', $delivery->getLocation());
+            $stmt->bindValue(':pid', $delivery->getPackageID());
+            $stmt->execute();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
+    protected function completeDeliverQuery(Connection $connection, Package $delivery) {
+        try{
+            $sql = "UPDATE package SET package.VehicleID = null, package.Status = 5 WHERE package.packageID = :pid";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':pid', $delivery->getPackageID());
+            $stmt->execute();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
     protected function CustomerAddressQuery(Connection $connection, $identity) {
         try{
             $sql = "SELECT c.Street, c.ApartmentNo, c.City, s.StateName, s.StateID as StateID, c.ZIP FROM customer as c, state as s WHERE c.Email = :email AND s.StateID = c.State";
 
             $stmt = $connection->prepare($sql);
             $stmt->bindValue(':email', $identity);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
+    protected function startShift(Connection $connection, $id, $vehicle) {
+        try{
+            $sql = "INSERT INTO shift (`EmployeeID`, `VehicleID`) VALUES (:id, :vehicle)";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':id', $id);
+            $stmt->bindValue(':vehicle', $vehicle);
+            $stmt->execute();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
+    protected function endShift(Connection $connection, $session) {
+        try{
+            $sql = "UPDATE shift SET shift.Clock_out_dateTime = NOW() WHERE shift.ShiftSession = :sessionID";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':sessionID', $session);
+            $stmt->execute();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+
+    }
+
+    protected function getShiftDetailsQuery(Connection $connection, $session) {
+        try{
+            $sql = "SELECT shift.VehicleID, shift.Clock_in_dateTime as checkin FROM shift where shift.ShiftSession = :session";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':session', $session);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+///////////////////////////////////////////////
+    protected function getShippingOfficesQuery(Connection $connection, $office) {
+
+
+        try{
+            $sql = "select office.OfficeID, state.StateID, state.StateAbbreviation, office.City, office.ZIP, office.Street, office.isRegional from state, office, (select office.State from office where office.OfficeID = :office) as m where m.State = office.State and office.state = state.StateID union select office.OfficeID, state.StateID, state.StateAbbreviation, office.City, office.ZIP, office.Street, office.isRegional from state, office, (select office.isRegional as d from office where office.OfficeID = :office) as m where m.d = 1 and office.isRegional = 1 and office.State = state.StateID";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':office', $office);
             $stmt->execute();
 
             return $stmt->fetchAll();
@@ -287,6 +390,21 @@ class Root_DashboardController extends AbstractController {
 
             $stmt = $connection->prepare($sql);
             $stmt->bindValue(':state', $officeState);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
+    protected function getShiftQuery(Connection $connection, $id) {
+        try{
+            $sql = "SELECT s.ShiftSession as session FROM shift as s WHERE s.EmployeeID = :id AND s.Clock_out_dateTime is NULL ";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':id', $id);
             $stmt->execute();
 
             return $stmt->fetchAll();

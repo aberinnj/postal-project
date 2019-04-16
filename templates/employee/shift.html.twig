@@ -1,0 +1,162 @@
+{%  extends 'shift_layout.html.twig' %}
+
+{% block title %}
+{{ parent() }} - Delivery
+{% endblock %}
+
+
+            {% block navOptions %}
+            {{parent()}}
+            {% endblock %}
+
+
+{% block body %}
+    {{ parent() }}
+    
+    <section class="section" id="postal-shift">
+        <div class="container">
+
+            <div class="title">Your Courier.PO Delivery Manager</div>
+            <div class="subtitle">Shift started on {{checkin}}<br/>
+                <span><small>Ongoing delivery.</small></span>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="section">
+        <div class="container">
+
+            <div class="media is-mobile" style="margin-bottom: 10px;">
+                <div class="media-content is-mobile">
+                    <label class="label">Deliveries Left</label>
+                </div>
+            </div>
+
+
+            <div style="overflow-x: auto">
+                            <table class="table is-fullwidth">
+                            <thead class="postal-package-table">
+                                <tr>
+                                    <th><abbr title="PackageID">ID</abbr></th>
+                                    <th><abbr title="Service">Service/Priority</abbr></th>
+                                    <th><abbr title="Destination Street Address">Dest_Street</abbr></th>
+                                    <th><abbr title="Destination Apt/Suite">Apt/Suite No.</abbr></th>
+                                    <th><abbr title="Destination City">Dest_City</abbr></th>
+                                    <th><abbr title="Destination State">Dest_State</abbr></th>
+                                    <th><abbr title="Destination ZIP">Dest_ZIP</abbr></th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            {% if packages|length > 0 %}
+                            <tbody>
+                                {% for package in packages %}
+
+                                <tr>
+                                    <th>{{ package.ID}}</th>
+                                    <th>{{ package.ServiceName}}</th>
+                                    <th>{{ package.Street}}</th>
+                                    <th>{{ package.ApartmentNo}}</th>
+                                    <th>{{ package.City}}</th>
+                                    <th>{{ package.State}}</th>
+                                    <th>{{ package.ZIP}}</th>
+                                    <th>
+                                        <button class="button is-warning" onclick="view({{package.ID}}, {{package.Weight}}, {{package.Width}}, {{package.Length}}, {{package.Height}});">View</button>
+                                        <a class="button is-warning" onclick="deliver({{package.ID}}, {{package.StateID}});">Deliver</a>                                                                                                                 
+                                    </th>
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+                            {% endif %}
+
+                            </table>
+            </div>
+        </div>
+    </section>
+
+
+    <div id="shift-deliver-modal" class="modal">
+    <div id="shift-deliver-modal-bg" class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+        <p class="modal-card-title">Deliver Package</p>
+        <button class="delete" aria-label="close" onclick="deliver_modal();"></button>
+        </header>
+        <section class="modal-card-body">
+
+            {{ form_start(deliver) }}
+
+
+                {{form_row(deliver.Location)}}
+
+
+                <div style="display:none">
+                    {{ form_row(deliver.PackageID)}}
+                    {{ form_row(deliver.State)}}
+                    {{ form_row(deliver.Ship)}}
+
+                </div>
+
+            {{ form_end(deliver) }}
+
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-dark" onclick="submitDelivery();">Deliver</button>
+            <button class="button" onclick="deliver_modal();">Cancel</button>
+        </footer>
+    </div>
+    </div>
+
+
+    {% if fault|length > 0 %}
+        <div id="shift-modal" class="modal is-active">
+        <div id="shift-modal-bg" class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+            <p class="modal-card-title">Delivery Failed</p>
+            <button class="delete" aria-label="close" onclick="modal();"></button>
+            </header>
+            <section class="modal-card-body">
+
+                <p>Cannot deliver package from {{fault}}.</p>
+
+                <p>Please deliver the package to the nearest regional office.</p>
+
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button" onclick="modal();">Cancel</button>
+            </footer>
+        </div>
+        </div>
+    {% endif %}
+
+    <div id="shift-view-modal" class="modal">
+    <div id="shift-view-modal-bg" class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+        <p class="modal-card-title">View Package</p>
+        <button class="delete" aria-label="close" onclick="view_modal();"></button>
+        </header>
+        <section class="modal-card-body">
+
+            <label class="label">Package ID: <span id="view-package-id"></span><label>
+            <hr/>
+            <label class="label">Specifications</label>
+            <div id="view-package-specifications"></div>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button" onclick="view_modal();">Close</button>
+        </footer>
+    </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+        <script src="{{ asset('js/deliver.js') }}"></script>
+        <script src="{{ asset('js/display.js') }}"></script>
+{% endblock %}

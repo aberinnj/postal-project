@@ -2,12 +2,12 @@
 
 {% block body %}
 
-<nav class="navbar dashbar is-dark" role="navigation" aria-label="main navigation">
+<nav class="navbar shiftdash" role="navigation" aria-label="main navigation">
 
   <div class="navbar-brand ">
-    <a class="navbar-item postal-brand" href="{{ path('app-employee-home')}}">
+    <div class="navbar-item postal-brand">
     Courier.PO
-    </a>
+    </div>
 
     <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
       <span aria-hidden="true"></span>
@@ -18,13 +18,6 @@
 
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
-      <a class="navbar-item" href="{{ path('app-employee-office') }}">
-        My Office
-      </a>
-
-      <a class="navbar-item" href="{{ path('app-employee-manage-office') }}">
-        Manage Office
-      </a>
       <a class="navbar-item" href="{{ path('app-employee-deliver') }}">
         My Delivery
       </a>
@@ -35,7 +28,13 @@
 
         <div class="navbar-dropdown">
           <a class="navbar-item">
-            View CourierPO Reports
+            View Shift Details
+          </a>
+          <a class="navbar-item">
+            View Weather
+          </a>
+          <a class="navbar-item">
+            Contact Office
           </a>
         </div>
       </div>
@@ -44,7 +43,7 @@
     
 <div class="navbar-end">
       <div class="navbar-item">
-        <div class="navbar-item disabled" style="color: #fff;">
+        <div class="navbar-item disabled" style="color: #292929;">
           Signed In As
         </div>
 
@@ -54,7 +53,7 @@
 
 
       <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link button is-primary">
+          <a class="navbar-link button">
           <strong>
             {% if name is defined %}
 
@@ -84,7 +83,7 @@
         </div>
         </div>
         
-          {{ form(logout) }}
+          {{ form(endShift) }}
 
 
       </div>

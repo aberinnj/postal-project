@@ -4,6 +4,7 @@ namespace App\Entity;
 
 class Package
 {
+    protected $PackageID;
     protected $Email;
     protected $Recipient;
     protected $Weight;
@@ -37,6 +38,16 @@ class Package
         $this->Status = 2;
     }
 
+    // PackageID
+    public function getPackageID()
+    {
+        return $this->PackageID;
+    }
+
+    public function setPackageID($PackageID){
+        $this->PackageID = $PackageID;
+    }
+
     // Email
     public function getEmail()
     {
@@ -46,7 +57,6 @@ class Package
     public function setEmail($Email){
         $this->Email = $Email;
     }
-
 
     // Location
     public function getLocation()
@@ -245,7 +255,7 @@ class Package
     }
     
     public function setStatus($Status){
-        $this->Status = 2;
+        $this->Status = $Status;
     }
 
 

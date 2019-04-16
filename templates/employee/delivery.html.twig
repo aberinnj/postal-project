@@ -23,7 +23,7 @@
             
             </div>
             <div class="title">Your Courier.PO Delivery Manager</div>
-            <div class="subtitle">Select your packages and deliver away!</div>
+            <div class="subtitle">Select your vehicle and deliver away!<br/><small>Employee ID#{{id}}</small></div>
         </div>
 
     </section>
@@ -44,85 +44,88 @@
                         {{ form_row(vehicles.Select)}}
                         </div>
 
+                        <hr>
+
+                        <label class="label">Your Delivery</label>
+                        <div class="VIN">
+                            <div class="subtitle">
+                                    <div class="tags has-addons is-large">
+                                        <span class="tag is-dark">Vehicle VIN</span>
+                                        {% if selected|length > 0 %}
+                                            <span class="tag is-primary">{{selected}}</span>
+                                        {% else %}
+                                            <span class="tag">No Vehicle Selected</span>
+                                        {% endif %}
+
+                                    </div>
+                            </div>
+                        </div>
+
+
+                        <div>
+
+                            <div style="overflow-x: auto">
+                            <table class="table is-fullwidth">
+                            Need to add Delivery Due date later
+                            <thead>
+                                <tr>
+                                    <th><abbr title="PackageID">ID</abbr></th>
+                                    <th><abbr title="Weight">Weight (lbs.)</abbr></th>
+                                    <th><abbr title="Height">Height (cm.)</abbr></th>
+                                    <th><abbr title="Width">Width (cm.)</abbr></th>
+                                    <th><abbr title="Length">Length (cm.)</abbr></th>
+                                    <th><abbr title="Service">Service/Priority</abbr></th>
+                                    <th><abbr title="Destination Street Address">Destination Street</abbr></th>
+                                    <th><abbr title="Destination Apt/Suite">Apt/Suite No.</abbr></th>
+                                    <th><abbr title="Destination City">Destination City</abbr></th>
+                                    <th><abbr title="Destination State">Destination State</abbr></th>
+                                    <th><abbr title="Destination ZIP">Destination ZIP</abbr></th>
+                                </tr>
+                            </thead>
+
+                            {% if packages|length > 0 %}
+                            <tbody>
+                                {% for package in packages %}
+
+                                <tr>
+                                    <th>{{ package.ID}}</th>
+                                    <th>{{ package.Weight }}</th>
+                                    <th>{{ package.Height }}</th>
+                                    <th>{{ package.Width }}</th>                            
+                                    <th>{{ package.Length }}</th>
+                                    <th>{{ package.ServiceName}}</th>
+                                    <th>{{ package.Street}}</th>
+                                    <th>{{package.ApartmentNo}}</th>
+                                    <th>{{package.City}}</th>
+                                    <th>{{package.State}}</th>
+                                    <th>{{package.ZIP}}</th>
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+                            {% endif %}
+
+                            </table>
+                            </div>
+
+                        </div>
+
+                        <hr>
+
+                        <div>
+                            {% if packages|length > 0 %}
+                                <label class="label">Courier Ready?</label>
+                                {{ form(startShift) }}
+                            {% endif %}
+                        </div>
+
+
 
                     {{ form_end(vehicles) }}
                 </div>
 
-                <hr>
-
-                <label class="label">Your Delivery</label>
-                <div class="VIN">
-                    <div class="subtitle">
-                            <div class="tags has-addons is-large">
-                                <span class="tag is-dark">Vehicle VIN</span>
-                                {% if selected|length > 0 %}
-                                    <span class="tag is-primary">{{selected}}</span>
-                                {% else %}
-                                    <span class="tag">No Vehicle Selected</span>
-                                {% endif %}
-
-                            </div>
-                    </div>
-                </div>
-
-
-                <div>
-
-                    <div style="overflow-x: auto">
-                    <table class="table is-fullwidth">
-                    <thead>
-                        <tr>
-                            <th><abbr title="PackageID">ID</abbr></th>
-                            <th><abbr title="Weight">Weight (lbs.)</abbr></th>
-                            <th><abbr title="Height">Height (cm.)</abbr></th>
-                            <th><abbr title="Width">Width (cm.)</abbr></th>
-                            <th><abbr title="Length">Length (cm.)</abbr></th>
-                            <th><abbr title="Service">Service/Priority</abbr></th>
-                            <th><abbr title="Destination Street Address">Destination Street</abbr></th>
-                            <th><abbr title="Destination Apt/Suite">Apt/Suite No.</abbr></th>
-                            <th><abbr title="Destination City">Destination City</abbr></th>
-                            <th><abbr title="Destination State">Destination State</abbr></th>
-                            <th><abbr title="Destination ZIP">Destination ZIP</abbr></th>
-                        </tr>
-                    </thead>
-
-                    {% if packages|length > 0 %}
-                    <tbody>
-                        {% for package in packages %}
-
-                        <tr>
-                            <th>{{ package.ID}}</th>
-                            <th>{{ package.Weight }}</th>
-                            <th>{{ package.Height }}</th>
-                            <th>{{ package.Width }}</th>                            
-                            <th>{{ package.Length }}</th>
-                            <th>{{ package.ServiceName}}</th>
-                            <th>{{ package.Street}}</th>
-                            <th>{{package.ApartmentNo}}</th>
-                            <th>{{package.City}}</th>
-                            <th>{{package.State}}</th>
-                            <th>{{package.ZIP}}</th>
-                        </tr>
-
-
-                        {% endfor %}
-
-                    </tbody>
-                    {% endif %}
-
-                    </table>
-                    </div>
-
-                </div>
-
-                <hr>
-
-                <div>
-                    {% if packages|length > 0 %}
-                    <label class="label">Courier Ready?</label>
-
-                </div>
-
+               
             </div>
         </div>
     </section>
