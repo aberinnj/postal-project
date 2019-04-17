@@ -176,6 +176,25 @@ class Root_DashboardController extends AbstractController {
         }
     }
 
+    protected function ReportOfficeStats(Connection $connection) {
+        //get data number of packages shipped by an office and the total amount of revenue
+        try{
+            $sql = "SELECT O.OfficeID, COUNT(P.PackageID) AS TotalPackages, SUM(T.TransactionTotal) AS TotalRev
+            FROM office AS O, package AS P, transaction AS T 
+            WHERE P.OfficeID = O.OfficeID AND P.PackageID = T.PackageID
+            GROUP BY O.OfficeID
+            ";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
 
     protected function ReportRegionalOfficeStatistics(Connection $connection) {
         try{

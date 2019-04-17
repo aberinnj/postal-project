@@ -84,15 +84,21 @@
         <table class="table is-fullwidth">
             <thead>
             <tr>
-                    <th>State</th>
-                    <th>No. Of Offices</th>
+                    <th>Office</th>
                     <th>Total No. Of Shipping Orders</th>
+                    <th>Total Revenue</th>
 
             </tr>
             </thead>
 
             <tbody>
-            
+            {% for each in reportOfficeStats %}
+                    <tr>
+                    <th>{{ each.OfficeID }}</th>
+                    <th>{{ each.TotalPackages }}</th>
+                    <th>${{ each.TotalRev }}</th>
+                    </tr>
+                {% endfor %}
             {% if reportRegionalStats is defined %}
                 {% for each in reportRegionalStats %}
                     <tr>
