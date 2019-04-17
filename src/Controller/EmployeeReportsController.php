@@ -25,7 +25,7 @@ class EmployeeReportsController extends Root_DashboardController {
         }
 
         $ReportEmployeeDelivery = $this->ReportEmployeeDeliveryQuery($connection);
-
+        $ReportEmployeeStats = $this->ReportEmployeeStats($connection);
 
         //$ReportRegionalStats = $this->ReportRegionalOfficeStatistics($connection);
         //            'reportRegionalStats' => $ReportRegionalStats,
@@ -45,6 +45,7 @@ class EmployeeReportsController extends Root_DashboardController {
             'name'=>$name['FirstName'].' '.$name['LastName'],
             'breadcrumbs' => $breadcrumbs,
             'reportEmployeeDelivery' => $ReportEmployeeDelivery,
+            'reportEmployeeStats' => $ReportEmployeeStats,
             'logout'=>$logoutForm->createView()]
         );
     }

@@ -147,7 +147,7 @@ class Root_DashboardController extends AbstractController {
 
     protected function ReportEmployeeDeliveryQuery(Connection $connection) {
         try{
-            $sql = "SELECT * FROM employee_delivery_report;";
+            $sql = "SELECT * FROM employee_delivery_report";
 
             $stmt = $connection->prepare($sql);
             $stmt->execute();
@@ -158,6 +158,24 @@ class Root_DashboardController extends AbstractController {
             echo "Error " . $e->getMessage();
         }
     }
+
+    protected function ReportEmployeeStats(Connection $connection) {
+        try{
+            $sql = "SELECT R.FirstName, R.MiddleName, R.LastName, R.EmployeeID, COUNT(R.PackageID) AS Total, D.TotalD AS TotalD2
+            FROM employee_delivery_report AS R, (SELECT DISTINCT COUNT(R2.Status) AS TotalD FROM employee_delivery_report AS R2 WHERE R2.Status = 'Delivered' GROUP BY EmployeeID) AS D
+            GROUP BY R.EmployeeID
+            ";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
 
     protected function ReportRegionalOfficeStatistics(Connection $connection) {
         try{

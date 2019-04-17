@@ -32,6 +32,10 @@
     <section class="section">
         <div class="container">
         <div style="overflow-x: auto;">
+
+        {% for each in reportEmployeeStats %}
+            <b>{{ each.FirstName }} {{ each.MiddleName}}. {{ each.LastName}}</b> (ID#<b>{{ each.EmployeeID }}</b>) has handled <b>{{ each.Total }}</b> packages and delivered <b>{{ each.TotalD2 }}</b>.<br/> 
+        {% endfor %}
         <table class="table is-fullwidth">
             <thead>
             <tr>
