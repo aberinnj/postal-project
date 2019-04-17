@@ -40,15 +40,13 @@
             <thead>
             <tr>
                     <th>Employee ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
+                    <th>Name</th>
                     <th>VIN</th>                   
                     <th>Office ID</th>
-
                     <th>Package ID</th>
                     <th>Destination ZIP</th>
                     <th>Package Weight</th>
-                    <th>Status Name</th>
+                    <th>Status</th>
             </tr>
             </thead>
 
@@ -57,14 +55,13 @@
                 {% for each in reportEmployeeDelivery %}
                     <tr>
                     <th>{{ each.EmployeeID }}</th>
-                    <th> {{ each.FirstName }}</th>
-                    <th> {{ each.LastName }}</th>
+                    <th>{{ each.FirstName }} {{ each.MiddleName }}. {{ each.LastName }}</th>
                     <th>{{ each.VIN }}</th>                   
                     <th>{{ each.OfficeID }}</th>
 
                     <th>{{each.PackageID}}</th>
                     <th>{{each.dest_ZIP}}</th>
-                    <th>{{each.Weight}}</th>
+                    <th>{{each.Weight}} oz.</th>
                     <th>{{each.Status}}</th>
                     </tr>
                 {% endfor %}

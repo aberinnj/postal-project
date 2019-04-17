@@ -147,7 +147,11 @@ class Root_DashboardController extends AbstractController {
 
     protected function ReportEmployeeDeliveryQuery(Connection $connection) {
         try{
-            $sql = "SELECT * FROM employee_delivery_report";
+            //$sql = "SELECT * FROM employee_delivery_report";
+            $sql = "SELECT  DISTINCT E.EmployeeID, E.FirstName, E.MiddleName, E.LastName, O.OfficeID, St.Status, V.VIN, P.PackageID, P.dest_ZIP, P.Weight, T.Package_ID
+                    FROM employee AS E, package AS P, vehicle AS V, office AS O, shift as S, status as St, Tracking AS T
+                    WHERE S.VehicleID = V.VIN AND E.OfficeID = O.OfficeID AND E.EmployeeID = S.EmployeeID AND P.Status = St.Code AND P.PackageID = T.Package_ID AND T.OfficeID = E.OfficeID
+                    ORDER BY E.EmployeeID ASC";
 
             $stmt = $connection->prepare($sql);
             $stmt->execute();
@@ -161,8 +165,8 @@ class Root_DashboardController extends AbstractController {
 
     protected function ReportEmployeeStats(Connection $connection) {
         try{
-            $sql = "SELECT R.FirstName, R.MiddleName, R.LastName, R.EmployeeID, COUNT(R.PackageID) AS Total, D.TotalD AS TotalD2
-            FROM employee_delivery_report AS R, (SELECT DISTINCT COUNT(R2.Status) AS TotalD FROM employee_delivery_report AS R2 WHERE R2.Status = 'Delivered' GROUP BY EmployeeID) AS D
+            $sql = "SELECT DISTINCT R.FirstName, R.MiddleName, R.LastName, R.EmployeeID, COUNT(DISTINCT R.PackageID) AS Total, D.TotalD AS TotalD2
+            FROM employee_delivery_report AS R, (SELECT DISTINCT COUNT(DISTINCT R2.Status) AS TotalD FROM employee_delivery_report AS R2 WHERE R2.Status = 'Delivered' GROUP BY EmployeeID) AS D
             GROUP BY R.EmployeeID
             ";
 
@@ -179,9 +183,9 @@ class Root_DashboardController extends AbstractController {
     protected function ReportOfficeStats(Connection $connection) {
         //get data number of packages shipped by an office and the total amount of revenue
         try{
-            $sql = "SELECT O.OfficeID, COUNT(P.PackageID) AS TotalPackages, SUM(T.TransactionTotal) AS TotalRev
-            FROM office AS O, package AS P, transaction AS T 
-            WHERE P.OfficeID = O.OfficeID AND P.PackageID = T.PackageID
+            $sql = "SELECT DISTINCT *, COUNT(DISTINCT T.PackageID) AS TotalPackages, SUM(DISTINCT T.TransactionTotal) AS TotalRev
+            FROM office AS O, package AS P, transaction AS T, Tracking AS TR 
+            WHERE TR.OfficeID = O.OfficeID AND TR.Package_ID = T.PackageID
             GROUP BY O.OfficeID
             ";
 
