@@ -33,9 +33,7 @@
         <div class="container">
         <div style="overflow-x: auto;">
 
-        {% for each in reportEmployeeStats %}
-            <b>{{ each.FirstName }} {{ each.MiddleName}}. {{ each.LastName}}</b> (ID#<b>{{ each.EmployeeID }}</b>) has handled <b>{{ each.Total }}</b> packages and delivered <b>{{ each.TotalD2 }}</b>.<br/> 
-        {% endfor %}
+        
         <table class="table is-fullwidth">
             <thead>
             <tr>
@@ -95,7 +93,7 @@
                     <th>{{ each.TotalPackages }}</th>
                     <th>${{ each.TotalRev }}</th>
                     </tr>
-                {% endfor %}
+            {% endfor %}
             {% if reportRegionalStats is defined %}
                 {% for each in reportRegionalStats %}
                     <tr>
@@ -119,24 +117,31 @@
         <table class="table is-fullwidth">
             <thead>
             <tr>
-                <th>PackageID</th>
-                <th>Email</th>
-                <th>Weight</th>
-                <th>Length</th>
-                <th>Width</th>
-                <th>Height</th>
-                <th>Price</th>
-                <th>State</th>
-                <th>City</th>
-                <th>ZIP</th>
-                <th>Street</th>
-                <th>Apt/Suite. No</th>
-                <th>isFragile</th>
-                <th>Send date</th>
-                <th>Priority</th>
-                <th>Status</th>
+                <th>Shift ID</th>
+                <th>Employee ID</th>
+                <th>Employee Name</th>
+                <th>Vehicle Used (VIN)</th>
+                <th>Packages Managed</th>
+                <th>Packages Delivered</th>
+                <th>Date</th>
+                <th>Hours Worked</th>
             </tr>
             </thead>
+            <tbody>
+                {% for each in reportEmployeeStats %}
+                    <tr>
+                    <th>{{ each.ShiftSession }}</th>
+                    <th>{{ each.EmployeeID }}</th>
+                    <th>{{ each.FirstName }} {{ each.MiddleName }}. {{ each.LastName }}</th>
+                    <th>{{ each.VehicleID }}</th>
+                    <th>{{ each.TotalP }}</th>
+                    <th></th>
+                    <th>{{ each.Clock_in_dateTime }}</th>
+                    <th>{{ each.Hours_Worked }}</th>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
         </div>
         </div>
