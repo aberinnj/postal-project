@@ -174,11 +174,11 @@ class Root_DashboardController extends AbstractController {
             //get the shift id, use shift vehicle to link with package vehicle and assign shift id to that package
             //get each shift, the employee associated with the shift, the number of packages handled and delivered, and datetime information about the shift
             $sql = "SELECT S.ShiftSession, E.EmployeeID, E.FirstName, E.MiddleName, E.LastName, 
-                        COUNT(DISTINCT case when P.ShiftID = S.ShiftSession then 1 end) AS TotalP, 
-                        COUNT(DISTINCT case when P.Status = 5 AND P.ShiftID = S.ShiftSession then 1 end) AS TotalDelivered,
+                        COUNT(P.PackageID) AS TotalP, 
+                        COUNT(case when P.OfficeID <> P.return_office then 1 else 0 end) AS TotalDelivered,
                         S.Clock_in_dateTime, S.Hours_Worked, S.VehicleID
-                    FROM shift AS S, employee AS E, package AS P, tracking AS T
-                    WHERE S.EmployeeID = E.EmployeeID AND T.Package_ID = P.PackageID 
+                    FROM shift AS S, employee AS E, package AS P
+                    WHERE S.EmployeeID = E.EmployeeID AND S.ShiftSession = P.ShiftID
                     GROUP BY S.ShiftSession
             ";
 
@@ -195,10 +195,10 @@ class Root_DashboardController extends AbstractController {
     protected function ReportOfficeStats(Connection $connection) {
         //get data number of packages shipped by an office and the total amount of revenue
         try{
-            $sql = "SELECT DISTINCT *, COUNT(DISTINCT T.PackageID) AS TotalPackages, SUM(DISTINCT T.TransactionTotal) AS TotalRev
-            FROM office AS O, package AS P, transaction AS T, Tracking AS TR 
-            WHERE TR.OfficeID = O.OfficeID AND TR.Package_ID = T.PackageID
-            GROUP BY O.OfficeID
+            $sql = "SELECT P.return_office, COUNT(P.PackageID) AS TotalPackages, SUM(T.TransactionTotal) AS TotalRev
+            FROM package AS P, transaction AS T
+            WHERE P.PackageID = T.PackageID
+            GROUP BY P.return_office
             ";
 
             $stmt = $connection->prepare($sql);
@@ -449,7 +449,7 @@ class Root_DashboardController extends AbstractController {
     protected function endShift(Connection $connection, $session) {
         try{
             $sql = "UPDATE shift SET shift.Clock_out_dateTime = NOW(), 
-                    shift.Hours_Worked = DATEDIFF(shift.Clock_in_dateTime, shift.Clock_out_dateTime)/60
+                    shift.Hours_Worked = TIMESTAMPDIFF(minute, shift.Clock_in_dateTime, NOW())/60
             WHERE shift.ShiftSession = :sessionID";
 
             $stmt = $connection->prepare($sql);
@@ -544,7 +544,7 @@ class Root_DashboardController extends AbstractController {
             $sql = "INSERT INTO package (RecipientName, Email, Weight, Length, Width, Height, 
             dest_State, dest_City, dest_ZIP, dest_Street, dest_ApartmentNo,
             return_State, return_City, return_ZIP, return_Street, return_ApartmentNo,
-            isFragile, send_date, Service, Status, OfficeID) VALUES (
+            isFragile, send_date, Service, Status, OfficeID, return_office) VALUES (
                 :Recipient,
                 :Email,
                 :Weight,
@@ -565,6 +565,7 @@ class Root_DashboardController extends AbstractController {
                 :sendDate,
                 :service,
                 :status,
+                :OfficeID,
                 :OfficeID
             )";
 
