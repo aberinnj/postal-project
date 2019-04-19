@@ -72,11 +72,14 @@ class EmployeeDeliveryController extends Root_DashboardController {
         if ($startShiftForm->isSubmitted() && $startShiftForm->getClickedButton() && $startShiftForm->getClickedButton()->getName() === 'startShift' ) {
 
             $this->startShift($connection, $user['id'], $selected);
-                    
+            
+
             $shiftdata = $this->getShiftQuery($connection, $user['id']);
             if (count($shiftdata) > 0) {
+                $this->insertShiftToPackage($connection);
                 return $this->redirectToRoute('app-employee-shift', ['shift'=>$shiftdata[0]['session']]);
             }
+            
         }
 
         

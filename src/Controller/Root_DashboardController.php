@@ -170,10 +170,15 @@ class Root_DashboardController extends AbstractController {
 
     protected function ReportEmployeeStats(Connection $connection) {
         try{
+            //Requires trigger: when a shift is inserted into the shift table
+            //get the shift id, use shift vehicle to link with package vehicle and assign shift id to that package
             //get each shift, the employee associated with the shift, the number of packages handled and delivered, and datetime information about the shift
-            $sql = "SELECT S.ShiftSession, E.EmployeeID, E.FirstName, E.MiddleName, E.LastName, COUNT(DISTINCT T.Package_ID) AS TotalP, S.Clock_in_dateTime, S.Hours_Worked, S.VehicleID
+            $sql = "SELECT S.ShiftSession, E.EmployeeID, E.FirstName, E.MiddleName, E.LastName, 
+                        COUNT(DISTINCT case when P.ShiftID = S.ShiftSession then 1 end) AS TotalP, 
+                        COUNT(DISTINCT case when P.Status = 5 AND P.ShiftID = S.ShiftSession then 1 end) AS TotalDelivered,
+                        S.Clock_in_dateTime, S.Hours_Worked, S.VehicleID
                     FROM shift AS S, employee AS E, package AS P, tracking AS T
-                    WHERE S.EmployeeID = E.EmployeeID AND T.Package_ID = P.PackageID
+                    WHERE S.EmployeeID = E.EmployeeID AND T.Package_ID = P.PackageID 
                     GROUP BY S.ShiftSession
             ";
 
@@ -425,6 +430,16 @@ class Root_DashboardController extends AbstractController {
             $stmt->bindValue(':id', $id);
             $stmt->bindValue(':vehicle', $vehicle);
             $stmt->execute();
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+    protected function insertShiftToPackage(Connection $connection) {
+        try{
+            $sql = "UPDATE package, shift SET package.ShiftID = shift.ShiftSession WHERE shift.VehicleID = package.VehicleID";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->execute();
 
         } catch (PODException $e){ 
             echo "Error " . $e->getMessage();
@@ -433,7 +448,9 @@ class Root_DashboardController extends AbstractController {
 
     protected function endShift(Connection $connection, $session) {
         try{
-            $sql = "UPDATE shift SET shift.Clock_out_dateTime = NOW() WHERE shift.ShiftSession = :sessionID";
+            $sql = "UPDATE shift SET shift.Clock_out_dateTime = NOW(), 
+                    shift.Hours_Worked = DATEDIFF(shift.Clock_in_dateTime, shift.Clock_out_dateTime)/60
+            WHERE shift.ShiftSession = :sessionID";
 
             $stmt = $connection->prepare($sql);
             $stmt->bindValue(':sessionID', $session);
