@@ -289,3 +289,9 @@ section.breadcrumbs {
 .postal-package-table tr th {
     color: #fff9d9;
 }
+
+h1 {
+    font-size: 40px;
+    font-weight: 700;
+    color: #960C22;
+}

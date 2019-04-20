@@ -16,4 +16,43 @@
         </div>
 
     </section>
+    {% block trackResult %} 
+    
+    <section class="section is-small tracking-history-result">
+        <div class="container">
+            <div>
+                <div class="subtitle">
+                    Tracking History
+                </div>
+
+                {% if data|length > 0 %}
+
+                    <div>
+
+                            {{ id }} - 
+                            {% if status|length > 0 %}
+
+                            {{ status[0].Status }}
+
+                            {% endif %}
+
+                    </div>
+
+                    {% for record in data %}
+                        <div>
+                            {{ record.Date }} -
+                            {{ record.Note }}
+                        </div>
+                        <br/><br/>
+                        
+                    {% endfor %}
+
+                {% else %}
+
+                {% endif %}
+            </div>
+        </div>
+    </section>
+    
+    {% endblock %}
 {% endblock %}

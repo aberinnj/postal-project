@@ -46,8 +46,29 @@ class CustomerTrackingController extends Root_DashboardController {
     public function viewWithID(Connection $connection, Request $request, $id) {
         $session = $this->get('session');
         $user = $session->get('user');
+        $bag = $session->getFlashBag();
         $breadcrumbs = ['Home'=>'/dashboard', 'Orders'=>'/dashboard/orders', 'Tracking' =>'/dashboard/orders/track', $id=>'/dashboard/orders/track/'.$id];
+//------------------
+        $data = [];
+        $status = [];
+        $previous_tracking_data = null;
+        
+        //$bag = $session->getFlashBag();
+        
+        if ($bag->has('trackID')) {
 
+            $previous_tracking_data = ($bag->get('trackID'))[0];
+            
+            $data = $this->trackingQuery($connection, $previous_tracking_data);
+            $status = $this->statusQuery($connection, $previous_tracking_data);
+        } 
+
+
+        $trackingBundle = $this->tracking($previous_tracking_data);
+        $trackingForm = $trackingBundle[1];
+        $trackingHandler = $this->handleTracking($request, $trackingForm, $trackingBundle[0], "Tracking");  
+
+//---------------
         $action = $this->requestPage('customer', 'app-main-page');
         if ($action) {
             return $action;
@@ -59,11 +80,17 @@ class CustomerTrackingController extends Root_DashboardController {
         if($logoutHandler) {
             return $logoutHandler;
         }
+        else if($trackingHandler) {
+            return $trackingHandler;
+        }
 
         $name = ($this->CustomerDetailsQuery($connection, $user['id']))[0];
         return $this->render('customer/track_id.html.twig', [
+            'tracking' => $trackingForm->createView(),
+            'data' => $data,
             'logout' => $logoutForm->createView(),
             'id' => $id,
+            'status' =>$status,
             'breadcrumbs'=> $breadcrumbs,
             'name'=> $name["FName"]." ".$name["LName"],
         ]);

@@ -107,6 +107,7 @@ class HomeController extends Root_HomeController {
         $bag = $this->get('session')->getFlashBag();
 
         if ($bag->has('trackID')) {
+            echo "WOOOO";
 
             $previous_tracking_data = ($bag->get('trackID'))[0];
             

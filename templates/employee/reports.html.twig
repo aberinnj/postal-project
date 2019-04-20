@@ -33,7 +33,7 @@
         <div class="container">
         <div style="overflow-x: auto;">
 
-        
+        <h1> Employee-Package Tracking Report </h1>
         <table class="table is-fullwidth">
             <thead>
             <tr>
@@ -54,12 +54,12 @@
                     <tr>
                     <th>{{ each.EmployeeID }}</th>
                     <th>{{ each.FirstName }} {{ each.MiddleName }}. {{ each.LastName }}</th>
-                    <th>{{ each.VIN }}</th>                   
+                    <th>{{ each.VehicleID }}</th>                   
                     <th>{{ each.OfficeID }}</th>
 
                     <th>{{each.PackageID}}</th>
                     <th>{{each.dest_ZIP}}</th>
-                    <th>{{each.Weight}} oz.</th>
+                    <th>{{each.Weight}} lbs.</th>
                     <th>{{each.Status}}</th>
                     </tr>
                 {% endfor %}
@@ -76,6 +76,7 @@
     <section class="section">
         <div class="container">
         <div style="overflow-x: auto;">
+        <h1> Office Revenue Report </h1>
         <table class="table is-fullwidth">
             <thead>
             <tr>
@@ -111,9 +112,41 @@
 
     </section>
 
-        <section class="section">
+    <section class="section">
         <div class="container">
         <div style="overflow-x: auto;">
+        <h1> Employee Stats Last 30 Days </h1>
+        Below shows each employee and their logged hours worked over the last 30 days.
+        <table class="table is-fullwidth">
+            <thead>
+            <tr>
+                <th>Office</th>
+                <th>Employee ID</th>
+                <th>Employee Name</th>
+
+                <th>Hours Worked</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for each in reportLast30Days %}
+                    <tr>
+                    <th> {{each.OfficeID}}</th>
+                    <th>{{ each.EmployeeID }}</th>
+                    <th>{{ each.FirstName }} {{ each.MiddleName }}. {{ each.LastName }}</th>
+                    <th>{{ each.TotalHours }}</th>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+        <div style="overflow-x: auto;">
+        <h1> Employee Shift Details Report </h1>
         <table class="table is-fullwidth">
             <thead>
             <tr>
@@ -121,8 +154,7 @@
                 <th>Employee ID</th>
                 <th>Employee Name</th>
                 <th>Vehicle Used (VIN)</th>
-                <th>Packages Managed</th>
-                <th>Packages Delivered</th>
+
                 <th>Date</th>
                 <th>Hours Worked</th>
             </tr>
@@ -134,8 +166,7 @@
                     <th>{{ each.EmployeeID }}</th>
                     <th>{{ each.FirstName }} {{ each.MiddleName }}. {{ each.LastName }}</th>
                     <th>{{ each.VehicleID }}</th>
-                    <th>{{ each.TotalP }}</th>
-                    <th>{{ each.TotalDelivered }}</th>
+
                     <th>{{ each.Clock_in_dateTime }}</th>
                     <th>{{ each.Hours_Worked }}</th>
 

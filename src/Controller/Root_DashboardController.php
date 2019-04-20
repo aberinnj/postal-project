@@ -148,7 +148,7 @@ class Root_DashboardController extends AbstractController {
     protected function ReportEmployeeDeliveryQuery(Connection $connection) {
         try{
             //$sql = "SELECT * FROM employee_delivery_report";
-            $sql = "SELECT  DISTINCT E.EmployeeID, E.FirstName, E.MiddleName, E.LastName, O.OfficeID, St.Status, V.VIN, P.PackageID, P.dest_ZIP, P.Weight, T.Package_ID
+            $sql = "SELECT  DISTINCT E.EmployeeID, E.FirstName, E.MiddleName, E.LastName, E.OfficeID, St.Status, S.VehicleID, P.PackageID, P.dest_ZIP, P.Weight
                     FROM employee AS E, package AS P, vehicle AS V, office AS O, shift as S, status as St, Tracking AS T
                     WHERE S.VehicleID = V.VIN 
                         AND E.OfficeID = O.OfficeID 
@@ -173,14 +173,35 @@ class Root_DashboardController extends AbstractController {
             //Requires trigger: when a shift is inserted into the shift table
             //get the shift id, use shift vehicle to link with package vehicle and assign shift id to that package
             //get each shift, the employee associated with the shift, the number of packages handled and delivered, and datetime information about the shift
-            $sql = "SELECT S.ShiftSession, E.EmployeeID, E.FirstName, E.MiddleName, E.LastName, 
-                        COUNT(P.PackageID) AS TotalP, 
-                        COUNT(case when P.OfficeID <> P.return_office then 1 else 0 end) AS TotalDelivered,
-                        S.Clock_in_dateTime, S.Hours_Worked, S.VehicleID
+            $sql = "SELECT S.ShiftSession, E.EmployeeID, E.FirstName, E.MiddleName, E.LastName,S.Clock_in_dateTime, S.Hours_Worked, S.VehicleID
                     FROM shift AS S, employee AS E, package AS P
-                    WHERE S.EmployeeID = E.EmployeeID AND S.ShiftSession = P.ShiftID
+                    WHERE S.EmployeeID = E.EmployeeID
                     GROUP BY S.ShiftSession
+                    ORDER BY E.EmployeeID
             ";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
+    protected function ReportLast30Days(Connection $connection) {
+        try{
+            //Requires trigger: when a shift is inserted into the shift table
+            //get the shift id, use shift vehicle to link with package vehicle and assign shift id to that package
+            //get each shift, the employee associated with the shift, the number of packages handled and delivered, and datetime information about the shift
+
+
+            $sql = "SELECT E.EmployeeID, E.FirstName, E.MiddleName, E.LastName, SUM(S.Hours_Worked) AS TotalHours, E.OfficeID
+            FROM employee AS E, shift AS S
+            WHERE S.EmployeeID = E.EmployeeID AND S.Clock_in_dateTime < DATE_ADD(NOW(), INTERVAL +1 MONTH)
+            GROUP BY E.EmployeeID
+            ORDER BY E.OfficeID";
 
             $stmt = $connection->prepare($sql);
             $stmt->execute();
@@ -448,9 +469,10 @@ class Root_DashboardController extends AbstractController {
 
     protected function endShift(Connection $connection, $session) {
         try{
-            $sql = "UPDATE shift SET shift.Clock_out_dateTime = NOW(), 
+            $sql1 = "UPDATE shift SET shift.Clock_out_dateTime = NOW(), 
                     shift.Hours_Worked = TIMESTAMPDIFF(minute, shift.Clock_in_dateTime, NOW())/60
             WHERE shift.ShiftSession = :sessionID";
+
 
             $stmt = $connection->prepare($sql);
             $stmt->bindValue(':sessionID', $session);
@@ -477,6 +499,37 @@ class Root_DashboardController extends AbstractController {
         }
     }
 ///////////////////////////////////////////////
+    protected function trackingQuery(Connection $connection, Tracking $tracking): array {
+        
+        try{
+            $sql = "SELECT DISTINCT t.Update_Date as Date, t.TrackingNote as Note FROM tracking as t, package as p WHERE t.Package_ID = :pID ORDER BY t.Tracking_Index ASC";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':pID', strval($tracking->getPackageID()));
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
+    protected function statusQuery(Connection $connection, Tracking $tracking) {
+        try{
+            $sql = "SELECT DISTINCT s.Status as Status FROM package as p, status as s WHERE p.PackageID = :pID AND p.Status = s.Code";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':pID', strval($tracking->getPackageID()));
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
     protected function getShippingOfficesQuery(Connection $connection, $office) {
 
 
