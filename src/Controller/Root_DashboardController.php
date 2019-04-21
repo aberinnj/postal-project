@@ -156,7 +156,7 @@ class Root_DashboardController extends AbstractController {
                         AND P.Status = St.Code 
                         AND P.PackageID = T.Package_ID 
                         AND T.OfficeID = E.OfficeID
-                    ORDER BY E.EmployeeID ASC";
+                    ORDER BY P.PackageID ASC";
 
             $stmt = $connection->prepare($sql);
             $stmt->execute();
@@ -173,9 +173,9 @@ class Root_DashboardController extends AbstractController {
             //Requires trigger: when a shift is inserted into the shift table
             //get the shift id, use shift vehicle to link with package vehicle and assign shift id to that package
             //get each shift, the employee associated with the shift, the number of packages handled and delivered, and datetime information about the shift
-            $sql = "SELECT S.ShiftSession, E.EmployeeID, E.FirstName, E.MiddleName, E.LastName,S.Clock_in_dateTime, S.Hours_Worked, S.VehicleID
-                    FROM shift AS S, employee AS E, package AS P
-                    WHERE S.EmployeeID = E.EmployeeID
+            $sql = "SELECT S.ShiftSession, E.EmployeeID, E.FirstName, E.MiddleName, E.LastName,S.Clock_in_dateTime, S.Hours_Worked, S.VehicleID, COUNT(DISTINCT T.Package_ID) AS Delivered
+                    FROM shift AS S, employee AS E, package AS P, tracking AS T
+                    WHERE S.EmployeeID = E.EmployeeID AND S.ShiftSession = T.ShiftID
                     GROUP BY S.ShiftSession
                     ORDER BY E.EmployeeID
             ";
@@ -197,10 +197,10 @@ class Root_DashboardController extends AbstractController {
             //get each shift, the employee associated with the shift, the number of packages handled and delivered, and datetime information about the shift
 
 
-            $sql = "SELECT E.EmployeeID, E.FirstName, E.MiddleName, E.LastName, SUM(S.Hours_Worked) AS TotalHours, E.OfficeID
-            FROM employee AS E, shift AS S
-            WHERE S.EmployeeID = E.EmployeeID AND S.Clock_in_dateTime < DATE_ADD(NOW(), INTERVAL +1 MONTH)
-            GROUP BY E.EmployeeID
+            $sql = "SELECT E.EmployeeID, E.FirstName, E.MiddleName, E.LastName, SUM(S.Hours_Worked) AS TotalHours, E.OfficeID, COUNT(DISTINCT T.Package_ID) AS Delivered
+            FROM employee AS E, shift AS S, tracking AS T
+            WHERE S.EmployeeID = E.EmployeeID AND S.Clock_in_dateTime < DATE_ADD(NOW(), INTERVAL +1 MONTH) AND S.ShiftSession = T.ShiftID
+            GROUP BY S.EmployeeID
             ORDER BY E.OfficeID";
 
             $stmt = $connection->prepare($sql);
@@ -457,7 +457,7 @@ class Root_DashboardController extends AbstractController {
     }
     protected function insertShiftToPackage(Connection $connection) {
         try{
-            $sql = "UPDATE package, shift SET package.ShiftID = shift.ShiftSession WHERE shift.VehicleID = package.VehicleID";
+            $sql = "UPDATE package, shift SET package.ShiftID = shift.ShiftSession WHERE shift.VehicleID = package.VehicleID AND shift.Clock_out_dateTime IS NULL";
 
             $stmt = $connection->prepare($sql);
             $stmt->execute();
@@ -469,7 +469,7 @@ class Root_DashboardController extends AbstractController {
 
     protected function endShift(Connection $connection, $session) {
         try{
-            $sql1 = "UPDATE shift SET shift.Clock_out_dateTime = NOW(), 
+            $sql = "UPDATE shift SET shift.Clock_out_dateTime = NOW(), 
                     shift.Hours_Worked = TIMESTAMPDIFF(minute, shift.Clock_in_dateTime, NOW())/60
             WHERE shift.ShiftSession = :sessionID";
 
