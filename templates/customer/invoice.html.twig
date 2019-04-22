@@ -11,7 +11,7 @@
             {% endfor %}
 
             <div class="title">Find Your Courier.PO Invoices</div>
-            <div class="subtitle">Looking for your package's invoice? Enter a Package ID <br>
+            <div class="subtitle">Looking for your package's invoice? Enter your package's invoice ID <br>
                 <small>You can only view your packages' invoices. </small>
             </div>
         </div>
@@ -26,7 +26,7 @@
             
                 {{ form_start(tracking) }}
                     <div class="container has-text-centered">
-                        <label class="Label">Enter Your CourierPO Package ID</label>
+                        <label class="Label">Enter Your CourierPO Invoice ID</label>
                             <div class="package-track-form">
                                 {{ form_row(tracking.PackageID) }}
 
