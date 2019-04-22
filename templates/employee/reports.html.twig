@@ -24,17 +24,28 @@
             </div>
             <div class="title">Our Courier.PO Reports</div>
             <div class="subtitle">View how Courier.PO is doing</div>
+
         </div>
 
     </section>
-
+    <section class="section">
+        <div class="container">
+            <a id="Index"></a>
+            <h2>Page Index</h2><br/>
+            <a href="#EPTracking">Employee-Package Tracking Report</a><br/>
+            <a href="#Revenue">Office Revenue Report</a><br/>
+            <a href="#MonthLog">Employee Stats Last 30 Days</a><br/>
+            <a href="#ShiftReport">Employee Shift Details Report</a><br/>
+        </div>
+    </section>
 
     <section class="section">
         <div class="container">
         <div style="overflow-x: auto;">
-
+        <a id="EPTracking"></a>
         <h1> Employee-Package Tracking Report </h1>
-        Below is a detailed report of each package, its journey and current status. Use this if something happens to a package, to find its last known handler and vehicle.
+        Below is a detailed report of each package, its journey and current status. Use this if something happens to a package, to find its last known handler and vehicle.<br/>
+        <a href="#Index">Click to return to Index</a><br/>
         <table class="table is-fullwidth">
             <thead>
             <tr>
@@ -77,13 +88,16 @@
     <section class="section">
         <div class="container">
         <div style="overflow-x: auto;">
+        <a id="Revenue"></a>
         <h1> Office Revenue Report </h1>
-        Below is a report of how many orders each office has had and its total revenue.
+        Below is a report of how many orders each office has had and its total revenue.<br/>
+        <a href="#Index">Click to return to Index</a><br/>
         <table class="table is-fullwidth">
             <thead>
             <tr>
                     <th>Office</th>
                     <th>Total No. Of Shipping Orders</th>
+                    <th>Employees Employed</th>
                     <th>Total Revenue</th>
 
             </tr>
@@ -94,6 +108,7 @@
                     <tr>
                     <th>{{ each.return_office }}</th>
                     <th>{{ each.TotalPackages }}</th>
+                    <th>{{ each.TotalEmployees}}</th>
                     <th>${{ each.TotalRev }}</th>
                     </tr>
             {% endfor %}
@@ -117,8 +132,10 @@
     <section class="section">
         <div class="container">
         <div style="overflow-x: auto;">
+        <a id="MonthLog"></a>
         <h1> Employee Stats Last 30 Days </h1>
-        Below shows each employee and their logged information over the past 30 days. This includes their hours worked and all unique packages delivered either to other offices or to their destination.
+        Below shows each employee and their logged information over the past 30 days. This includes their hours worked and all unique packages delivered either to other offices or to their destination.<br/>
+        <a href="#Index">Click to return to Index</a><br/>
         <table class="table is-fullwidth">
             <thead>
             <tr>
@@ -149,8 +166,10 @@
     <section class="section">
         <div class="container">
         <div style="overflow-x: auto;">
+        <a id="ShiftReport"></a>
         <h1> Employee Shift Details Report </h1>
-        Below is a detailed log of each shift logged by an employee, including their hours worked that shift, which vehicle was used, and how many packages they delivered.
+        Below is a detailed log of each shift logged by an employee, including their hours worked that shift, which vehicle was used, and how many packages they delivered.<br/>
+        <a href="#Index">Click to return to Index</a><br/>
         <table class="table is-fullwidth">
             <thead>
             <tr>

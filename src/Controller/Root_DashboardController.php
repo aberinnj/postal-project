@@ -216,8 +216,9 @@ class Root_DashboardController extends AbstractController {
     protected function ReportOfficeStats(Connection $connection) {
         //get data number of packages shipped by an office and the total amount of revenue
         try{
-            $sql = "SELECT P.return_office, COUNT(P.PackageID) AS TotalPackages, SUM(T.TransactionTotal) AS TotalRev
-            FROM package AS P, transaction AS T
+            $sql = "SELECT P.return_office, COUNT(P.PackageID) AS TotalPackages, SUM(T.TransactionTotal) AS TotalRev, EE.TotalEmployees
+            FROM (package AS P, transaction AS T) LEFT OUTER JOIN (SELECT O.OfficeID, COUNT(DISTINCT E.EmployeeID) AS TotalEmployees FROM employee AS E, office AS O WHERE E.OfficeID = O.OfficeID GROUP BY O.OfficeID) AS EE
+            ON EE.OfficeID = P.return_office
             WHERE P.PackageID = T.PackageID
             GROUP BY P.return_office
             ";
