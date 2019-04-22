@@ -6,6 +6,7 @@ use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Entity\Tracking;
 
 class CustomerTrackingController extends Root_DashboardController {
 
@@ -62,6 +63,17 @@ class CustomerTrackingController extends Root_DashboardController {
             $data = $this->trackingQuery($connection, $previous_tracking_data);
             $status = $this->statusQuery($connection, $previous_tracking_data);
         } 
+        $action = $this->requestPage('customer', 'app-main-page');
+        if ($action) {
+            return $action;
+        }
+
+        $tr = new Tracking();
+        $tr->setPackageID($id);
+        $PID = $tr->getPackageID();
+        $data = $this->trackingQuery($connection, $tr);
+        $status = $this->statusQuery($connection, $tr);
+        //$returnTransaction = ($this->getReturnAddressQuery($connection, $id))[0];
 
 
         $trackingBundle = $this->tracking($previous_tracking_data);

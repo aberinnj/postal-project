@@ -18,7 +18,7 @@ Not doing so won't break anything, of course, however the experience is a bit le
 ---------------------
 
 INSTRUCTIONS (FRONT END):
-The site is, for the most part, pretty intuitive. But just in case, here's a general guide to the standard and expected usage.
+The site is, for the most part, pretty intuitive. But just in case, here's a detailed guide to the standard and expected usage.
 
     HOME PAGE:
         This page contains 3 basic important functions. 
