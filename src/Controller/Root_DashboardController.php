@@ -173,7 +173,7 @@ class Root_DashboardController extends AbstractController {
             //Requires trigger: when a shift is inserted into the shift table
             //get the shift id, use shift vehicle to link with package vehicle and assign shift id to that package
             //get each shift, the employee associated with the shift, the number of packages handled and delivered, and datetime information about the shift
-            $sql = "SELECT S.ShiftSession, E.EmployeeID, E.FirstName, E.MiddleName, E.LastName,S.Clock_in_dateTime, S.Hours_Worked, S.VehicleID, COUNT(DISTINCT T.Package_ID) AS Delivered
+            $sql = "SELECT S.ShiftSession, E.EmployeeID, E.FirstName, E.MiddleName, E.LastName,S.Clock_in_dateTime, S.Hours_Worked, S.VehicleID, COUNT(DISTINCT T.Package_ID) AS Delivered, E.OfficeID
                     FROM shift AS S, employee AS E, package AS P, tracking AS T
                     WHERE S.EmployeeID = E.EmployeeID AND S.ShiftSession = T.ShiftID
                     GROUP BY S.ShiftSession

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 21, 2019 at 10:53 PM
+-- Generation Time: Apr 22, 2019 at 07:38 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.2.14
 
@@ -175,23 +175,70 @@ CREATE TABLE IF NOT EXISTS `office` (
 --
 
 INSERT INTO `office` (`OfficeID`, `State`, `City`, `ZIP`, `Street`, `isRegional`) VALUES
+('ALB001', 32, 'Albany', 12084, 'New York Street', 1),
+('ANN001', 20, 'Annapolis', 21401, 'Maryland Street', 1),
+('ATL001', 10, 'Atlanta', 30301, 'Georgia Street', 1),
+('AUG001', 19, 'Augusta\r\n', 30805, 'Maine Street', 1),
 ('AUS001', 43, 'Austin', 78701, '212 East 6th St', 1),
 ('AUS002', 43, 'Austin', 78704, '3001 South Congress Avenue', 0),
+('BIS001', 33, 'Bismarck', 58501, 'North Dakota Street', 1),
+('BOI001', 12, 'Boise', 83701, 'Idaho Street', 1),
+('BOS001', 21, 'Boston', 2101, 'Massachusetts Street', 1),
+('BRO001', 18, 'Baton Rouge', 70801, 'Louisiana Street', 1),
+('CAR001', 28, 'Carson City', 89403, 'Nevada Street', 1),
+('CHA001', 48, 'Charleston', 29401, 'West Virginia Street', 1),
+('CHE001', 50, 'Cheyenne', 82001, 'Wyoming Street', 1),
+('COL001', 35, 'Columbus', 43004, 'North Dakota Street', 1),
+('CON001', 29, 'Concord', 94518, 'New Hampshire Street', 1),
+('DEN001', 6, 'Denver', 80014, 'Colorado Street', 1),
 ('DFW001', 43, 'Fort Worth', 76131, '5601 Mark IV Parkway', 0),
 ('DFW002', 43, 'Plano', 75093, '6121 West Park Blvd', 0),
 ('DFW003', 43, 'Irving', 75038, '5000 Hanson Drive', 0),
+('DMO001', 15, 'Des Moines', 50047, 'Iowa Street', 1),
+('DOV001', 8, 'Dover', 19901, 'Delaware Street', 1),
 ('ELP001', 43, 'El Paso', 79901, '114 W Mills Ave', 0),
+('FRA001', 17, 'Frankfort', 40601, 'Kentucky Street', 1),
+('HAR001', 7, 'Hartford', 6101, 'Connecticut Street', 1),
+('HEL001', 26, 'Helena', 59601, 'Montana Street', 1),
+('HON001', 11, 'Honolulu', 96795, 'Hawaii Street', 1),
 ('HOU001', 43, 'Houston', 77023, '3525 Sage Road', 0),
 ('HOU002', 43, 'Katy', 77494, '12212 Westheimer Parkway', 0),
 ('HOU003', 43, 'Baytown', 77015, '13311 East Freeway', 0),
 ('HOU004', 43, 'Sugar Land', 77479, '2700 Town Center Boulevard North', 0),
 ('HOU005', 43, 'The Woodlands', 77380, '1201 Lake Woodlands Drive', 0),
+('IND001', 14, 'Indianapolis', 46077, 'Indiana Street', 1),
+('JAC001', 24, 'Jackson', 39056, 'Mississippi Street', 1),
+('JEF001', 25, 'Jefferson City', 65043, 'Missouri Street', 1),
+('JUN001', 2, 'Juneau', 99801, 'Alaska Street', 1),
+('LAN001', 22, 'Lansing', 48864, 'Michigan Street', 1),
+('LIN001', 27, 'Lincoln', 68501, 'Nebraska Street', 1),
+('LRO001', 4, 'Little Rock', 72002, 'Arkansas Street', 1),
+('MAD001', 49, 'Madison', 53558, 'Wisconsin Street', 1),
 ('MON001', 1, 'Montgomery', 35004, 'Montgomery Ave.', 1),
+('MOP001', 45, 'Montpelier', 5601, 'Vermont Street', 1),
+('NAS001', 42, 'Tennessee', 37011, 'Tennessee Street', 1),
+('OKL001', 36, 'Oklahoma City', 73008, 'Oklahoma Street', 1),
 ('OLY001', 47, 'Olympia', 98501, '414 Jefferson St NE', 1),
 ('OLY002', 47, 'Olympia', 98599, '2201 Homer St', 0),
+('PEN001', 38, 'Harrisburg', 17025, 'Pennsylvania Street', 1),
+('PHO001', 3, 'Phoenix', 85001, 'Arizona Street', 1),
+('PIE001', 41, 'Pierre', 57501, 'South Dakota Street', 1),
+('PRO001', 39, 'Providence', 17025, 'Rhode Island Street', 1),
+('RAL001', 34, 'Raleigh', 27513, 'North Carolina Street', 1),
+('RIC001', 46, 'Richmond', 23173, 'Virginia Street', 1),
+('SAC001', 5, 'Sacramento', 94203, 'California Street', 1),
+('SAF001', 31, 'Santa Fe', 87501, 'New Mexico Street', 1),
+('SAL001', 37, 'Salem', 97301, 'Oklahoma Street', 1),
 ('SAN001', 43, 'San Antonio', 78216, '151 Interpark Boulevard', 0),
+('SCA001', 40, 'Columbia', 29044, 'South Carolina Street', 1),
 ('SEA001', 47, 'Seattle', 98401, '420 Valid St', 0),
 ('SEA002', 47, 'Seattle', 98101, '911 Pine St', 0),
+('SLC001', 44, 'Salt Lake City', 84044, 'Utah Street', 1),
+('SPA001', 23, 'St. Paul', 55101, 'Minnesota Street', 1),
+('SPR001', 13, 'Springfield', 65619, 'Illinois Street', 1),
+('TAL001', 9, 'Tallahassee', 32301, 'Florida Street', 1),
+('TOP001', 16, 'Topeka', 66546, 'Kansas Street', 1),
+('TRE001', 30, 'Trenton', 8601, 'New Jersey Street', 1),
 ('VAN001', 47, 'Vancouver', 98662, '8700 NE Vancouver Mall Dr', 0);
 
 -- --------------------------------------------------------
@@ -236,7 +283,7 @@ CREATE TABLE IF NOT EXISTS `package` (
   KEY `Package_ibfk_6` (`VehicleID`),
   KEY `Package_ibfk_7` (`return_office`),
   KEY `ShiftID` (`ShiftID`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `package`
@@ -246,7 +293,8 @@ INSERT INTO `package` (`PackageID`, `RecipientName`, `Email`, `Weight`, `Length`
 (24, 'Marco', 'cooper@hotmail.com', '5.00', '5.00', '5.00', '5.00', 43, 'Austin', 77534, '1111 Street', NULL, 43, 'Man', 77534, 'notFree Ln', NULL, 0, '2019-04-21', 1, 5, NULL, NULL, 'AUS001', 33),
 (25, 'James', 'cooper@hotmail.com', '6.00', '5.00', '5.00', '5.00', 43, 'Austin', 77534, '1111 Street', NULL, 43, 'Man', 77534, 'notFree Ln', NULL, 0, '2019-04-21', 1, 5, NULL, NULL, 'HOU002', 33),
 (26, 'Marty', 'cooper@hotmail.com', '5.00', '5.00', '5.00', '5.00', 43, 'Ala', 77534, '1111 Street', NULL, 43, 'Man', 77534, 'notFree Ln', NULL, 0, '2019-04-21', 1, 5, NULL, NULL, 'AUS001', 33),
-(27, 'Marco', 'cooper@hotmail.com', '5.00', '5.00', '5.00', '5.00', 43, 'Houston', 77777, '1111 Street', NULL, 43, 'Man', 77777, 'notFree Ln', NULL, 0, '2019-04-21', 1, 5, NULL, NULL, 'AUS001', 34);
+(27, 'Marco', 'cooper@hotmail.com', '5.00', '5.00', '5.00', '5.00', 43, 'Houston', 77777, '1111 Street', NULL, 43, 'Man', 77777, 'notFree Ln', NULL, 0, '2019-04-21', 1, 5, NULL, NULL, 'AUS001', 34),
+(28, 'Marco', 'cooper@hotmail.com', '5.00', '5.00', '5.00', '5.00', 43, 'Austin', 77534, '1111 Street', NULL, 43, 'Man', 77534, 'notFree Ln', NULL, 0, '2019-04-22', 1, 5, NULL, NULL, 'HOU002', 35);
 
 --
 -- Triggers `package`
@@ -328,7 +376,7 @@ CREATE TABLE IF NOT EXISTS `shift` (
   PRIMARY KEY (`ShiftSession`),
   KEY `Shift_ibfk_2` (`VehicleID`),
   KEY `EmployeeID` (`EmployeeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `shift`
@@ -338,7 +386,8 @@ INSERT INTO `shift` (`ShiftSession`, `EmployeeID`, `Clock_in_dateTime`, `Clock_o
 (31, 1000005, '2019-04-21 17:11:18', '2019-04-21 17:11:40', '0.00', 'AAAAAAA0000000010'),
 (32, 1000000, '2019-04-21 17:14:11', '2019-04-21 17:14:34', '0.00', 'AAAAAAA0000000000'),
 (33, 1000005, '2019-04-21 17:15:14', '2019-04-21 17:16:08', '0.00', 'AAAAAAA0000000010'),
-(34, 1000000, '2019-04-21 17:16:29', '2019-04-21 17:16:34', '0.00', 'AAAAAAA0000000000');
+(34, 1000000, '2019-04-21 17:16:29', '2019-04-21 17:16:34', '0.00', 'AAAAAAA0000000000'),
+(35, 1000000, '2019-04-22 02:36:13', '2019-04-22 02:37:23', '0.02', 'AAAAAAA0000000000');
 
 --
 -- Triggers `shift`
@@ -477,7 +526,7 @@ CREATE TABLE IF NOT EXISTS `tracking` (
   KEY `Tracking_ibfk_1` (`Package_ID`),
   KEY `Tracking_ibfk_2` (`OfficeID`),
   KEY `ShiftID` (`ShiftID`)
-) ENGINE=InnoDB AUTO_INCREMENT=158 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tracking`
@@ -511,7 +560,11 @@ INSERT INTO `tracking` (`Tracking_Index`, `Package_ID`, `TrackingNote`, `Update_
 (154, 26, 'Package delivered', '2019-04-21 22:16:07', NULL, 33),
 (155, 27, 'Package transferred to HOU002', '2019-04-21 22:16:25', 'HOU002', 33),
 (156, 27, 'Left Courier.PO facility', '2019-04-21 22:16:29', NULL, 34),
-(157, 27, 'Package delivered', '2019-04-21 22:16:32', NULL, 34);
+(157, 27, 'Package delivered', '2019-04-21 22:16:32', NULL, 34),
+(158, 28, 'Package Picked Up.', '2019-04-22 07:35:58', 'HOU002', NULL),
+(159, 28, 'Package transferred to HOU002', '2019-04-22 07:36:09', 'HOU002', NULL),
+(160, 28, 'Left Courier.PO facility', '2019-04-22 07:36:13', NULL, 35),
+(161, 28, 'Package delivered', '2019-04-22 07:37:20', NULL, 35);
 
 -- --------------------------------------------------------
 
@@ -527,7 +580,7 @@ CREATE TABLE IF NOT EXISTS `transaction` (
   `TransactionDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`TransactionID`),
   KEY `Transaction_ibfk_2` (`PackageID`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `transaction`
@@ -537,7 +590,8 @@ INSERT INTO `transaction` (`TransactionID`, `PackageID`, `TransactionTotal`, `Tr
 (30, 24, '7.50', '2019-04-21 17:10:32'),
 (31, 25, '7.50', '2019-04-21 17:12:28'),
 (32, 26, '7.50', '2019-04-21 17:12:52'),
-(33, 27, '7.50', '2019-04-21 17:13:20');
+(33, 27, '7.50', '2019-04-21 17:13:20'),
+(34, 28, '7.50', '2019-04-22 02:35:58');
 
 -- --------------------------------------------------------
 
@@ -583,7 +637,60 @@ INSERT INTO `vehicle` (`OfficeID`, `VIN`, `Vehicle_Type`, `Status`) VALUES
 ('MON001', 'AAAAAAA0000000009', 'Truck', 0),
 ('AUS001', 'AAAAAAA0000000010', 'Truck', 0),
 ('HOU004', 'AAAAAAA0000000012', 'Van', 1),
-('HOU003', 'AAAAAAA0000000013', 'Van', 0);
+('HOU003', 'AAAAAAA0000000013', 'Van', 0),
+('ALB001', 'AAAAAAA0000000014', 'Van', NULL),
+('JUN001', 'AAAAAAA0000000015', 'Van', NULL),
+('PHO001', 'AAAAAAA0000000016', 'Van', NULL),
+('LRO001', 'AAAAAAA0000000017', 'Van', NULL),
+('SAC001', 'AAAAAAA0000000018', 'Van', NULL),
+('DEN001', 'AAAAAAA0000000019', 'Van', NULL),
+('HAR001', 'AAAAAAA0000000020', 'Van', NULL),
+('DOV001', 'AAAAAAA0000000021', 'Van', NULL),
+('TAL001', 'AAAAAAA0000000022', 'Van', NULL),
+('ATL001', 'AAAAAAA0000000023', 'Van', NULL),
+('HON001', 'AAAAAAA0000000024', 'Van', NULL),
+('BOI001', 'AAAAAAA0000000025', 'Van', NULL),
+('SPR001', 'AAAAAAA0000000026', 'Van', NULL),
+('IND001', 'AAAAAAA0000000027', 'Van', NULL),
+('DMO001', 'AAAAAAA0000000028', 'Van', NULL),
+('TOP001', 'AAAAAAA0000000029', 'Van', NULL),
+('FRA001', 'AAAAAAA0000000030', 'Van', NULL),
+('BRO001', 'AAAAAAA0000000031', 'Van', NULL),
+('AUG001', 'AAAAAAA0000000032', 'Van', NULL),
+('ANN001', 'AAAAAAA0000000033', 'Van', NULL),
+('BOS001', 'AAAAAAA0000000034', 'Van', NULL),
+('LAN001', 'AAAAAAA0000000035', 'Van', NULL),
+('SPA001', 'AAAAAAA0000000036', 'Van', NULL),
+('JAC001', 'AAAAAAA0000000037', 'Van', NULL),
+('JEF001', 'AAAAAAA0000000038', 'Van', NULL),
+('HEL001', 'AAAAAAA0000000039', 'Van', NULL),
+('LIN001', 'AAAAAAA0000000040', 'Van', NULL),
+('CAR001', 'AAAAAAA0000000041', 'Van', NULL),
+('CON001', 'AAAAAAA0000000042', 'Van', NULL),
+('TRE001', 'AAAAAAA0000000043', 'Van', NULL),
+('SAF001', 'AAAAAAA0000000044', 'Van', NULL),
+('ALB001', 'AAAAAAA0000000045', 'Van', NULL),
+('BIS001', 'AAAAAAA0000000046', 'Van', NULL),
+('RAL001', 'AAAAAAA0000000047', 'Van', NULL),
+('COL001', 'AAAAAAA0000000048', 'Van', NULL),
+('OKL001', 'AAAAAAA0000000049', 'Van', NULL),
+('SAL001', 'AAAAAAA0000000050', 'Van', NULL),
+('PEN001', 'AAAAAAA0000000051', 'Van', NULL),
+('PRO001', 'AAAAAAA0000000052', 'Van', NULL),
+('SCA001', 'AAAAAAA0000000053', 'Van', NULL),
+('PIE001', 'AAAAAAA0000000054', 'Van', NULL),
+('NAS001', 'AAAAAAA0000000055', 'Van', NULL),
+('SLC001', 'AAAAAAA0000000056', 'Van', NULL),
+('MOP001', 'AAAAAAA0000000057', 'Van', NULL),
+('RIC001', 'AAAAAAA0000000058', 'Van', NULL),
+('OLY002', 'AAAAAAA0000000059', 'Van', NULL),
+('SEA001', 'AAAAAAA0000000060', 'Van', NULL),
+('SEA002', 'AAAAAAA0000000061', 'Van', NULL),
+('OLY001', 'AAAAAAA0000000062', 'Van', NULL),
+('VAN001', 'AAAAAAA0000000063', 'Van', NULL),
+('CHA001', 'AAAAAAA0000000064', 'Van', NULL),
+('MAD001', 'AAAAAAA0000000065', 'Van', NULL),
+('CHE001', 'AAAAAAA0000000066', 'Van', NULL);
 
 -- --------------------------------------------------------
 
