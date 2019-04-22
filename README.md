@@ -1,4 +1,4 @@
-Welcome to Group 1's (Tuesday/Thursday) postal office project!
+# Welcome to Group 1's (Tuesday/Thursday) postal office project!
 This document contains 3 important sections, that is the IMPORTANT, the INSTRUCTIONS and the CREDENTIALS. There are also some backend information should they matter. If you have any questions feel free to email our group leader.
 ---------------------
 IMPORTANT:
