@@ -12,8 +12,8 @@ class CustomerLoginForm extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options){
         $builder
-            ->add('Email', EmailType::class, [ 'label' => false, 'attr' => ['placeholder' => 'Email']])
-            ->add('Password', PasswordType::class, ['label' => false, 'attr' => ['placeholder' => 'Password']])
-            ->add('Submit', SubmitType::class, [ 'label' => 'Login'] );
+            ->add('Email', EmailType::class, [ 'label' => false, 'attr' => ['placeholder' => 'Email', 'class'=>'input']])
+            ->add('Password', PasswordType::class, ['label' => false, 'attr' => ['placeholder' => 'Password', 'class'=>'input']])
+            ->add('Submit', SubmitType::class, [ 'label' => 'Login', 'attr'=>['class'=>'button is-fullwdith is-primary is-fullwidth']] );
     }
 }

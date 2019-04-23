@@ -134,7 +134,7 @@ section.info div {
     width: 100%;
     font-size: .65em;
     padding: 2px 5px;
-    background-color: #c8102e;
+    background-color: #960C22;
 }
 
 .postal-copyright *, .postal-copyright a:hover, .postal-copyright a:visited {
@@ -148,6 +148,10 @@ section.info div {
     justify-content: center;
 }
 
+.footer {
+    background-color: #292929;
+}
+
 .footer-listing ul {
     list-style: none;
     font-size: 1.1em;
@@ -155,7 +159,7 @@ section.info div {
 }
 
 .footer-listing ul li a, .footer-listing ul li a:visited, .footer-listing ul li a:active {
-    color: #00866C;
+    color: #ffffff;
 }
 
 .footer-listing ul li a:hover {
@@ -218,6 +222,38 @@ section.info div {
     background-position: center; 
     background-repeat: no-repeat; 
     background-size: cover;
+}
+
+.postal-bg-tracking {
+    background-image: url("../images/architecture-building-city-2047397.jpg");
+    background-color: #ffffff;
+    height: inherit;
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-size: cover;
+}
+
+.postal-bg-register {
+    background-image: url("../images/blur-businesswoman-close-up.jpg");
+    background-color: #ffffff;
+    height: inherit;
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-size: cover;
+}
+
+.postal-bg-register section {
+    background: rgba(216, 155, 0, .8)
+}
+
+
+.postal-header-banner div{
+    text-align: center;
+    color: #ffffff
+}
+
+.postal-bg-tracking section{
+    background-color: rgba(0, 89, 80, .64)
 }
 
 section.breadcrumbs {
@@ -298,4 +334,8 @@ h1 {
 h2 {
     font-size: 20px;
     font-weight: 700;
+}
+
+.postal-form-space div{
+    margin-bottom: 5px;
 }

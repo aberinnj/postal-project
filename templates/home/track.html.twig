@@ -15,14 +15,15 @@
         {{ parent() }}
     </section>
 
+    <div class="postal-bg-tracking">
     <section class="section is-medium">
-        <div>
+        <div class="postal">
             <div class="columns is-mobile">
             <div class="column is-4 is-offset-4 postal-track-ribbon">
             
                 {{ form_start(tracking) }}
                     <div class="container has-text-centered">
-                        <div class="title">Enter a CourierPO tracking number.</div>
+                        <div class="title" style="color: #fff">Enter a CourierPO tracking number.</div>
                             <div class="package-track-form">
                                 {{ form_row(tracking.PackageID) }}
 
@@ -36,6 +37,7 @@
 
         </div>
     </section>
+    </div>
 
     {% block trackResult %} 
     

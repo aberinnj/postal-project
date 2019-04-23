@@ -11,7 +11,7 @@ class TrackingForm extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options){
         $builder
-        ->add('PackageID', TextType::class, ['label' => false,  'required' => true])
+        ->add('PackageID', TextType::class, ['label' => false,  'required' => true, 'attr'=>['placeholder'=>'Enter Your Tracking ID']])
         ->add('Submit', SubmitType::class, ['label' => 'Submit']);
     }
 }

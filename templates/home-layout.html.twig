@@ -52,7 +52,18 @@
                                 <div class="dropdown-content">
 
                                     <div class="dropdown-item">
-                                    {{ form(login) }}
+                                    {{ form_start(login) }}
+
+                                    <div class="postal-form-space">
+                                        <label class="label">Customer Login</label>
+                                        {{ form_row(login.Email)}}
+
+                                        {{ form_row(login.Password)}}
+
+                                        {{ form_row(login.Submit)}}
+                                    </div>
+
+                                    {{ form_end(login) }}
                                     </div>
                                     <hr class="dropdown-divider">
 
