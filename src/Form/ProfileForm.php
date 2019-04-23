@@ -16,14 +16,13 @@ class ProfileForm extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options){
         $builder
-        ->add('Email', TextType::class, ['label' => 'Email ',  'required' => false, 'attr'=>['readonly'=>true]])
-        ->add('Password', PasswordType::class, ['label' => 'Password ',  'required' => true])
-        ->add('FName', TextType::class, ['label' => 'First Name ',  'required' => true])
-        ->add('MInit', TextType::class, ['label' => 'Middle Initial ',  'required' => true])
-        ->add('LName', TextType::class, ['label' => 'Last Name ',  'required' => true])
-        ->add('Street', TextType::class, ['label' => 'Street Address ',  'required' => true])
-        ->add('ApartmentNo', NumberType::class, ['label' => 'Apartment No. ', 'required' => false])
-        ->add('City', TextType::class, ['label' => 'City ',  'required' => true])
+        ->add('Email', TextType::class, ['label' => 'Email ',  'required' => false, 'attr'=>['readonly'=>true, 'class'=>'input is-fullwidth']])
+        ->add('FName', TextType::class, ['label' => 'First Name ',  'required' => true, 'attr'=>['class'=>'input is-fullwidth']])
+        ->add('MInit', TextType::class, ['label' => 'Middle Initial ',  'required' => true, 'attr'=>['class'=>'input is-fullwidth']])
+        ->add('LName', TextType::class, ['label' => 'Last Name ',  'required' => true, 'attr'=>['class'=>'input is-fullwidth']])
+        ->add('Street', TextType::class, ['label' => 'Street Address ',  'required' => true, 'attr'=>['class'=>'input is-fullwidth']])
+        ->add('ApartmentNo', NumberType::class, ['label' => 'Apartment No. ', 'required' => false, 'attr'=>['class'=>'input is-fullwidth']])
+        ->add('City', TextType::class, ['label' => 'City ',  'required' => true, 'attr'=>['class'=>'input is-fullwidth']])
         ->add('State', ChoiceType::class, ['label'=> 'State ','choices' => [
             'Alabama'=>1,
             'Alaska'=>2,
@@ -75,8 +74,8 @@ class ProfileForm extends AbstractType {
             'West Virginia'=>48,
             'Wisconsin'=>49,
             'Wyoming'=>50
-        ],  'required' => true])
-        ->add('ZIP', NumberType::class, ['label' => 'ZIP Code ',  'required' => true])
+        ],  'required' => true, 'attr'=>['class'=>'input is-fullwidth']])
+        ->add('ZIP', NumberType::class, ['label' => 'ZIP Code ',  'required' => true, 'attr'=>['class'=>'input is-fullwidth']])
         ->add('Update', SubmitType::class, ['label' => 'Update Profile']);
     }
 }

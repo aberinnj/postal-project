@@ -27,12 +27,29 @@ class CustomerProfileController extends Root_DashboardController {
         if($logoutHandler) {
             return $logoutHandler;
         }
-
+        $profileData = $this->GetProfileQuery($connection, $user['id'])[0];
         $profile = new Registration();
+        $profile->setEmail($profileData['Email']);
+        $profile->setFName($profileData['FName']);
+        $profile->setMInit($profileData['MInit']);
+        $profile->setLname($profileData['LName']);
+        $profile->setState($profileData['State']);
+        $profile->setCity($profileData['City']);
+        $profile->setApartmentNo($profileData['ApartmentNo']);
+        $profile->setStreet($profileData['Street']);
+        $profile->setZIP($profileData['ZIP']);
+
+
         $profileForm = $this->createForm(ProfileForm::class, $profile);
+        $profileForm->handleRequest($request);
         
+        if($profileForm->isSubmitted() && $profileForm->isValid()) {
+            $profile = $profileForm->getData();
+            $this->UpdateProfileQuery($connection, $profile);
+        }
 
         $name = ($this->CustomerDetailsQuery($connection, $user['id']))[0];
+
         $orderList = ($this->CustomerOrdersQuery($connection, $user['id']));
         return $this->render('customer/profile.html.twig', [
             'logout'=>$logoutForm->createView(),

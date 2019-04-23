@@ -6,6 +6,7 @@ use App\Entity\Tracking;
 use App\Entity\Invoice;
 use App\Entity\Package;
 use App\Entity\Delivery;
+use App\Entity\Registration;
 use App\Form\CustomerPackageForm;
 use App\Form\InvoiceForm;
 use App\Form\TrackingForm;
@@ -133,6 +134,42 @@ class Root_DashboardController extends AbstractController {
     /*******************************************************************************
      * All Dashboard Queries
     *******************************************************************************/
+
+    protected function GetProfileQuery(Connection $connection, $identity) {
+        try{
+            $sql = "SELECT * FROM customer WHERE customer.Email = :email;";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':email', $identity);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+    protected function UpdateProfileQuery(Connection $connection, Registration $registration) {
+        try{
+            $sql = "UPDATE customer SET customer.Fname = :FName, customer.MInit = :MInit, customer.LName = :LName,  customer.State = :State, customer.City = :City, customer.ZIP = :ZIP, customer.Street = :Street, customer.ApartmentNo = :ApartmentNo WHERE customer.Email = :email;";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':FName', $registration->getFName());
+            $stmt->bindValue(':MInit', $registration->getMInit());
+            $stmt->bindValue(':LName', $registration->getLName());
+            $stmt->bindValue(':email', $registration->getEmail());
+            $stmt->bindValue(':State', $registration->getState());
+            $stmt->bindValue(':City', $registration->getCity());
+            $stmt->bindValue(':ZIP', $registration->getZIP());
+            $stmt->bindValue(':Street', $registration->getStreet());
+            $stmt->bindValue(':ApartmentNo', $registration->getApartmentNo());
+            $stmt->execute();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
     protected function CustomerDetailsQuery(Connection $connection, $identity) {
         try{
             $sql = "SELECT FName, LName FROM customer WHERE customer.Email = :email;";
