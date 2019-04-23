@@ -26,9 +26,9 @@ class CustomerInvoiceController extends Root_DashboardController {
             return $logoutHandler;
         }
 
-        $trackingBundle = $this->tracking();
-        $trackingForm = $trackingBundle[1];
-        $trackingHandler = $this->handleTracking($request, $trackingForm, $trackingBundle[0], "Invoice");
+        $trackingBundle = $this->invoice();
+        $invoiceForm = $trackingBundle[1];
+        $trackingHandler = $this->handleTracking($request, $invoiceForm, $trackingBundle[0], "Invoice");
 
         if($trackingHandler) {
             return $trackingHandler;
@@ -38,7 +38,7 @@ class CustomerInvoiceController extends Root_DashboardController {
         return $this->render('customer/invoice.html.twig', [
             'logout' => $logoutForm->createView(),
             'breadcrumbs'=> $breadcrumbs,
-            'tracking' => $trackingForm->createView(),
+            'tracking' => $invoiceForm->createView(),
             'name'=> $name["FName"]." ".$name["LName"],
         ]);
     }
@@ -63,18 +63,30 @@ class CustomerInvoiceController extends Root_DashboardController {
 
         
         $name = ($this->CustomerDetailsQuery($connection, $user['id']))[0];
-        $transaction = ($this->getInvoiceQuery($connection, $user['id'], $id))[0];
+        $data = ($this->getInvoiceQuery($connection, $user['id'], $id));
         
-        $returnTransaction = ($this->getReturnAddressQuery($connection, $id))[0];
+        $transaction = [];
+        $pid = "";
+        if(count($data) > 0) {
+            $transaction = $data[0];
+            $pid = $transaction['pid'];
+        }
+        
+        $data = ($this->getReturnAddressQuery($connection, $id));
+        $returnTransaction = [];
+        if(count($data) > 0) {
+
+            $returnTransaction = $data[0];
+        }
+        
         
         return $this->render('customer/invoice_id.html.twig', [
             'logout' => $logoutForm->createView(),
-            'pid' => $transaction['pid'],
+            'pid' => $pid,
             'email' => $user['id'],
             'breadcrumbs'=> $breadcrumbs,
-            'fullret_street' => $returnTransaction['return_Street'].' '.$returnTransaction['return_ApartmentNo'],
+            'return_transaction' => $returnTransaction,
             'transaction' => $transaction,
-            'fullret_region' => $returnTransaction['return_City'].', '.$returnTransaction['StateName'].' '.$returnTransaction['return_ZIP'],
             'name'=> $name["FName"]." ".$name["LName"],
         ]);
     }

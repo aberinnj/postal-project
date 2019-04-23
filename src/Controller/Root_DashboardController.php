@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Tracking;
+use App\Entity\Invoice;
 use App\Entity\Package;
 use App\Entity\Delivery;
 use App\Form\CustomerPackageForm;
+use App\Form\InvoiceForm;
 use App\Form\TrackingForm;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,6 +59,17 @@ class Root_DashboardController extends AbstractController {
         return null;
     }
 
+    public function invoice($new_tracking_found=null) {
+        if ($new_tracking_found) {
+            $tracking = $new_tracking_found;
+        } else {
+            $tracking = new Invoice();
+        }
+
+        $trackingForm = $this->createForm(InvoiceForm::class, $tracking);
+        return Array($tracking, $trackingForm);
+    }
+
     //
     public function tracking($new_tracking_found=null) {
         if ($new_tracking_found) {
@@ -87,7 +100,12 @@ class Root_DashboardController extends AbstractController {
                     $route = "app-customer-invoice-id";
                     break;
             }
-            return $this->redirectToRoute($route, ['id'=>$tracking->getPackageID()]);
+            if ($type == "Tracking") {
+                return $this->redirectToRoute($route, ['id'=>$tracking->getPackageID()]);
+            } else {
+                return $this->redirectToRoute($route, ['id'=>$tracking->getInvoiceID()]);
+            }
+
         }
         return null;
     }

@@ -3,7 +3,8 @@
 {% block body %}
 {{ parent() }}
 
-    <section id="postal-banner" class="section postal-banner">
+    {% if pid|length > 0 %}
+<section id="postal-banner" class="section postal-banner">
         <div class="container">
 
             {% for crumbsKey, crumbsValue in breadcrumbs %}
@@ -11,13 +12,12 @@
             {% endfor %}
 
             <div class="title">Viewing Invoice</div>
-            <div class="subtitle">For Package {{ pid }}</div>
         </div>
 
     </section>
 
 
-    {% if transaction is defined %}
+    {% if transaction|length > 0 %}
 
     <section class="section">
         <div class="container">
@@ -37,8 +37,8 @@
     <div>
       <p class="heading">Return</p>
       <p class="title">
-        {{fullret_street}}<br/>
-        {{fullret_region}}
+        {{return_transaction.return_Street}} {% if return_transaction.return_ApartmentNo is defined %}{{return_transaction.return_ApartmentNo}}{% endif %}<br/>
+        {{return_transaction.return_City}}, {{return_transaction.StateName}} {{return_transaction.return_ZIP}}
       </p>
     </div>
   </div>
@@ -118,4 +118,31 @@
     </section>
 
     {% endif %}
+    {% else %}
+
+    <section id="postal-banner" class="section postal-banner">
+        <div class="container">
+
+            {% for crumbsKey, crumbsValue in breadcrumbs %}
+                <a href={{ crumbsValue }}>{{ crumbsKey}}</a> <strong>/</strong>
+            {% endfor %}
+
+            <div class="title">View Invoice</div>
+            <div class="subtitle">Invoice not found.</div>
+        </div>
+
+    </section>
+    <section class="section">
+    <div class="container">
+
+      <div class="notification is-warning">
+        Uh Oh! Invoice not found. <br/>
+        <a href="{{path('app-customer-invoice')}}"> Return </a>
+      </div>
+
+    </div>
+    </section>
+            
+    {% endif %}
+    
 {% endblock %}

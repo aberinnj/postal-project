@@ -18,41 +18,72 @@
     </section>
     {% block trackResult %} 
     
-    <section class="section is-small tracking-history-result">
+    {% if data|length > 0 %}
+        <section class="section info">
         <div class="container">
-            <div>
-                <div class="subtitle">
-                    Tracking History
-                </div>
 
-                {% if data|length > 0 %}
+            <div class="postal-payment-list">
+                <div class="subtitle"> Tracking No. {{ id }}</div> 
 
-                    <div>
 
-                            {{ id }} - 
-                            {% if status|length > 0 %}
-
-                            {{ status[0].Status }}
-
-                            {% endif %}
-
-                    </div>
-
-                    {% for record in data %}
-                        <div>
-                            {{ record.Date }} -
-                            {{ record.Note }}
-                        </div>
-                        <br/><br/>
+                    <div class="control">
+                        <div class="tags has-addons">
+                        <span class="tag is-dark">Package</span>
+                        <span class="tag is-primary">
                         
-                    {% endfor %}
-
-                {% else %}
-
-                {% endif %}
+                                        {% if status|length > 0 %}
+                                            {{ status[0].Status }}
+                                        {% endif %}
+                        
+                        </span>
+                        </div>
+                    </div>
             </div>
+        <hr>
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Datetime Updated</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody>
+        {% for record in data %}
+                <tr>
+                    <th>{{ record.Date }}</th>
+                    <th>{{ record.Note }}</th>
+                <tr>
+        {% endfor %}
+            </tbody>
+        </table>
+
         </div>
+        </section>
+
+    {% else %}
+        
+    <section class="section">
+        <div class="container">
+
+
+        <article class="message is-warning">
+            <div class="message-header">
+                <p>Invalid TrackingID</p>
+            </div>
+            <div class="message-body">
+                Package with given Tracking ID not found.
+            </div>
+        </article>
+        
+            <div class="subtitle">
+
+            </div>
+            
+        </div>
+
     </section>
+
+    {% endif %}
     
     {% endblock %}
 {% endblock %}
