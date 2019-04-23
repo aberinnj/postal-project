@@ -38,14 +38,22 @@ class HomeController extends Root_HomeController {
         $trackingForm = $trackingBundle[1];
         $trackingHandler = $this->handleTracking($request, $trackingForm, $trackingBundle[0]);
 
+        $feedback = "";
         if($trackingHandler) {
             return $trackingHandler;
         }
-        elseif($loginHandler) {
+        elseif($loginHandler && $loginHandler !== "Invalid") {
             return $loginHandler;
         }
+        else if($loginHandler === "Invalid") {
+            $feedback = "Login Unsuccessful";
+        }
 
-        return $this->render('home/home.html.twig', ['tracking' => $trackingForm->createView(), 'login' => $loginForm->createView()]);
+        return $this->render('home/home.html.twig', [
+            'tracking' => $trackingForm->createView(), 
+            'login' => $loginForm->createView(),
+            'feedback'=> $feedback
+            ]);
     }
 
     /**
@@ -61,8 +69,12 @@ class HomeController extends Root_HomeController {
         $registrationForm = $registrationBundle[1];
         $registrationHandler = $this->handleSignUp_as_customer($connection, $request, $registrationForm, $registrationBundle[0]);
 
-        if($loginHandler){
+        $feedback = "";
+        if($loginHandler && $loginHandler !== "Invalid") {
             return $loginHandler;
+        }
+        else if($loginHandler === "Invalid") {
+            $feedback = "Login Unsuccessful";
         }
         elseif ($registrationHandler) {
             return $registrationHandler;
@@ -70,7 +82,8 @@ class HomeController extends Root_HomeController {
 
         return $this->render('home/register.html.twig', [
             "registration" => $registrationForm->createView(),
-            'login' => $loginForm->createView()
+            'login' => $loginForm->createView(),
+            'feedback' => $feedback
         ]);
     }
 
@@ -80,8 +93,12 @@ class HomeController extends Root_HomeController {
         $loginForm = $loginBundle[1];
         $loginHandler = $this->handleSignIn_as_customer($connection, $request, $loginForm, $loginBundle[0]);
 
-        if($loginHandler) {
+        $feedback = "";
+        if($loginHandler && $loginHandler !== "Invalid") {
             return $loginHandler;
+        }
+        else if($loginHandler === "Invalid") {
+            $feedback = "Login Unsuccessful";
         }
 
         //////////////////////////////////////////////////////////////////////////////////////
@@ -92,6 +109,7 @@ class HomeController extends Root_HomeController {
 
         return $this->render('home/order.html.twig', 
         ['package' => $packageForm->createView(),
+        'feedback' => $feedback,
         'login' => $loginForm->createView()]);
     }
 
@@ -110,9 +128,13 @@ class HomeController extends Root_HomeController {
         $trackingForm = $trackingBundle[1];
         $trackingHandler = $this->handleTracking($request, $trackingForm, $trackingBundle[0]);  
 
-        if($loginHandler){
+        $feedback = "";
+        if($loginHandler && $loginHandler !== "Invalid") {
             return $loginHandler;
-        } 
+        }
+        else if($loginHandler === "Invalid") {
+            $feedback = "Login Unsuccessful";
+        }
         else if($trackingHandler) {
             return $trackingHandler;
         }
@@ -121,6 +143,7 @@ class HomeController extends Root_HomeController {
             'tracking' => $trackingForm->createView(),
             'login' => $loginForm->createView(), 
             'data' => $data,
+            'feedback' => $feedback,
             'id' => $trackingBundle[0]->getPackageID(),
             'status' =>$status
             ]);
@@ -139,9 +162,13 @@ class HomeController extends Root_HomeController {
         $trackingForm = $trackingBundle[1];
         $trackingHandler = $this->handleTracking($request, $trackingForm, $trackingBundle[0]);  
 
-        if($loginHandler){
+        $feedback = "";
+        if($loginHandler && $loginHandler !== "Invalid") {
             return $loginHandler;
-        } 
+        }
+        else if($loginHandler === "Invalid") {
+            $feedback = "Login Unsuccessful";
+        }
         else if($trackingHandler) {
             return $trackingHandler;
         }
@@ -150,6 +177,7 @@ class HomeController extends Root_HomeController {
             'tracking' => $trackingForm->createView(),
             'login' => $loginForm->createView(), 
             'data' => $data,
+            'feedback' => $feedback,
             'id' => $trackingBundle[0]->getPackageID(),
             'status' =>$status
             ]);
@@ -188,14 +216,26 @@ class HomeController extends Root_HomeController {
         $employeeForm = $employeeBundle[1];
         $employeeHandler = $this->handleSignIn_as_employee($connection, $request, $employeeForm, $employeeBundle[0]);
 
-        if($loginHandler){
+        $userdata = "";
+        $feedback = "";
+        if($loginHandler && $loginHandler !== "Invalid") {
             return $loginHandler;
-        } 
+        }
+        else if($loginHandler === "Invalid") {
+            $feedback = "Login Unsuccessful";
+        }
         elseif ($employeeHandler) {
             return $employeeHandler;
+        } else if ($employeeHandler === FALSE) {
+            $userdata = "Login unsuccessful.";
         }
 
-        return $this->render('home/portal.html.twig', ['login' => $loginForm->createView(), 'portal'=>$employeeForm->createView()]);
+        return $this->render('home/portal.html.twig', [
+            'login' => $loginForm->createView(), 
+            'portal'=>$employeeForm->createView(),
+            'feedback2'=>$userdata,
+            'feedback'=>$feedback
+        ]);
     }
         
     /**
@@ -207,13 +247,22 @@ class HomeController extends Root_HomeController {
         $loginForm = $loginBundle[1];
         $loginHandler = $this->handleSignIn_as_customer($connection, $request, $loginForm, $loginBundle[0]);
 
-
-        if($loginHandler){
+        $feedback = "";
+        if($loginHandler && $loginHandler !== "Invalid") {
             return $loginHandler;
-        } 
+        }
+        else if($loginHandler === "Invalid") {
+            $feedback = "Login Unsuccessful";
+        }
 
-        return $this->render('employee/careers.html.twig',
-        ['login' => $loginForm->createView()]);
+        $jobs = [
+            '001'=>['Office'=>'AUS001', 'Position'=>'Courier', 'Details'=>'Manage and deliver packages.'],
+            '002'=>['Office'=>'HOU002', 'Position'=>'Courier', 'Details'=>'Manage and deliver packages.'],
+            '003'=>['Office'=>'ATL001', 'Position'=>'Courier', 'Details'=>'Manage and deliver packages.']];
+        return $this->render('employee/careers.html.twig',[
+            'login' => $loginForm->createView(),
+            'feedback'=> $feedback
+        ]);
     }
 
     /**
@@ -225,8 +274,12 @@ class HomeController extends Root_HomeController {
         $loginForm = $loginBundle[1];
         $loginHandler = $this->handleSignIn_as_customer($connection, $request, $loginForm, $loginBundle[0]);
 
-        if($loginHandler){
+        $feedback = "";
+        if($loginHandler && $loginHandler !== "Invalid") {
             return $loginHandler;
+        }
+        else if($loginHandler === "Invalid") {
+            $feedback = "Login Unsuccessful";
         }
 
         $registration = new Registration();
@@ -251,12 +304,16 @@ class HomeController extends Root_HomeController {
         if($registrationForm->isSubmitted() && $registrationForm->isValid()) {
             $registration = $registrationForm->getData();
             $hp = $this->registerEmployeeQuery($connection, $registration);
-            return $this->render('employee/apply.html.twig', [
-            'employee_id'=> $hp,
+            $this->get('session')->getFlashBag()->add('registration-type', 'Employee');
+            $this->get('session')->getFlashBag()->add('registration-id', $hp);
+
+            return $this->redirectToRoute('app-registration-complete');
+        }  
+        return $this->render('employee/apply.html.twig', [
+            'employee_id'=>$hp, 
+            'feedback'=>$feedback,
             'login' => $loginForm->createView(), 
             'registration' => $registrationForm->createView()]);
-        }  
-        return $this->render('employee/apply.html.twig', ['employee_id'=>$hp, 'login' => $loginForm->createView(), 'registration' => $registrationForm->createView()]);
     }
 
 }

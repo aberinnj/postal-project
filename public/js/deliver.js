@@ -52,5 +52,4 @@ document.getElementById("shift-modal-bg").addEventListener('click', function(){
 
 function modal2(){
     document.getElementById("shift-modal").classList.toggle("is-active");
-    window.location.replace("http://courierpo.aberin-nj.com/employee");
 }

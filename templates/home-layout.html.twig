@@ -52,6 +52,11 @@
                                 <div class="dropdown-content">
 
                                     <div class="dropdown-item">
+                                        {% if feedback|length > 0 %}
+                                            <div class="notification is-warning">
+                                                Incorrect Email or Password
+                                            </div>
+                                        {% endif %}
                                     {{ form_start(login) }}
 
                                     <div class="postal-form-space">

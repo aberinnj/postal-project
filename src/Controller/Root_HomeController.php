@@ -41,6 +41,10 @@ class Root_HomeController extends AbstractController {
                     'type'=>'customer']);
 
                     return $this->redirectToRoute('app-customer-home');
+                } else if (count($pw) == 0) {
+                    return "Invalid";
+                } else if (!empty($pw) && !$this->passmatch($data, $pw[0]['password'])) {
+                    return "Invalid";
                 }
                 return null;
         }
@@ -69,8 +73,13 @@ class Root_HomeController extends AbstractController {
                 'type'=>'employee']);
 
                 return $this->redirectToRoute('app-employee-home');
+            } 
+            elseif(!empty($pw) && !$this->passmatch($credentials, $pw[0]['password'])) {
+                return FALSE;
             }
-
+            else if(count($pw) == 0) {
+                return FALSE;
+            }
         }
         return null;
     }
@@ -112,7 +121,9 @@ class Root_HomeController extends AbstractController {
             $registration = $registrationForm->getData();
 
             $this->registerCustomerQuery($connection, $registration);
-            return $this->redirectToRoute('app-main-page');
+            $this->get('session')->getFlashBag()->add('registration-type', 'Customer');
+            $this->get('session')->getFlashBag()->add('registration-id', $registration->getEmail());
+            return $this->redirectToRoute('app-registration-complete');
         }
         return null;
 

@@ -1,0 +1,70 @@
+{%  extends 'home-layout.html.twig' %}
+
+{% block title %}
+{{ parent() }} - Employee Portal
+{% endblock %}
+
+
+            {% block navOptions %}
+            {{parent()}}
+            {% endblock %}
+
+
+{% block body %}
+    <section class="hero is-dark postal-bg-image">
+        {{ parent() }}
+    </section>  
+
+    <section class="section is-medium">
+        <div class="container postal-registration-feedback">
+
+
+            {% if regType == "Employee" %}
+                <section id="postal-banner" class="section postal-banner">
+                        <div class="container">
+
+                            <div class="title">Welcome to Courier.PO!</div>
+                        </div>
+
+                </section>
+                <div>
+                    <div class="subtitle" style="margin-top: 50px">
+                    Do not refresh. <br/>
+                    Your Courier.PO Employee ID is <strong>{{ regID }}</strong>.
+                    <div>
+                    <div>
+                        Please keep and write your EmployeeID somewhere. You will be given a physical EmployeeID on your orientation.
+                    </div>
+                </div>
+            {% elseif regType == "Customer" %}
+                <section id="postal-banner" class="section postal-banner">
+                        <div class="container">
+                            <div class="title">Welcome to Courier.PO!</div>
+                        </div>
+
+                </section>
+                <div>
+                    <div class="subtitle" style="margin-top: 50px">
+                        You have successfully registered with email: <strong>{{ regID }}</strong>.
+                    </div>
+                    <br/>
+                    You can now login and enjoy the benefits of having a Courier.PO account.
+                </div>
+            {% else %}
+                <section id="postal-banner" class="section postal-banner">
+                        <div class="container">
+                            <div class="title">Welcome to Courier.PO!</div>
+                        </div>
+
+                </section>
+                <div class="notification is-warning">
+                    Need an account? Please register with us.
+                    <div class="notification-body">
+                        <a href="{{path('app-main-page')}}">Return Home</a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+    
+{% endblock %}

@@ -25,18 +25,38 @@
     </div>
     </section>  
 
-    <section class="section postal-career-listings">
+    <section class="section">
         <div class="container">
          
-        <div class="postal-career-listings">
-            {% if jobs is defined %}
-            {% else %}
-<div class="notification postal-career-default">
-  There are no current postings. 
-</div>
-            {% endif %}
+            <div class="">
+                {% if jobs is defined %}
+                
+                    {% for job in jobs %}
 
-        </div>
+                            <div class="level">
+                                <div class="level-left">
+                                    <div>
+                                    <strong>{{job.Position}}</strong>
+                                    </div>
+                                    <div>
+                                    {{ job.Office }}
+                                    </div>
+                                </div>
+                                <div class="level-right">
+                                    <a class="level-item apply-button" aria-label="Apply" href="{{ path('app-employee-register') }}">
+                                        Apply
+                                    </a>
+                                </div>
+                            </div>
+
+                    {% endfor %}
+                {% else %}
+                <div class="notification postal-career-default">
+                There are no current postings. 
+                </div>
+                    {% endif %}
+
+            </div>
         </div>
     </section>
 

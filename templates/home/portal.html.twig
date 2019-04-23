@@ -20,7 +20,12 @@
 
             <div class="columns is-mobile">
             <div class="column is-4 is-offset-4 portal-modal">
-
+                {% if feedback2|length > 0 %}
+                    <div class="notification is-warning">
+                        {{feedback2}} Incorrect EmployeeID or Password.
+                    </div>
+                {% else %}
+                {% endif %}
                 {{ form_start(portal) }}
                     <div class="postal-login">
                         <div>

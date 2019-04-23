@@ -10,8 +10,6 @@ app-track-id:
   path: /track/{id}
   controller: App\Controller\HomeController::track_view_id
 
-
-
 app-employee:
   path: /employee
   controller: App\Controller\HomeController::employee_login
@@ -20,6 +18,9 @@ app-employee-home:
   path: /employee/dashboard
   controller: App\Controller\EmployeeController::home
 
+app-registration-complete:
+  path: /welcome
+  controller: App\Controller\RegistrationFeedback::home
 
 app-employee-shift:
   path: /employee/dashboard/delivery/shift?{shift}
