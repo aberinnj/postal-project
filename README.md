@@ -1,5 +1,36 @@
 # Welcome to Group 1's (Tuesday/Thursday) postal office project!
-This document contains 3 important sections, that is the IMPORTANT, the INSTRUCTIONS and the CREDENTIALS. There are also some backend information should they matter. If you have any questions feel free to email our group leader.
+
+### This document contains 3 important sections, that is the IMPORTANT, the INSTRUCTIONS and the CREDENTIALS. There are also some backend information should they matter. If you have any questions feel free to email our group leader.
+---
+### Our Triggers
+1. When package is created, the selected office picks it up and changes status to Processed.
+2. When shift ends, the vehicle's status is reverted to not being used.
+
+and more.
+
+### Reports
+1. A report of how many orders each office has had and its total revenue.
+2. A detailed report of each package, its journey and current status. Use this if something happens to a package, to find its last known handler and vehicle.
+
+and more.
+
+## EMPLOYEE CREDENTIALS:
+
+| OFFICEID  | EMPLOYEEID  | PASSWORD  |
+|-----------|-------------|-----------|
+| HOU002  | 1000000 | johnMdoe |
+| AUS001 |  1000005 | pass |
+         
+
+
+## CUSTOMER CREDENTIALS:
+| EMAIL | PASSWORD |
+|---|---|
+|cooper@hotmail.com | cooper|
+
+INSTRUCTIONS (BACK END):
+The back end project is provided, if you look through it, it may seem like a lot, but the following folders are the important bits.
+
 ---------------------
 IMPORTANT:
 There's a couple of things to keep in mind before using this project that might be confusing if you aren't aware of them but actually help immensely with keeping the data organized and relevant to those logged in.
@@ -14,7 +45,6 @@ There's a couple of things to keep in mind before using this project that might 
 
 For ease of use, we've created many post offices in Texas and populated them with employees and vehicles and local customers. However you feel free to make accounts for other offices elsewhere. The results may not be as densely populated, however.
 
-Not doing so won't break anything, of course, however the experience is a bit lengthier (as it should be), so just keep this in mind.
 ---------------------
 
 INSTRUCTIONS (FRONT END):
@@ -68,21 +98,6 @@ The site is, for the most part, pretty intuitive. But just in case, here's a det
             And that's it for employees! It's pretty simple if you create in state packages and can send them directly to their destinations, but doing otherwise is very much possible, it just becomes a game of logging out and then into other accounts to pick up packages. So feel free to check if that works!
         
     And that's the whole site, basically. Once you've delivered your packages to other offices or the destination, check out the tracking numbers (or log back in as a customer and view their dashboard) to check status and tracking information of the packages. Pretty cool!
-
----------------------
-EMPLOYEE CREDENTIALS:
-
-OFFICEID    EMPLOYEEID  PASSWORD
-HOU002      1000000     johnMdoe
-AUS001      1000005     pass
-
-
-CUSTOMER CREDENTIALS:
-EMAIL                   PASSWORD
-cooper@hotmail.com      cooper
-
-INSTRUCTIONS (BACK END):
-The back end project is provided, if you look through it, it may seem like a lot, but the following folders are the important bits.
 
 /_sql/...
     Contains some sql files but the actual database you would load (if you wished to look at our triggers or anything) would be final_db.sql.
