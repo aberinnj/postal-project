@@ -128,6 +128,10 @@ section.info {
     border-radius: 10px 10px 0 0 ;
 }
 
+section.info .information-list div.title {
+    font-size: 1.55em;
+}
+
 .postal-copyright {
     width: 100%;
     font-size: 1em;
@@ -333,4 +337,8 @@ h2 {
 
 .postal-form-space div{
     margin-bottom: 5px;
+}
+
+.postal-listing div {
+    margin-bottom: 10px;
 }

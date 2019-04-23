@@ -23,7 +23,7 @@
             
                 {{ form_start(tracking) }}
                     <div class="container has-text-centered">
-                        <div class="title" style="color: #fff">Enter a CourierPO tracking number.</div>
+                        <div class="title" style="color: #fff">Enter a CourierPO Tracking ID </div>
                             <div class="package-track-form">
                                 {{ form_row(tracking.PackageID) }}
 
@@ -41,46 +41,26 @@
 
     {% block trackResult %} 
     
-    <section class="section is-small tracking-history-result">
-        <div class="container">
+    <section class="section info">
+        <div class="container information-list">
 
-
-
-            <div>
-                <div class="subtitle">
-                    Tracking History
-                </div>
-
-                {% if data|length > 0 %}
-                    <div>
-
-
-                            {{ id }} - 
-                            {% if status|length > 0 %}
-
-                            {{ status[0].Status }}
-
-                            {% endif %}
-
-                    </div>
-
-                    {% for record in data %}
-                        <div>
-                            {{ record.Date }} -
-                            {{ record.Note }}
-                        </div>
-                        <br/><br/>
-                        
-                    {% endfor %}
-
-                {% else %}
-
-                {% endif %}
+            <div class="title">
+                What's a Tracking ID?
             </div>
-
+            <div class="subtitle">
+                Whenever you create and ship a package, you also get a tracking ID with your order. <br/>This ID is used to determine where your package has gone through and its status.
+            </div>
+            <hr>
+            <div class="title">
+                How to track your package?
+            </div>
+            <div class="subtitle">
+                To view your package's tracking, simply enter your TrackingID on the text field above <br/>and press submit. You can also do this on our homepage.
+            </div>
+            
         </div>
     </section>
-    
+
     {% endblock %}
 
 {% endblock %}

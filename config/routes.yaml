@@ -2,6 +2,16 @@ app-home-create-package:
   path: /order
   controller: App\Controller\HomeController::order
 
+app-track:
+  path: /track
+  controller: App\Controller\HomeController::track_view
+
+app-track-id:
+  path: /track/{id}
+  controller: App\Controller\HomeController::track_view_id
+
+
+
 app-employee:
   path: /employee
   controller: App\Controller\HomeController::employee_login
@@ -38,6 +48,8 @@ app-employee-manage-office:
 app-employee-office-vehicles:
   path: /employee/dashboard/office/vehicles
   controller: App\Controller\EmployeeVehiclesController::home
+
+
 
 app-customer-home:
   path: /dashboard

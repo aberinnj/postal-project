@@ -95,30 +95,18 @@ class HomeController extends Root_HomeController {
         'login' => $loginForm->createView()]);
     }
 
-    /**
-     * @Route("/track", name="app-track")
-     */
+
     public function track_view(Connection $connection, Request $request)
     {
 
         $data = [];
         $status = [];
-        $previous_tracking_data = null;
-        $bag = $this->get('session')->getFlashBag();
-
-        if ($bag->has('trackID')) {
-
-            $previous_tracking_data = ($bag->get('trackID'))[0];
-            
-            $data = $this->trackingQuery($connection, $previous_tracking_data);
-            $status = $this->statusQuery($connection, $previous_tracking_data);
-        } 
 
         $loginBundle = $this->signIn_as_customer();
         $loginForm = $loginBundle[1];
         $loginHandler = $this->handleSignIn_as_customer($connection, $request, $loginForm, $loginBundle[0]);
 
-        $trackingBundle = $this->tracking($previous_tracking_data);
+        $trackingBundle = $this->tracking();
         $trackingForm = $trackingBundle[1];
         $trackingHandler = $this->handleTracking($request, $trackingForm, $trackingBundle[0]);  
 
@@ -134,8 +122,40 @@ class HomeController extends Root_HomeController {
             'login' => $loginForm->createView(), 
             'data' => $data,
             'id' => $trackingBundle[0]->getPackageID(),
-            'status' =>$status]);
+            'status' =>$status
+            ]);
     }
+
+    public function track_view_id(Connection $connection, Request $request, $id)
+    {
+        $data = $this->trackingQuery($connection, $id);
+        $status = $this->statusQuery($connection, $id);
+
+        $loginBundle = $this->signIn_as_customer();
+        $loginForm = $loginBundle[1];
+        $loginHandler = $this->handleSignIn_as_customer($connection, $request, $loginForm, $loginBundle[0]);
+
+        $trackingBundle = $this->tracking($id);
+        $trackingForm = $trackingBundle[1];
+        $trackingHandler = $this->handleTracking($request, $trackingForm, $trackingBundle[0]);  
+
+        if($loginHandler){
+            return $loginHandler;
+        } 
+        else if($trackingHandler) {
+            return $trackingHandler;
+        }
+
+        return $this->render('home/trackid.html.twig', [
+            'tracking' => $trackingForm->createView(),
+            'login' => $loginForm->createView(), 
+            'data' => $data,
+            'id' => $trackingBundle[0]->getPackageID(),
+            'status' =>$status
+            ]);
+    }
+
+
 
 
     public function employee_home(Connection $connection, Request $request)

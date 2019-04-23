@@ -1,0 +1,116 @@
+{%  extends 'home-layout.html.twig' %}
+
+{% block title %}
+{{ parent() }} - Track package
+{% endblock %}
+
+
+            {% block navOptions %}
+            {{parent()}}
+            {% endblock %}
+
+
+{% block body %}
+
+    <section class="hero is-dark postal-bg-image">
+        {{ parent() }}
+    </section>
+
+    <div class="postal-bg-tracking">
+    <section class="section is-medium">
+        <div class="postal">
+            <div class="columns is-mobile">
+            <div class="column is-4 is-offset-4 postal-track-ribbon">
+            
+                {{ form_start(tracking) }}
+                    <div class="container has-text-centered">
+                        <div class="title" style="color: #fff">Enter a CourierPO Tracking ID </div>
+                            <div class="package-track-form">
+                                {{ form_row(tracking.PackageID) }}
+
+                                {{ form_row(tracking.Submit) }}
+                            </div>
+                    </div>
+                {{ form_end(tracking) }}
+                            
+            </div>
+            </div>
+
+        </div>
+    </section>
+    </div>
+
+    {% block trackResult %} 
+
+
+    {% if data|length > 0 %}
+        <section class="section info">
+        <div class="container">
+
+            <div class="postal-payment-list">
+                <div class="subtitle"> Tracking No. {{ id }}</div> 
+
+
+                    <div class="control">
+                        <div class="tags has-addons">
+                        <span class="tag is-dark">Package</span>
+                        <span class="tag is-primary">
+                        
+                                        {% if status|length > 0 %}
+                                            {{ status[0].Status }}
+                                        {% endif %}
+                        
+                        </span>
+                        </div>
+                    </div>
+            </div>
+        <hr>
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Datetime Updated</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody>
+        {% for record in data %}
+                <tr>
+                    <th>{{ record.Date }}</th>
+                    <th>{{ record.Note }}</th>
+                <tr>
+        {% endfor %}
+            </tbody>
+        </table>
+
+        </div>
+        </section>
+
+    {% else %}
+        
+    <section class="section">
+        <div class="container">
+
+
+        <article class="message is-warning">
+            <div class="message-header">
+                <p>Invalid TrackingID</p>
+            </div>
+            <div class="message-body">
+                Package with given Tracking ID not found.
+            </div>
+        </article>
+        
+            <div class="subtitle">
+
+            </div>
+            
+        </div>
+
+    </section>
+
+    {% endif %}
+
+    
+    {% endblock %}
+
+{% endblock %}

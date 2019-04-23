@@ -78,11 +78,9 @@ class Root_HomeController extends AbstractController {
     //
     public function tracking($new_tracking_found=null) {
 
-        if ($new_tracking_found) {
-            $tracking = $new_tracking_found;
-        } else {
-            $tracking = new Tracking();
-        }
+
+        $tracking = new Tracking();
+        $tracking->setPackageID($new_tracking_found);
 
         $trackingForm = $this->createForm(TrackingForm::class, $tracking);
         return Array($tracking, $trackingForm);
@@ -94,8 +92,7 @@ class Root_HomeController extends AbstractController {
         if ($trackingForm->isSubmitted() && $trackingForm->isValid()) {
             $tracking = $trackingForm->getData();
 
-            $this->get('session')->getFlashBag()->add('trackID', $tracking);
-            return $this->redirectToRoute('app-track');
+            return $this->redirectToRoute('app-track-id', ['id'=> $tracking->getPackageID()]);
         }
         return null;
     }
@@ -214,13 +211,13 @@ class Root_HomeController extends AbstractController {
         }
     }
 
-    protected function trackingQuery(Connection $connection, Tracking $tracking): array {
+    protected function trackingQuery(Connection $connection, $tracking): array {
 
         try{
             $sql = "SELECT DISTINCT t.Update_Date as Date, t.TrackingNote as Note FROM tracking as t, package as p WHERE t.Package_ID = :pID ORDER BY t.Tracking_Index ASC";
 
             $stmt = $connection->prepare($sql);
-            $stmt->bindValue(':pID', strval($tracking->getPackageID()));
+            $stmt->bindValue(':pID', $tracking);
             $stmt->execute();
 
             return $stmt->fetchAll();
@@ -230,12 +227,12 @@ class Root_HomeController extends AbstractController {
         }
     }
 
-    protected function statusQuery(Connection $connection, Tracking $tracking) {
+    protected function statusQuery(Connection $connection, $tracking) {
         try{
             $sql = "SELECT DISTINCT s.Status as Status FROM package as p, status as s WHERE p.PackageID = :pID AND p.Status = s.Code";
 
             $stmt = $connection->prepare($sql);
-            $stmt->bindValue(':pID', strval($tracking->getPackageID()));
+            $stmt->bindValue(':pID', $tracking);
             $stmt->execute();
 
             return $stmt->fetchAll();
