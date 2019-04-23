@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `courierdb_1`
+-- Database: `courierdb_2`
 --
 
 -- --------------------------------------------------------
@@ -699,7 +699,7 @@ INSERT INTO `vehicle` (`OfficeID`, `VIN`, `Vehicle_Type`, `Status`) VALUES
 --
 DROP TABLE IF EXISTS `employee_delivery_report`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`admin`@`%` SQL SECURITY DEFINER VIEW `employee_delivery_report`  AS  select `e`.`EmployeeID` AS `EmployeeID`,`e`.`FirstName` AS `FirstName`,`e`.`MiddleName` AS `MiddleName`,`e`.`LastName` AS `LastName`,`v`.`VIN` AS `VIN`,`o`.`OfficeID` AS `OfficeID`,`p`.`PackageID` AS `PackageID`,`p`.`dest_ZIP` AS `dest_ZIP`,`p`.`Weight` AS `Weight`,`t`.`Status` AS `Status` from (((((`employee` `e` join `package` `p`) join `vehicle` `v`) join `office` `o`) join `shift` `s`) join `status` `t`) where ((`e`.`OfficeID` = `o`.`OfficeID`) and (`e`.`EmployeeID` = `s`.`EmployeeID`) and (`s`.`VehicleID` = `v`.`VIN`) and (`p`.`Status` = `t`.`Code`)) order by `e`.`EmployeeID` ;
+CREATE VIEW `employee_delivery_report`  AS  select `e`.`EmployeeID` AS `EmployeeID`,`e`.`FirstName` AS `FirstName`,`e`.`MiddleName` AS `MiddleName`,`e`.`LastName` AS `LastName`,`v`.`VIN` AS `VIN`,`o`.`OfficeID` AS `OfficeID`,`p`.`PackageID` AS `PackageID`,`p`.`dest_ZIP` AS `dest_ZIP`,`p`.`Weight` AS `Weight`,`t`.`Status` AS `Status` from (((((`employee` `e` join `package` `p`) join `vehicle` `v`) join `office` `o`) join `shift` `s`) join `status` `t`) where ((`e`.`OfficeID` = `o`.`OfficeID`) and (`e`.`EmployeeID` = `s`.`EmployeeID`) and (`s`.`VehicleID` = `v`.`VIN`) and (`p`.`Status` = `t`.`Code`)) order by `e`.`EmployeeID` ;
 
 -- --------------------------------------------------------
 
@@ -708,7 +708,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`admin`@`%` SQL SECURITY DEFINER VIEW `employ
 --
 DROP TABLE IF EXISTS `unique_customers`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`admin`@`%` SQL SECURITY DEFINER VIEW `unique_customers`  AS  select count(distinct `package`.`Email`) AS `COUNT(DISTINCT Email)` from `package` ;
+CREATE VIEW `unique_customers`  AS  select count(distinct `package`.`Email`) AS `COUNT(DISTINCT Email)` from `package` ;
 
 --
 -- Constraints for dumped tables

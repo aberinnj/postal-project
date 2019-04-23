@@ -204,7 +204,7 @@ class Root_DashboardController extends AbstractController {
         try{
             //$sql = "SELECT * FROM employee_delivery_report";
             $sql = "SELECT  DISTINCT E.EmployeeID, E.FirstName, E.MiddleName, E.LastName, E.OfficeID, St.Status, S.VehicleID, P.PackageID, P.dest_ZIP, P.Weight
-                    FROM employee AS E, package AS P, vehicle AS V, office AS O, shift as S, status as St, Tracking AS T
+                    FROM employee AS E, package AS P, vehicle AS V, office AS O, shift as S, status as St, tracking AS T
                     WHERE S.VehicleID = V.VIN 
                         AND E.OfficeID = O.OfficeID 
                         AND E.EmployeeID = S.EmployeeID 
