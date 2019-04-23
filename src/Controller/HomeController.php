@@ -128,6 +128,7 @@ class HomeController extends Root_HomeController {
         else if($trackingHandler) {
             return $trackingHandler;
         }
+
         return $this->render('home/track.html.twig', [
             'tracking' => $trackingForm->createView(),
             'login' => $loginForm->createView(), 

@@ -77,7 +77,7 @@ html, body {
 }
 
 .postal-idea.postal-idea-image {
-    background-image: url("../images/mothers-day.jpg");
+    background-image: url("../images/adult-blur-cap-935948.jpg");
     background-color: #ffffff;
     height: 400px;
     background-position: center; 
@@ -119,20 +119,18 @@ html, body {
     background-color: #00b388;
 }
 
-.postal-support-ribbon {
+.postal-support-ribbon, .postal-career-default, #postal-banner {
     background-color: #F6BE00
 }
 
 section.info {
     background-color: #ffffff;
+    border-radius: 10px 10px 0 0 ;
 }
 
-section.info div {
-    text-align: center;
-}
 .postal-copyright {
     width: 100%;
-    font-size: .65em;
+    font-size: 1em;
     padding: 2px 5px;
     background-color: #960C22;
 }
@@ -182,17 +180,11 @@ section.info div {
     font-weight: bold;
 }
 
-#postal-banner{
-    background-color: #F6BE00;
-}
 
 .postal-career-listings {
     height: 10em;
 }
 
-.postal-career-default {
-    background: #F6BE00
-}
 
 .postal-careers-general {
     background-color: #ffffff;
@@ -247,8 +239,11 @@ section.info div {
 }
 
 
-.postal-header-banner div{
+.postal-header-banner div, #postal-header-banner div{
     text-align: center;
+}
+
+.postal-bg-register section .postal-header-banner div {
     color: #ffffff
 }
 
