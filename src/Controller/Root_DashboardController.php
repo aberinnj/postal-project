@@ -425,9 +425,24 @@ class Root_DashboardController extends AbstractController {
         }
     }
 
+    protected function VehicleAvailabilityQuery(Connection $connection, $vehicle) {
+        try{
+            $sql = "SELECT v.VIN FROM vehicle as v WHERE v.VIN = :vehicle and (v.Status is NULL or v.Status = 0)";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':vehicle', $vehicle);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
+
     protected function GetVehiclesQuery(Connection $connection, $office) {
         try{
-            $sql = "SELECT * FROM vehicle WHERE vehicle.officeID = :office";
+            $sql = "SELECT * FROM vehicle WHERE vehicle.officeID = :office and (vehicle.Status = 0 or vehicle.Status is null)";
 
             $stmt = $connection->prepare($sql);
             $stmt->bindValue(':office', $office);

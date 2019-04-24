@@ -60,8 +60,14 @@ class EmployeeDeliveryController extends Root_DashboardController {
         if($packageVehicleForm->isSubmitted() && $packageVehicleForm->isValid()) {
             $packageVehicle = $packageVehicleForm->getData();
             $selected = $packageVehicle->getVehicle();
+            
 
-            $packages = $this->getPackagesForVehicle($connection, $selected);
+            $vehicle = $this->VehicleAvailabilityQuery($connection, $selected);
+            if (count($vehicle) > 0) {
+                $packages = $this->getPackagesForVehicle($connection, $selected);
+            } else {
+                return $this->redirectToRoute($request->get('app-employee-deliver'), $request->query->all());
+            }
         }
 
         $startShift = new Tracking();

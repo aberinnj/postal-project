@@ -7,6 +7,17 @@ class Delivery
     
     protected $Vehicle;
     protected $PackageID;
+    protected $OfficeID;
+
+    // Office
+    public function getOffice()
+    {
+        return $this->Office;
+    }
+
+    public function setOffice($Office){
+        $this->Office = $Office;
+    }
 
     // Vehicle
     public function getVehicle()
