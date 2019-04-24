@@ -41,14 +41,13 @@ class EmployeeVehiclesController extends Root_DashboardController {
                 return $this->redirectToRoute('app-main-page');
         }
 
-
-        $vehicles = ($this->GetVehiclesQuery($connection, $name['OfficeID']));
-        $listing = [];
-        $counter = 0;
-        foreach ($vehicles as $vehicle) {
-            $counter += 1;
-            array_push($listing, [$vehicle['OfficeID'].'_Vehicle_'.$counter=>$vehicle['VIN']]);
+        $vehicles = [];
+        $data = ($this->GetAllVehiclesQuery($connection, $name['OfficeID']));
+        
+        if(count($data) > 0) {
+            $vehicles = $data;
         }
+
  
         return $this->render( 'employee/vehicles.html.twig',[
             'firstname'=>$name['FirstName'],
@@ -57,7 +56,7 @@ class EmployeeVehiclesController extends Root_DashboardController {
             'breadcrumbs' => $breadcrumbs,
             'logout'=>$logoutForm->createView(),
             'packages'=>$packages,
-            'vehicles'=>$listing,
+            'vehicles'=>$vehicles,
             'branch'=>$name['OfficeID']
         ]);
     }

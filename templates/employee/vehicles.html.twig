@@ -32,41 +32,35 @@
     <section class="section is-small dashboard">
     <div class="container">
 
-        <div class="postal-quick-buttons">
-            <a class="button is-active" href="{{ path('app-employee-profile') }}">Employee ID#{{id}}</a>
-            <a class="button is-active" href="{{ path('app-employee-manage-office') }}">{{branch}} Office</a>
-        </div>
-
-        <div class="tile is-ancestor">
-        <div class="tile is-vertical is-8">
-
-            <div class="tile">
-
-               
-            </div>
-            <div class="tile">
-                <div class="tile is-parent is-vertical">
-
-                </div>
-            </div>
-
-            <div class="tile">
-                    <div class="tile is-parent is-vertical">
-
-                    </div>
-            </div>
-        </div>
-        <div class="tile is-parent">
-            <article class="tile is-child">
-            <div class="content">
-                <div class="content">
-
-                </div>
-            </div>
-            </article>
-        </div>
-        </div>
-
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>
+                        VIN
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vehicle in vehicles %}
+                    <tr>
+                        <th>{{vehicle.VIN}}</th>
+                        <th>
+                        {% if vehicle.Status == null %}
+                            Free
+                        {% elseif vehicle.Status == 0 %}
+                            Free
+                        {% else %}
+                            In-Use
+                        {% endif %}
+                        
+                        </th>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
     </div>
     </section>

@@ -439,6 +439,20 @@ class Root_DashboardController extends AbstractController {
             echo "Error " . $e->getMessage();
         }
     }
+    protected function GetAllVehiclesQuery(Connection $connection, $office) {
+        try{
+            $sql = "SELECT * FROM vehicle WHERE vehicle.officeID = :office";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':office', $office);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+
+        } catch (PODException $e){ 
+            echo "Error " . $e->getMessage();
+        }
+    }
 
     protected function GetVehiclesQuery(Connection $connection, $office) {
         try{
